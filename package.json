@@ -6,14 +6,16 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "test:awesome": "vue-cli-service test:unit --reporter mochawesome",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test:awesome": "vue-cli-service test:unit --reporter mochawesome"
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "null-loader": "^4.0.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
+    "vuetify": "^2.2.11",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
@@ -35,6 +37,10 @@
     "geckodriver": "^1.19.1",
     "mochawesome": "^6.1.1",
     "prettier": "^1.19.1",
-    "vue-template-compiler": "^2.6.11"
+    "sass": "^1.26.8",
+    "sass-loader": "^8.0.2",
+    "vue-cli-plugin-vuetify": "~2.0.5",
+    "vue-template-compiler": "^2.6.11",
+    "vuetify-loader": "^1.3.0"
   }
 }
