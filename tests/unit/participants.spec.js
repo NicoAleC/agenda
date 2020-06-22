@@ -6,6 +6,7 @@ import Vuex from "vuex";
 import Vuetify from "vuetify";
 
 import Participants from "@/views/Participants.vue";
+
 import store from "@/store";
 
 describe("Participants.vue", () => {
@@ -20,26 +21,33 @@ describe("Participants.vue", () => {
         vuetify = new Vuetify();
     });
     it.only("Default participants", () => {
+
         const wrapper = mount(Participants, {
             store,
             vuetify,
-            localVue
+            localVue,
+            stubs: ['VTextField']
+
         });
-        let expectedLength = 1;
+        let expectedLength = 2;
         const participants = wrapper.vm.participants;
         assert.equal(participants.length, expectedLength);
     });
     it.only("Delete participants works right", () => {
+        global.alert = () => { };
+        global.confirm = () => true;
         const wrapper = mount(Participants, {
             store,
             vuetify,
-            localVue
+            localVue,
+            stubs: ['VTextField']
+
         });
-        const initiallength = wrapper.vm.participants;
-        wrapper.vm.delete("PART-001");
-        assert.equal(initiallength.length, 1);
+        const initiallength = wrapper.vm.participants.length;
+        wrapper.vm.deleteItem("PART-002");
+        assert.equal(initiallength - 1, 1);
     });
-    it.only("Don`t add participants if some fields are empty", () => {
+    it.only("Add participants rigth", () => {
 
         global.alert = message => {
             console.log(message);
@@ -48,33 +56,44 @@ describe("Participants.vue", () => {
         const wrapper = mount(Participants, {
             store,
             vuetify,
-            localVue
+            localVue,
+            stubs: ['VTextField']
+
         });
         const expectedLength = 2;
-        const numberOfParticipants = wrapper.vm.participants;
-        wrapper.vm.addNewParticipant("Pablo Rivas", "69501045");
-        assert.equal(numberOfParticipants.length, expectedLength);
+        const numberOfParticipants = wrapper.vm.participants.length;
+        wrapper.vm.addNewParticipant({ name: "Pablo", contactNumber: "69501045", participantId: "Part1" });
+        assert.equal(numberOfParticipants + 1, expectedLength);
     });
     it.only("Don't update any participant if new name is not filled", () => {
-        const localVue = createLocalVue();
-
+        global.alert = message => {
+            console.log(message);
+        };
 
         const wrapper = mount(Participants, {
             store,
             vuetify,
-            localVue
+            localVue,
+            stubs: ['VTextField']
+
         });
         const participants = wrapper.vm.participants;
-        wrapper.vm.update("Anonimo", "69501045", "PART-001");
+        wrapper.vm.updateNewParticipant({ name: "Anonimo", contactNumber: "69501045", participantId: "PART-001" });
         assert.isTrue(participants[0].name === "Anonimo");
     });
 
     it.only("The title should be rendered", () => {
+        global.requestAnimationFrame = cb => cb()
+        global.alert = message => {
+            console.log(message);
+        };
         const expectedTitle = "Participants";
         const wrapper = mount(Participants, {
             store,
             localVue,
-            vuetify
+            vuetify,
+            stubs: ['VTextField']
+
         });
 
         const titleInComponent = wrapper.find("#participants-title");
