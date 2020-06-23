@@ -65,6 +65,22 @@ describe("Participants.vue", () => {
         wrapper.vm.addNewParticipant({ name: "Pablo", contactNumber: "69501045", participantId: "Part1" });
         assert.equal(numberOfParticipants + 1, expectedLength);
     });
+    it.only("Rendering participants after add one", async () => {
+
+
+        const wrapper = mount(Participants, {
+            store,
+            vuetify,
+            localVue,
+            stubs: ['VTextField']
+
+        });
+        await wrapper.vm.addNewParticipant({ name: "Renata", contactNumber: "69501045", participantId: "Part4" });
+        await wrapper.vm.$forceUpdate();
+        const list = wrapper.findAll(".list-participant");
+        assert.strictEqual(list.at(2).text(), "Renata");
+    });
+
     it.only("Don't update any participant if new name is not filled", () => {
         global.alert = message => {
             console.log(message);
