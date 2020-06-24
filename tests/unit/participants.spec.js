@@ -7,7 +7,12 @@ import Vuetify from "vuetify";
 
 import Participants from "@/views/Participants.vue";
 
-import store from "@/store";
+//import store from "@/store";
+import mockParticipant from "./mockParticipants";
+import actions from "@/store/actions.js";
+import mutations from "@/store/mutations.js";
+import getters from "@/store/getters.js";
+let store;
 
 describe("Participants.vue", () => {
     let localVue;
@@ -19,6 +24,13 @@ describe("Participants.vue", () => {
         localVue.use(Vuetify);
 
         vuetify = new Vuetify();
+        store = new Vuex.Store({
+            state: mockParticipant,
+            actions,
+            mutations,
+            getters,
+            modules: {}
+        });
     });
     it.only("Default participants", () => {
 
@@ -30,7 +42,7 @@ describe("Participants.vue", () => {
 
         });
         let expectedLength = 2;
-        const participants = wrapper.vm.participants;
+        const participants = wrapper.vm.$store.state.participants;
         assert.equal(participants.length, expectedLength);
     });
     it.only("Delete participants works right", () => {
