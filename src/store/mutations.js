@@ -21,13 +21,22 @@ export default {
         );
     },
     mutateParticipantAddAppointment(state, addAppoint) {
-        const foundAccountIndex = state.participants.findIndex(
-            part => part.participantId === addAppoint.participantId
+        const foundAccountIndex = state.scheduledAppointments.findIndex(
+            part => part.agendaId === addAppoint.appointmentName
         );
+        console.log("Index" + foundAccountIndex);
         state.scheduledAppointments[foundAccountIndex].participants.push({
             participantId: addAppoint.participantId,
             name: addAppoint.name,
             contactNumber: addAppoint.contactNumber
         });
+    },
+    mutateParticipantDeleteAppointment(state, deleteAppoint) {
+        const foundAccountIndex = state.scheduledAppointments.findIndex(
+            part => part.agendaId === deleteAppoint.appointmentName
+        );
+        state.scheduledAppointments[foundAccountIndex].participants = state.scheduledAppointments[
+            foundAccountIndex
+        ].participants.filter(appoint => appoint.participantId !== deleteAppoint.participantId);
     }
 };

@@ -130,7 +130,6 @@ export default {
       this.dialog = true;
       this.newMovement = newMovement;
     },
-    enableDeleteAndUpdate() {},
     addNewParticipant(newOne) {
       this.addParticipant({
         name: newOne.name,
