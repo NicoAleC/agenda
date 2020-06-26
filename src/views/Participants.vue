@@ -15,12 +15,13 @@
               rounded
             ></v-text-field>
           </v-col>
+
           <v-col class="text-right">
             <v-btn
               color="primary"
               dark
               x-large
-              class="mb-2"
+              class="ma-2"
               @click="sendData(selectedParticipant,true)"
             >New Participant</v-btn>
           </v-col>
@@ -56,6 +57,14 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </v-row>
+      <v-snackbar
+        v-model="alert"
+        type="success"
+        color="primary"
+        top
+        right
+        :timeout="timeout"
+      >Participante creado correctamente</v-snackbar>
       <ParticipantsDialog
         :selectedParticipant="selectedParticipant"
         :newMovement="newMovement"
@@ -85,7 +94,9 @@ export default {
     idparticipant: "",
     newMovement: false,
     dialog: false,
-    participantindex: null
+    participantindex: null,
+    alert: false,
+    timeout: 3000
   }),
   methods: {
     ...mapActions(["addParticipant", "updateParticipant", "deleteParticipant"]),
@@ -114,19 +125,21 @@ export default {
     },
     sendData(selectedParticipant, newMovement) {
       this.selectedParticipant = {
-        ...selectedParticipant,
-        index: this.participantindex
+        ...selectedParticipant
       };
       this.dialog = true;
-
       this.newMovement = newMovement;
     },
+    enableDeleteAndUpdate() {},
     addNewParticipant(newOne) {
       this.addParticipant({
         name: newOne.name,
         contactNumber: newOne.contactNumber,
-        participantId: newOne.participantId
+        participantId: newOne.participantId,
+        index: this.findIndex(newOne.participantId)
       });
+      this.alert = true;
+      console.log(this.findIndex(newOne.participantId));
     },
     updateNewParticipant(newOne) {
       this.updateParticipant({

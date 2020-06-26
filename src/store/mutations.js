@@ -19,5 +19,15 @@ export default {
         state.participants = state.participants.filter(
             account => account.participantId !== code.participantId
         );
+    },
+    mutateParticipantAddAppointment(state, addAppoint) {
+        const foundAccountIndex = state.participants.findIndex(
+            part => part.participantId === addAppoint.participantId
+        );
+        state.scheduledAppointments[foundAccountIndex].participants.push({
+            participantId: addAppoint.participantId,
+            name: addAppoint.name,
+            contactNumber: addAppoint.contactNumber
+        });
     }
 };

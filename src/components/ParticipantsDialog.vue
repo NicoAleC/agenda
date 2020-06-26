@@ -23,7 +23,7 @@
                     autocomplete="off"
                     v-model="selectedParticipant.name"
                     label="Name"
-                    :counter="15"
+                    :counter="25"
                     :rules="rules.nameRules"
                     required
                   ></v-text-field>
@@ -49,12 +49,10 @@
               :disabled="!valid"
               text
               @click="
-              emitUpdateAndAdd(
-                selectedParticipant.name,
-                selectedParticipant.contactNumber,
-                selectedParticipant.participantId
-              )
-            "
+                emitUpdateAndAdd(
+                  selectedParticipant.name,
+                  selectedParticipant.contactNumber,
+                  selectedParticipant.participantId)"
             >{{ newMovement ? "SAVE" : "UPDATE" }}</v-btn>
           </v-card-actions>
         </v-form>
@@ -73,7 +71,7 @@ export default {
     rules: {
       nameRules: [
         v => !!v || "Name is required",
-        v => (v && v.length <= 15) || "Name must be less than 15 characters"
+        v => (v && v.length <= 25) || "Name must be less than 25 characters"
       ],
       phoneRules: [
         v => !!v || "Phone is required",
