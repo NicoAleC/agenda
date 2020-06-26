@@ -1,20 +1,11 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import actions from "./actions";
-import mutations from "./mutations";
-import getters from "./getters";
-
-Vue.use(Vuex);
-
-const state = {
-  idToPass: "",
+export default {
   agendas: [
     {
       agendaId: "ANG-1",
       name: "Work",
       description: "My Agenda to manage my workd",
-      startHour: "10:00",
-      endHour: "12:00",
+      startHour: "",
+      endHour: "",
       appointments: [
         {
           name: "PRUEBA",
@@ -57,10 +48,3 @@ const state = {
     }
   ]
 };
-export default new Vuex.Store({
-  state,
-  mutations,
-  actions,
-  getters,
-  modules: {}
-});

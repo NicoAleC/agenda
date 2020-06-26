@@ -12,7 +12,6 @@ describe("Home.vue", () => {
     const id = "Home";
     const vuetify = new Vuetify();
     const wrapper = mount(Home, {
-
       vuetify,
       localVue
     });
@@ -20,5 +19,4 @@ describe("Home.vue", () => {
 
     assert.equal(tittle.text(), id);
   });
-
 });
