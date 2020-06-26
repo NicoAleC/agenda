@@ -35,24 +35,15 @@ export default {
       },
     
     mutateUpdateAppointment(state, appointmentToUpdate) {
-        const FoundAppointment = state.scheduledAppointments.findIndex(
+        let FoundAppointment = state.scheduledAppointments.findIndex(
           appointment => appointment.name === appointmentToUpdate.name
         );
     
-        state.scheduledAppointments[FoundAppointment].name =
-          appointmentToUpdate.name;
-        state.scheduledAppointments[FoundAppointment].description =
-          appointmentToUpdate.description;
-        state.scheduledAppointments[FoundAppointment].date =
-          appointmentToUpdate.date;
-        state.scheduledAppointments[FoundAppointment].startHour =
-          appointmentToUpdate.startHour;
-        state.scheduledAppointments[FoundAppointment].endHour =
-          appointmentToUpdate.endHour;
+        state.scheduledAppointments[FoundAppointment] = appointmentToUpdate;
       },
       mutateDeleteAppointment(state, deleteScheduledAppointment) {
         state.scheduledAppointments = state.scheduledAppointments.filter(
-          appointment => appointment.name !== deleteScheduledAppointment.name
+          appointment => appointment.name !== deleteScheduledAppointment
         );
       }
 };

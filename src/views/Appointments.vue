@@ -5,7 +5,7 @@
 
       <v-row justify="center">
         <v-layout row justify-space-around>
-          <v-col class="text-left">
+          <v-col class="text-right">
             <v-btn
               x-large
               class="mb-2"
@@ -16,28 +16,18 @@
         </v-layout>
         <v-expansion-panels popout>
           <v-expansion-panel
-            v-for="(appointment, i) in scheduledAppointments"
-            :key="i"
+            v-for="(appointment, index) in scheduledAppointments"
+            :key="index"
             hide-actions
           >
             <v-expansion-panel-header>
               <v-row align="center" class="spacer" no-gutters>
-                <v-col cols="5" sm="3" md="2">
-                  <v-avatar color="orange">
-                    <span class="white--text headline">{{
-                      appointment.name | capitalizeAvatar
-                    }}</span>
-                  </v-avatar>
-                </v-col>
+                <v-col cols="5" sm="3" md="2"> </v-col>
 
                 <v-col class="hidden-xs-only" sm="5" md="3">
                   <strong v-html="appointment.name" class="list-participant">{{
                     appointment.name
                   }}</strong>
-                </v-col>
-
-                <v-col class="text-no-wrap" cols="5" sm="3">
-                  <strong v-html="appointment.description"></strong>
                 </v-col>
 
                 <v-col class="text-no-wrap" cols="5" sm="3">
@@ -47,18 +37,9 @@
                 <v-col class="text-no-wrap" cols="5" sm="3">
                   <strong v-html="appointment.startHour"></strong>
                 </v-col>
+
                 <v-col class="grey--text text-truncate hidden-sm-and-down">
-                  <v-icon
-                    size="30"
-                    class="mr-2"
-                    @click="sendData(scheduledAppointments, false)"
-                    >mdi-pencil</v-icon
-                  >
-                </v-col>
-                <v-col class="grey--text text-truncate hidden-sm-and-down">
-                  <v-icon
-                    size="30"
-                    @click="deleteItem(scheduledAppointments.name)"
+                  <v-icon size="30" @click="deleteAppointment(appointment.name)"
                     >mdi-delete</v-icon
                   >
                 </v-col>
@@ -154,9 +135,11 @@ export default {
       "deleteScheduledAppointment"
     ]),
 
-    deleteAppointment() {
+    deleteAppointment: function(deleteScheduledAppointment) {
       let confirmation = confirm("Are you sure you want to delete?");
       if (confirmation) {
+        // this.delete(this.scheduledAppointment.name);
+        this.deleteScheduledAppointment(deleteScheduledAppointment);
         return true;
       } else {
         return false;
@@ -165,8 +148,7 @@ export default {
 
     sendData(scheduledAppointment, newMovement) {
       this.scheduledAppointment = {
-        ...scheduledAppointment,
-        index: this.participantindex
+        ...scheduledAppointment
       };
       this.dialog = true;
       this.newMovement = newMovement;
@@ -189,13 +171,8 @@ export default {
     },
 
     updateAppointment: function(appointmentToUpdate) {
-      this.updateScheduledAppointment({
-        name: appointmentToUpdate.name,
-        description: appointmentToUpdate.description,
-        date: appointmentToUpdate.date,
-        startHour: appointmentToUpdate.startHour,
-        endHour: appointmentToUpdate.endHour
-      });
+      this.scheduledAppointment = appointmentToUpdate;
+      this.updateScheduledAppointment(appointmentToUpdate);
     },
 
     getEvents() {
@@ -213,13 +190,6 @@ export default {
     },
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
-    }
-  },
-  filters: {
-    capitalizeAvatar: function(value) {
-      if (!value) return "";
-      value = value.toString();
-      return value.charAt(0).toUpperCase();
     }
   },
   computed: {

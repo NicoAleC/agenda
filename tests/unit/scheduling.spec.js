@@ -2,7 +2,7 @@ import Appointments from "@/views/Appointments.vue";
 import Scheduling from "@/components/Scheduling.vue";
 
 import { assert } from "chai";
-import { mount, createLocalVue, shallowMount } from "@vue/test-utils";
+import { createLocalVue, shallowMount } from "@vue/test-utils";
 
 import Vuex from "vuex";
 import Vuetify from "vuetify";
@@ -34,7 +34,17 @@ describe(" Scheduled Appointments CRUD", () => {
   });
 
   it.only(" Validate that the Appointment data is not empty", () => {
-    const wrapper = mount(Scheduling);
+    global.alert = message => {
+      console.log(message);
+    };
+
+    const wrapper = shallowMount(Scheduling, {
+      store,
+      vuetify,
+      localVue,
+      stubs: ["VTextField"]
+    });
+    
     const isValid = wrapper.vm._validateData();
     assert.isFalse(isValid);
   });
