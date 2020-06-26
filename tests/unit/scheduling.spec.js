@@ -44,7 +44,7 @@ describe(" Scheduled Appointments CRUD", () => {
       localVue,
       stubs: ["VTextField"]
     });
-    
+
     const isValid = wrapper.vm._validateData();
     assert.isFalse(isValid);
   });
@@ -62,10 +62,6 @@ describe(" Scheduled Appointments CRUD", () => {
     assert.isTrue(isValid);
   });*/
   it.only(" Validate add schedule appointment ", () => {
-    global.alert = message => {
-      console.log(message);
-    };
-
     const wrapper = shallowMount(Appointments, {
       store,
       vuetify,
@@ -86,6 +82,7 @@ describe(" Scheduled Appointments CRUD", () => {
       JSON.stringify(wrapper.vm.scheduledAppointments),
       appointmentToAdd.name
     );
+    //console.log("AddList:" +  JSON.stringify(wrapper.vm.scheduledAppointments));
   });
   //it.only(" Update appointment ", () => {
   /*global.alert = message => {
@@ -99,4 +96,26 @@ describe(" Scheduled Appointments CRUD", () => {
       stubs: ["VTextField"]
     });*/
   //});
+  it.only(" Validate delete schedule appointment ", () => {
+    global.alert = () => { };
+    global.confirm = () => true;
+
+    const wrapper = shallowMount(Appointments, {
+      store,
+      vuetify,
+      localVue,
+      stubs: ["VTextField"]
+    });
+
+    const appointmentToDelete = " Test ";
+    
+    wrapper.vm.deleteAppointment(appointmentToDelete);
+    //console.log("DeleteList:" +  JSON.stringify(wrapper.vm.scheduledAppointments));
+
+    assert.notInclude(
+      JSON.stringify(wrapper.vm.scheduledAppointments),
+      appointmentToDelete
+    );
+
+  });
 });

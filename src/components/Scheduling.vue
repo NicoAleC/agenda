@@ -34,6 +34,7 @@
                     offset-y
                     min-width="290px"
                   >
+                  
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         v-model="scheduledAppointment.date"
@@ -79,11 +80,6 @@
                       format="24hr"
                       color="green lighten-1"
                       :landscape="$vuetify.breakpoint.mdAndUp"
-                      @click:minute="
-                        $refs.menu_start_hour.save(
-                          scheduledAppointment.startHour
-                        )
-                      "
                     ></v-time-picker>
                   </v-menu>
                 </v-col>
@@ -114,9 +110,6 @@
                       format="24hr"
                       color="green lighten-1"
                       :landscape="$vuetify.breakpoint.mdAndUp"
-                      @click:minute="
-                        $refs.menu_end_hour.save(scheduledAppointment.endHour)
-                      "
                     ></v-time-picker>
                   </v-menu>
                 </v-col>

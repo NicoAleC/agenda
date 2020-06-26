@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container class="my-10" grid-list-md>
-      <h1>Appointments</h1>
+      <h1 class="text-center">Appointments</h1>
 
       <v-row justify="center">
         <v-layout row justify-space-around>
@@ -20,64 +20,86 @@
             :key="index"
             hide-actions
           >
-            <v-expansion-panel-header>
-              <v-row align="center" class="spacer" no-gutters>
-                <v-col cols="5" sm="3" md="2"> </v-col>
-
-                <v-col class="hidden-xs-only" sm="5" md="3">
-                  <strong v-html="appointment.name" class="list-participant">{{
-                    appointment.name
-                  }}</strong>
-                </v-col>
-
-                <v-col class="text-no-wrap" cols="5" sm="3">
-                  <strong v-html="appointment.date"></strong>
-                </v-col>
-
-                <v-col class="text-no-wrap" cols="5" sm="3">
-                  <strong v-html="appointment.startHour"></strong>
-                </v-col>
-
-                <v-col class="grey--text text-truncate hidden-sm-and-down">
-                  <v-icon size="30" @click="deleteAppointment(appointment.name)"
-                    >mdi-delete</v-icon
-                  >
-                </v-col>
-              </v-row>
-            </v-expansion-panel-header>
           </v-expansion-panel>
         </v-expansion-panels>
       </v-row>
-      <v-sheet tile height="54" class="d-flex">
-        <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
+      <v-sheet tile height="64" class="d-flex">
+        <v-btn icon class="ma-5" @click="$refs.calendar.prev()">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-        <v-select
-          v-model="type"
-          :items="types"
-          dense
-          outlined
-          hide-details
-          class="ma-2"
-          label="View by"
-        ></v-select>
-        <v-spacer></v-spacer>
-
-        <v-btn icon class="ma-2" @click="$refs.calendar.next()">
+        <v-toolbar-title v-if="$refs.calendar" class="ma-5">
+          {{ $refs.calendar.title }}
+        </v-toolbar-title>
+        <v-btn icon class="ma-5" @click="$refs.calendar.next()">
           <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
+
+        <v-col sm="3">
+          <v-select
+            v-model="type"
+            :items="types"
+            dense
+            outlined
+            hide-details
+            class="ma-3"
+            label="View by"
+          ></v-select>
+        </v-col>
       </v-sheet>
-      <v-sheet height="600">
+      <v-sheet height="800">
         <v-calendar
+          class="ma-4"
           ref="calendar"
           v-model="value"
           :type="type"
           :events="events"
-          :event-overlap-mode="mode"
-          :event-overlap-threshold="30"
           :event-color="getEventColor"
-          @change="getEvents"
+          @click:event="showAppointment"
+          @change="drawAppointments"
         ></v-calendar>
+        <v-menu
+          v-model="selectedOpen"
+          :close-on-content-click="false"
+          :activator="selectedElement"
+          offset-x
+        >
+          <v-card min-width="500px" flat>
+            <v-toolbar :color="selectedAppointment.color" dark>
+              <v-row justify="center">
+                <v-toolbar-title
+                  v-html="selectedAppointment.name"
+                ></v-toolbar-title>
+              </v-row>
+            </v-toolbar>
+            <v-card-text>
+              <div class="mt-8 text-center">
+                Description: {{ appointmentE.description }}
+              </div>
+              <div class="mt-8 text-center">
+                Duration: {{ appointmentE.startHour }} -
+                {{ appointmentE.endHour }}
+              </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-col
+                class="grey--text text-truncate hidden-sm-and-down"
+                align="center"
+              >
+                <v-icon size="35" @click="sendData(appointmentE, false)"
+                  >mdi-pencil</v-icon
+                >
+              </v-col>
+              <v-col
+                class="grey--text text-truncate hidden-sm-and-down"
+                align="center"
+              >
+                <v-icon size="35" @click="deleteAppointment(appointmentE.name)"
+                  >mdi-delete</v-icon
+                >
+              </v-col>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
       </v-sheet>
       <Scheduling
         :scheduledAppointment="scheduledAppointment"
@@ -104,12 +126,15 @@ export default {
 
   data: () => ({
     scheduledAppointment: {},
+    appointmentE: {},
     newMovement: false,
     dialog: false,
     type: "month",
-    mode: "stack",
     types: ["month", "week", "day"],
     value: "",
+    selectedAppointment: {},
+    selectedElement: null,
+    selectedOpen: false,
     colors: [
       "blue",
       "indigo",
@@ -119,14 +144,7 @@ export default {
       "orange",
       "grey darken-1"
     ],
-    events: [
-      {
-        name: "Dentist",
-        start: "2020-06-18 10:00",
-        end: "2020-06-18 11:00",
-        color: "green"
-      }
-    ]
+    events: []
   }),
   methods: {
     ...mapActions([
@@ -134,18 +152,6 @@ export default {
       "updateScheduledAppointment",
       "deleteScheduledAppointment"
     ]),
-
-    deleteAppointment: function(deleteScheduledAppointment) {
-      let confirmation = confirm("Are you sure you want to delete?");
-      if (confirmation) {
-        // this.delete(this.scheduledAppointment.name);
-        this.deleteScheduledAppointment(deleteScheduledAppointment);
-        return true;
-      } else {
-        return false;
-      }
-    },
-
     sendData(scheduledAppointment, newMovement) {
       this.scheduledAppointment = {
         ...scheduledAppointment
@@ -171,31 +177,77 @@ export default {
     },
 
     updateAppointment: function(appointmentToUpdate) {
-      this.scheduledAppointment = appointmentToUpdate;
+      //  this.scheduledAppointment = appointmentToUpdate;
       this.updateScheduledAppointment(appointmentToUpdate);
     },
 
-    getEvents() {
-      /* this.getScheduledAppointments.forEach(element => {
+    deleteAppointment: function(deleteScheduledAppointment) {
+      let confirmation = confirm("Are you sure you want to delete?");
+      if (confirmation) {
+        this.deleteScheduledAppointment(deleteScheduledAppointment);
+        this.events = this.events.filter(
+          event => event.name !== deleteScheduledAppointment
+        );
+        this.selectedOpen = false;
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    getEventColor(event) {
+      return event.color;
+    },
+
+    getEventName(event) {
+      return event.name;
+    },
+
+    rnd(a, b) {
+      return Math.floor((b - a + 1) * Math.random()) + a;
+    },
+
+    showAppointment: function({ nativeEvent, event }) {
+      const open = () => {
+        this.selectedAppointment = event;
+        this.selectedElement = nativeEvent.target;
+        setTimeout(() => (this.selectedOpen = true), 15);
+      };
+
+      if (this.selectedOpen) {
+        this.selectedOpen = false;
+        setTimeout(open, 15);
+      } else {
+        open();
+      }
+
+      nativeEvent.stopPropagation();
+      this.getScheduledAppointments.forEach(element => {
+        if (element.name === this.selectedAppointment.name) {
+          this.appointmentE = element;
+        }
+      });
+    },
+    drawAppointments: function() {
+      this.events = [];
+      this.getScheduledAppointments.forEach(element => {
         this.events.push({
           name: element.name,
           start: `${element.date} ${element.startHour}`,
           end: `${element.date} ${element.endHour}`,
           color: this.colors[this.rnd(0, this.colors.length - 1)]
         });
-      });*/
-    },
-    getEventColor(event) {
-      return event.color;
-    },
-    rnd(a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a;
+      });
     }
   },
+
   computed: {
     ...mapGetters(["getScheduledAppointments"]),
     scheduledAppointments() {
       return this.getScheduledAppointments;
+    },
+    draw() {
+      return this.events;
     }
   }
 };
