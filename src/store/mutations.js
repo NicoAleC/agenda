@@ -29,5 +29,30 @@ export default {
             name: addAppoint.name,
             contactNumber: addAppoint.contactNumber
         });
-    }
+    },
+    mutateScheduledAppointmentList(state, appointmentToAdd) {
+        state.scheduledAppointments.push(appointmentToAdd);
+      },
+    
+    mutateUpdateAppointment(state, appointmentToUpdate) {
+        const FoundAppointment = state.scheduledAppointments.findIndex(
+          appointment => appointment.name === appointmentToUpdate.name
+        );
+    
+        state.scheduledAppointments[FoundAppointment].name =
+          appointmentToUpdate.name;
+        state.scheduledAppointments[FoundAppointment].description =
+          appointmentToUpdate.description;
+        state.scheduledAppointments[FoundAppointment].date =
+          appointmentToUpdate.date;
+        state.scheduledAppointments[FoundAppointment].startHour =
+          appointmentToUpdate.startHour;
+        state.scheduledAppointments[FoundAppointment].endHour =
+          appointmentToUpdate.endHour;
+      },
+      mutateDeleteAppointment(state, deleteScheduledAppointment) {
+        state.scheduledAppointments = state.scheduledAppointments.filter(
+          appointment => appointment.name !== deleteScheduledAppointment.name
+        );
+      }
 };
