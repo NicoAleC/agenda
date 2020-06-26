@@ -1,5 +1,5 @@
-import Appointments from "@/views/testview.vue";
-import Scheduling from "@/components/test.vue";
+import Appointments from "@/views/Appointments.vue";
+import Scheduling from "@/components/Scheduling.vue";
 
 import { assert } from "chai";
 import { mount, createLocalVue, shallowMount } from "@vue/test-utils";

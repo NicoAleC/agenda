@@ -136,13 +136,6 @@ export default {
       return this.getScheduledAppointments;
     }
   },
-  filters: {
-    capitalizeAvatar: function(value) {
-      if (!value) return "";
-      value = value.toString();
-      return value.charAt(0).toUpperCase();
-    }
-  },
   methods: {
     ...mapActions(["updateScheduledAppointment"]),
 
