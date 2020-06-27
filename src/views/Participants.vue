@@ -18,10 +18,10 @@
 
           <v-col class="text-right">
             <v-btn
-              color="primary"
+              color="black"
               dark
               x-large
-              class="ma-2"
+              outlined
               @click="sendData(selectedParticipant,true)"
             >New Participant</v-btn>
           </v-col>
@@ -61,14 +61,12 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </v-row>
-      <v-snackbar
-        v-model="alert"
-        type="success"
-        color="primary"
-        top
-        right
-        :timeout="timeout"
-      >Participante creado correctamente</v-snackbar>
+      <v-snackbar v-model="alert" color="orange" top right :timeout="timeout">
+        <strong>{{changeName ? "Successfully created participant" : "The Participant is already in the appointment"}}</strong>
+      </v-snackbar>
+      <v-snackbar v-model="alert2" color="orange" top right :timeout="timeout">
+        <strong>{{changeNameTwo ? "¡Participant successfully added to the appointment!" : "Participant edited correctly"}}</strong>
+      </v-snackbar>
       <ParticipantsDialog
         :selectedParticipant="selectedParticipant"
         :newMovement="newMovement"
@@ -98,8 +96,11 @@ export default {
     newMovement: false,
     dialog: false,
     alert: false,
+    alert2: false,
+
     timeout: 3000,
-    //Hardcoded
+    changeName: null,
+    changeNameTwo: null,
     name: "Dentist"
   }),
   methods: {
@@ -111,15 +112,18 @@ export default {
     ]),
 
     addParticipantToAScheduleAppointment(name, contact, id, appointmen) {
-      if (this._findParticipant(appointmen, name) == -1) {
+      if (this._findParticipant(appointmen, id) == -1) {
         this.addParticipantToAnAppointment({
           name: name,
           contactNumber: contact,
           participantId: id,
           appointmentName: appointmen
         });
+        this.alert2 = true;
+        this.changeNameTwo = true;
       } else {
-        alert("El participante ya existe en la lista");
+        this.alert = true;
+        this.changeName = false;
       }
     },
     _findParticipant(appo, members) {
@@ -127,7 +131,7 @@ export default {
         appoint => appoint.name == appo
       );
       const appointmentFound = this.appointments[found].participants.findIndex(
-        participants => participants.name == members
+        participants => participants.participantId == members
       );
       return appointmentFound;
     },
@@ -156,6 +160,7 @@ export default {
         participantId: newOne.participantId
       });
       this.alert = true;
+      this.changeName = true;
     },
     updateNewParticipant(newOne) {
       this.updateParticipant({
@@ -163,6 +168,8 @@ export default {
         contactNumber: newOne.contactNumber,
         participantId: newOne.participantId
       });
+      this.alert2 = true;
+      this.changeNameTwo = false;
     }
   },
   filters: {

@@ -15,17 +15,20 @@ export default {
             participantId.contactNumber;
     },
     mutateParticipantDelete(state, code) {
-        /*const foudAccountIndex = state.participants.findIndex(
-            part => part.participantId === code.participantId
-        );
-        if (state.scheduledAppointments[foudAccountIndex].participants.length === 0) {
-            */
+        /* let foudAccountIndex = 0;
+         while (foudAccountIndex == 0) {
+             if (state.scheduledAppointments[foudAccountIndex].participants.length === 0) {
+                 console.log(state.scheduledAppointments[foudAccountIndex].participants.length);
+                
+             } else {
+                 foudAccountIndex++;
+             }
+         }*/
+
         state.participants = state.participants.filter(
             account => account.participantId !== code.participantId
         );
-        /* } else {
-             alert("Can´t delete this participant");
-         }*/
+
     },
     mutateParticipantAddAppointment(state, addAppoint) {
         const foundAccountIndex = state.scheduledAppointments.findIndex(
