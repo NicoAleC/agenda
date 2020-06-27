@@ -1,119 +1,125 @@
 <template>
-  <v-row class="fill-height">
-    <v-col>
-      <v-toolbar dark color="#5E35B1">
-        <v-select
-          v-model="choosedAgenda"
-          :hint="`${choosedAgenda.agendaId}, ${choosedAgenda.description}`"
-          :items="idNameGetAgendas"
-          item-text="name"
-          item-value="agendaId"
-          label="ALL"
-          persistent-hint
-          return-object
-          single-line
-        >
-        </v-select>
-        <v-spacer></v-spacer>
-        <v-btn icon @click.stop="toggleComponentAgendas">
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-        <v-btn icon @click.stop="toggleComponentDeleteAgendas">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon @click.stop="toggleComponentUpdateAgendas"
-            >mdi-rename-box</v-icon
+  <div id="home">
+    <v-row id="Home-first-table" class="fill-height">
+      <v-col>
+        <v-toolbar dark color="#5E35B1">
+          <v-select
+            v-model="choosedAgenda"
+            :hint="`${choosedAgenda.agendaId}, ${choosedAgenda.description}`"
+            :items="idNameGetAgendas"
+            item-text="name"
+            item-value="agendaId"
+            label="ALL"
+            persistent-hint
+            return-object
+            single-line
           >
-        </v-btn>
-      </v-toolbar>
-      <v-sheet height="64">
-        <v-toolbar flat color="#81D4FA">
-          <v-btn outlined class="mr-4" color="white--text" @click="setToday">
-            Today
-          </v-btn>
-          <v-btn fab text small color="grey darken-2" @click="prev">
-            <v-icon small>mdi-chevron-left</v-icon>
-          </v-btn>
-          <v-btn fab text small color="grey darken-2" @click="next">
-            <v-icon small>mdi-chevron-right</v-icon>
-          </v-btn>
-          <v-toolbar-title v-if="$refs.calendar">
-            {{ $refs.calendar.title }}
-          </v-toolbar-title>
+          </v-select>
           <v-spacer></v-spacer>
-          <v-menu bottom right>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn outlined color="white--text" v-bind="attrs" v-on="on">
-                <span>{{ typeToLabel[type] }}</span>
-                <v-icon right>mdi-menu-down</v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item @click="type = 'day'">
-                <v-list-item-title>Day</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = 'week'">
-                <v-list-item-title>Week</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = 'month'">
-                <v-list-item-title>Month</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = '4day'">
-                <v-list-item-title>4 days</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+          <v-btn
+            id="home-btn-addAgenda"
+            icon
+            @click.stop="toggleComponentAgendas"
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+          <v-btn icon @click.stop="toggleComponentDeleteAgendas">
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
+          <v-btn icon>
+            <v-icon @click.stop="toggleComponentUpdateAgendas"
+              >mdi-rename-box</v-icon
+            >
+          </v-btn>
         </v-toolbar>
-      </v-sheet>
-      <v-sheet height="600">
-        <v-calendar
-          ref="calendar"
-          v-model="focus"
-          color="primary"
-          :events="events"
-          :event-color="getEventColor"
-          :type="type"
-          @click:event="showEvent"
-          @click:more="viewDay"
-          @click:date="viewDay"
-        ></v-calendar>
-        <v-menu
-          v-model="selectedOpen"
-          :close-on-content-click="false"
-          :activator="selectedElement"
-          offset-x
-        >
-          <v-card color="grey lighten-4" min-width="350px" flat>
-            <v-toolbar :color="selectedEvent.color" dark>
-              <v-btn icon>
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn>
-              <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-btn icon>
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
-              <v-btn icon>
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
-            </v-toolbar>
-            <v-card-text>
-              <span v-html="selectedEvent.details"></span>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn text color="secondary" @click="selectedOpen = false">
-                Cancel
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-menu>
-      </v-sheet>
-    </v-col>
-    <agendas ref="newAgenda" v-model="dialogAgendas" />
-    <updateAgenda ref="updateAgendas" v-model="dialogUpdateAgenda" />
-    <DeleteAgenda ref="supressAgenda" v-model="dialogDeleteAgenda" />
-  </v-row>
+        <v-sheet height="64">
+          <v-toolbar flat color="#81D4FA">
+            <v-btn outlined class="mr-4" color="white--text" @click="setToday">
+              Today
+            </v-btn>
+            <v-btn fab text small color="grey darken-2" @click="prev">
+              <v-icon small>mdi-chevron-left</v-icon>
+            </v-btn>
+            <v-btn fab text small color="grey darken-2" @click="next">
+              <v-icon small>mdi-chevron-right</v-icon>
+            </v-btn>
+            <v-toolbar-title v-if="$refs.calendar">
+              {{ $refs.calendar.title }}
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-menu bottom right>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn outlined color="white--text" v-bind="attrs" v-on="on">
+                  <span>{{ typeToLabel[type] }}</span>
+                  <v-icon right>mdi-menu-down</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item @click="type = 'day'">
+                  <v-list-item-title>Day</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="type = 'week'">
+                  <v-list-item-title>Week</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="type = 'month'">
+                  <v-list-item-title>Month</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="type = '4day'">
+                  <v-list-item-title>4 days</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-toolbar>
+        </v-sheet>
+        <v-sheet height="600">
+          <v-calendar
+            ref="calendar"
+            v-model="focus"
+            color="primary"
+            :events="events"
+            :event-color="getEventColor"
+            :type="type"
+            @click:event="showEvent"
+            @click:more="viewDay"
+            @click:date="viewDay"
+          ></v-calendar>
+          <v-menu
+            v-model="selectedOpen"
+            :close-on-content-click="false"
+            :activator="selectedElement"
+            offset-x
+          >
+            <v-card color="grey lighten-4" min-width="350px" flat>
+              <v-toolbar :color="selectedEvent.color" dark>
+                <v-btn icon>
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+                <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn icon>
+                  <v-icon>mdi-heart</v-icon>
+                </v-btn>
+                <v-btn icon>
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </v-toolbar>
+              <v-card-text>
+                <span v-html="selectedEvent.details"></span>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn text color="secondary" @click="selectedOpen = false">
+                  Cancel
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-menu>
+        </v-sheet>
+      </v-col>
+      <agendas ref="newAgenda" v-model="dialogAgendas" />
+      <updateAgenda ref="updateAgendas" v-model="dialogUpdateAgenda" />
+      <DeleteAgenda ref="supressAgenda" v-model="dialogDeleteAgenda" />
+    </v-row>
+  </div>
 </template>
 <script>
 import agendas from "../components/CreateAgenda.vue";

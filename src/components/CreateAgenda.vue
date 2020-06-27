@@ -6,11 +6,17 @@
           <span class="headline">Create Agenda</span>
         </v-card-title>
         <v-col cols="12">
-          <v-text-field v-model="name" label="Name" required></v-text-field>
+          <v-text-field
+            id="CTA-Name"
+            v-model="name"
+            label="Name"
+            required
+          ></v-text-field>
         </v-col>
         <v-spacer></v-spacer>
         <v-col cols="12">
           <v-text-field
+            id="CTA-BeginH"
             v-model="beginning"
             label="Biggining Hour[00:00:00]"
             required
@@ -19,6 +25,7 @@
         <v-spacer></v-spacer>
         <v-col cols="12">
           <v-text-field
+            id="CTA-EndH"
             v-model="ending"
             label="Ending Hour[00:00:00]"
             required
@@ -27,6 +34,7 @@
         <v-spacer></v-spacer>
         <v-col cols="12">
           <v-text-field
+            id="CTA-Desc"
             v-model="description"
             label="Description"
             required
@@ -42,7 +50,13 @@
           "
           >Cancel</v-btn
         >
-        <v-btn color="blue darken-1" text @click.stop="newAgenda">Create</v-btn>
+        <v-btn
+          id="CTA-btn-Create"
+          color="blue darken-1"
+          text
+          @click.stop="newAgenda"
+          >Create</v-btn
+        >
       </v-card>
     </v-dialog>
   </div>

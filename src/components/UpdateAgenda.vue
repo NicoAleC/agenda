@@ -70,7 +70,6 @@ export default {
       let agendaFound = this.agendasGet.find(
         element => element.agendaId === this.getID
       );
-      console.log(agendaFound.endHour);
       if (agendaFound.appointments.length > 0) {
         this.updateAgenda({
           agendaId: agendaFound.agendaId,

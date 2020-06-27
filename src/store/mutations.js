@@ -7,7 +7,6 @@ const mutateaddAgenda = (state, newAgenda) => {
 
 const mutatedeleteAgenda = (state, agendaID) => {
   var indexOfItem;
-  console.log(agendaID);
   const value = state.agendas.find(item => item.agendaId === agendaID);
   indexOfItem = state.agendas.indexOf(value);
   if (value !== null) {
