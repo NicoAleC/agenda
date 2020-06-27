@@ -22,35 +22,58 @@
               dark
               x-large
               class="ma-2"
-              @click="sendData(selectedParticipant,true)"
-            >New Participant</v-btn>
+              @click="sendData(selectedParticipant, true)"
+              >New Participant</v-btn
+            >
           </v-col>
         </v-layout>
         <v-expansion-panels popout>
-          <v-expansion-panel v-for="(participant, i) in searching" :key="i" hide-actions>
+          <v-expansion-panel
+            v-for="(participant, i) in searching"
+            :key="i"
+            hide-actions
+          >
             <v-expansion-panel-header>
               <v-row align="center" class="spacer" no-gutters>
                 <v-col cols="5" sm="3" md="2">
                   <v-avatar color="orange">
-                    <span class="white--text headline">{{ participant.name | capitalizeAvatar }}</span>
+                    <span class="white--text headline">{{
+                      participant.name | capitalizeAvatar
+                    }}</span>
                   </v-avatar>
                 </v-col>
 
                 <v-col class="hidden-xs-only" sm="5" md="3">
-                  <strong v-html="participant.name" class="list-participant">{{ participant.name }}</strong>
+                  <strong v-html="participant.name" class="list-participant">{{
+                    participant.name
+                  }}</strong>
                 </v-col>
 
                 <v-col class="text-no-wrap" cols="5" sm="3">
                   <strong v-html="participant.contactNumber"></strong>
                 </v-col>
                 <v-col class="grey--text text-truncate hidden-sm-and-down">
-                  <v-icon size="35" class="mr-2" @click="sendData(participant,false)">mdi-plus</v-icon>
+                  <v-icon
+                    size="35"
+                    class="mr-2"
+                    @click="sendData(participant, false)"
+                    >mdi-plus</v-icon
+                  >
                 </v-col>
                 <v-col class="grey--text text-truncate hidden-sm-and-down">
-                  <v-icon size="35" class="mr-2" @click="sendData(participant,false)">mdi-pencil</v-icon>
+                  <v-icon
+                    size="35"
+                    class="mr-2"
+                    @click="sendData(participant, false)"
+                    >mdi-pencil</v-icon
+                  >
                 </v-col>
                 <v-col class="grey--text text-truncate hidden-sm-and-down">
-                  <v-icon size="35" @click="deleteItem(participant.participantId)">mdi-delete</v-icon>
+                  <v-icon
+                    size="35"
+                    @click="deleteItem(participant.participantId)"
+                    >mdi-delete</v-icon
+                  >
                 </v-col>
               </v-row>
             </v-expansion-panel-header>
@@ -64,7 +87,8 @@
         top
         right
         :timeout="timeout"
-      >Participante creado correctamente</v-snackbar>
+        >Participante creado correctamente</v-snackbar
+      >
       <ParticipantsDialog
         :selectedParticipant="selectedParticipant"
         :newMovement="newMovement"
