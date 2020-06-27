@@ -29,5 +29,17 @@ export default {
             name: addAppoint.name,
             contactNumber: addAppoint.contactNumber
         });
+    },
+    mutateAddPostponed(state, addPost) {
+        state.postponedAppointments.push(addPost);
+    },
+    mutateUpdatePostponed(state, updatedPost) {
+        const toUpdate = state.postponedAppointments.findIndex(post => post.name === updatedPost.name);
+        if (toUpdate >= 0) {
+            state.postponedAppointments.splice(toUpdate,1,updatedPost);
+        }
+    },
+    mutateDeletePostponed(state, deletePost) {
+        state.postponedAppointments = state.postponedAppointments.filter(post => post.name !== deletePost.name);
     }
 };

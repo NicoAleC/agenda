@@ -13,5 +13,14 @@ export default {
     },
     addParticipantToAnAppointment({ commit }, addAppointment) {
         commit("mutateParticipantAddAppointment", addAppointment);
+    },
+    addPostponed({ commit }, newPostponed) {
+        commit("mutateAddPostponed", newPostponed);
+    },
+    updatePostponed({ commit }, upPostponed) {
+        commit("mutateUpdatePostponed", upPostponed);
+    },
+    deletePostponed({ commit }, delPostponed) {
+        commit("mutateDeletePostponed", delPostponed);
     }
 };

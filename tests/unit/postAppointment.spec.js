@@ -27,32 +27,39 @@ describe("Postponed Appointments", () => {
   });
   it.only("Add a postponed appointment", () => {
     const wrapper = mount(PostAppointment, { store, localVue, vuetify });
-    const newPostponed = { name: "Test", description: "default description" };
-    let expectedLenght = wrapper.vm.$store.state.postponed.length + 1;
-    wrapper.vm.addPostponed(newPostponed);
-    assert.equal(expectedLenght, wrapper.vm.$store.state.postponed.length);
+    wrapper.setData({ name: "Test", description: "default description" });
+    let expectedLenght =
+      wrapper.vm.$store.state.postponedAppointments.length + 1;
+    wrapper.vm.addPostponedApp();
+    assert.equal(
+      expectedLenght,
+      wrapper.vm.$store.state.postponedAppointments.length
+    );
   });
   it.only("Edit a postponed appointment", () => {
     const wrapper = mount(PostAppointment, { store, localVue, vuetify });
-    const oldPostponed = { name: "Test", description: "default description" };
     const updatedPostponed = {
-      name: "UpdatedTest",
-      description: "New description"
+      name: "Test",
+      description: "updated description"
     };
-    wrapper.vm.updatePostponed(oldPostponed, updatedPostponed);
-    const foundPost = wrapper.vm.$store.state.postponed.find(
+    wrapper.setData({ name: "Test", description: "updated description" });
+    wrapper.vm.updatePostponedApp();
+    const foundPost = wrapper.vm.$store.state.postponedAppointments.find(
       appoint => appoint.name === updatedPostponed.name
     );
-    assert.equal(updatedPostponed, foundPost);
+    assert.equal(updatedPostponed.name, foundPost.name);
+    assert.equal(updatedPostponed.description, foundPost.description);
+  
   });
   it.only("Delete a postponed appointment", () => {
     const wrapper = mount(PostAppointment, { store, localVue, vuetify });
-    const deletedPostponed = {
-      name: "UpdatedTest",
-      description: "New description"
-    };
-    let expectedLenght = wrapper.vm.$store.state.postponed.length - 1;
-    wrapper.vm.deletePostponed(deletedPostponed);
-    assert.equal(expectedLenght, wrapper.vm.$store.state.postponed.length);
+    wrapper.setData({ name: "Test", description: "updated description" });
+    let expectedLenght =
+      wrapper.vm.$store.state.postponedAppointments.length - 1;
+    wrapper.vm.deletePostponedApp();
+    assert.equal(
+      expectedLenght,
+      wrapper.vm.$store.state.postponedAppointments.length
+    );
   });
 });
