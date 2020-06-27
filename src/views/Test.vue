@@ -1,21 +1,41 @@
 <template>
   <div class="test">
-    <h1 id="test">Home</h1>
+    <v-container class="my-10" grid-list-md>
+      <h1 id="test">Home</h1>
+      <v-layout row justify-space-around>
+        <v-col class="text-left"></v-col>
+
+        <v-col class="text-right">
+          <v-btn
+            color="primary"
+            dark
+            x-large
+            class="ma-2"
+            @click="$router.push('participants')"
+          >Añadir Participantes</v-btn>
+
+          <v-btn color="primary" dark x-large class="ma-2" @click="sendData()">Mis Participantes</v-btn>
+        </v-col>
+      </v-layout>
+
+      <ParticipantsAppointment :dialog="dialog" @close="dialog = false" />
+    </v-container>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
+import ParticipantsAppointment from "@/components/ParticipantsAppointment.vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Test",
-  components: {},
+  components: { ParticipantsAppointment },
   data: () => ({
     name: "",
     contact: "",
     id: "",
-    appointment: ""
+    appointment: "",
+    dialog: false
   }),
   methods: {
     ...mapActions([
@@ -35,6 +55,13 @@ export default {
         participantId: participantId,
         appointmentName: appointment
       });
+    },
+    sendData() {
+      /*this.selectedParticipant = {
+        ...selectedParticipant
+      };*/
+      this.dialog = true;
+      //this.newMovement = newMovement;
     }
   },
   computed: {

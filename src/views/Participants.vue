@@ -44,7 +44,11 @@
                   <strong v-html="participant.contactNumber"></strong>
                 </v-col>
                 <v-col class="grey--text text-truncate hidden-sm-and-down">
-                  <v-icon size="35" class="mr-2" @click="sendData(participant,false)">mdi-plus</v-icon>
+                  <v-icon
+                    size="35"
+                    class="mr-2"
+                    @click="addParticipantToAScheduleAppointment(participant.name, participant.contactNumber, participant.participantId,name )"
+                  >mdi-plus</v-icon>
                 </v-col>
                 <v-col class="grey--text text-truncate hidden-sm-and-down">
                   <v-icon size="35" class="mr-2" @click="sendData(participant,false)">mdi-pencil</v-icon>
@@ -91,16 +95,42 @@ export default {
   data: () => ({
     selectedParticipant: {},
     search: "",
-    idparticipant: "",
     newMovement: false,
     dialog: false,
-    participantindex: null,
     alert: false,
-    timeout: 3000
+    timeout: 3000,
+    //Hardcoded
+    name: "Dentist"
   }),
   methods: {
-    ...mapActions(["addParticipant", "updateParticipant", "deleteParticipant"]),
+    ...mapActions([
+      "addParticipant",
+      "updateParticipant",
+      "deleteParticipant",
+      "addParticipantToAnAppointment"
+    ]),
 
+    addParticipantToAScheduleAppointment(name, contact, id, appointmen) {
+      if (this._findParticipant(appointmen, name) == -1) {
+        this.addParticipantToAnAppointment({
+          name: name,
+          contactNumber: contact,
+          participantId: id,
+          appointmentName: appointmen
+        });
+      } else {
+        alert("El participante ya existe en la lista");
+      }
+    },
+    _findParticipant(appo, members) {
+      const found = this.appointments.findIndex(
+        appoint => appoint.name == appo
+      );
+      const appointmentFound = this.appointments[found].participants.findIndex(
+        participants => participants.name == members
+      );
+      return appointmentFound;
+    },
     deleteItem(idparticipant) {
       let confirmation = confirm("Are you sure you want to delete?");
       if (confirmation) {
@@ -111,17 +141,6 @@ export default {
       } else {
         return false;
       }
-    },
-    findIndex(code) {
-      const identification = this.participants.findIndex(
-        part => part.participantId === code
-      );
-      console.log(identification);
-      return identification;
-    },
-    firstElement(name) {
-      let first = name.charAt(0);
-      return first;
     },
     sendData(selectedParticipant, newMovement) {
       this.selectedParticipant = {
@@ -134,11 +153,9 @@ export default {
       this.addParticipant({
         name: newOne.name,
         contactNumber: newOne.contactNumber,
-        participantId: newOne.participantId,
-        index: this.findIndex(newOne.participantId)
+        participantId: newOne.participantId
       });
       this.alert = true;
-      console.log(this.findIndex(newOne.participantId));
     },
     updateNewParticipant(newOne) {
       this.updateParticipant({
@@ -156,9 +173,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["getParticipants"]),
+    ...mapGetters(["getParticipants", "getScheduled"]),
     participants() {
       return this.getParticipants;
+    },
+    appointments() {
+      return this.getScheduled;
     },
     searching: function() {
       if (this.search !== "") {

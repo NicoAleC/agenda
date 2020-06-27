@@ -46,26 +46,8 @@ describe("Participants.vue", () => {
         const participants = wrapper.vm.$store.state.participants;
         assert.equal(participants.length, expectedLength);
     });
-    it.only("Delete participants work right", () => {
-        global.alert = () => { };
-        global.confirm = () => true;
-        const wrapper = mount(Participants, {
-            store,
-            vuetify,
-            localVue,
-            stubs: ['VTextField', 'VSnackbar']
 
-        });
-        const initiallength = wrapper.vm.$store.state.participants.length;
-        wrapper.vm.deleteItem("PART-002");
-        assert.equal(initiallength - 1, 1);
-    });
     it.only("Add participants work rigth", () => {
-
-        global.alert = message => {
-            console.log(message);
-        };
-
         const wrapper = mount(Participants, {
             store,
             vuetify,
@@ -73,7 +55,7 @@ describe("Participants.vue", () => {
             stubs: ['VTextField', 'VSnackbar']
 
         });
-        const expectedLength = 2;
+        const expectedLength = 3;
         const numberOfParticipants = wrapper.vm.$store.state.participants.length;
         wrapper.vm.addNewParticipant({ name: "Pablo", contactNumber: "69501045", participantId: "Part1" });
         assert.equal(numberOfParticipants + 1, expectedLength);
@@ -90,7 +72,7 @@ describe("Participants.vue", () => {
         await wrapper.vm.addNewParticipant({ name: "Renata", contactNumber: "69501045", participantId: "Part4" });
         await wrapper.vm.$forceUpdate();
         const list = wrapper.findAll(".list-participant");
-        assert.strictEqual(list.at(2).text(), "Renata");
+        assert.strictEqual(list.at(3).text(), "Renata");
     });
 
     it.only("Editing a participant is enable", () => {
@@ -140,7 +122,7 @@ describe("Participants.vue", () => {
         const numberOfParticipants = wrapper.vm.$store.state.scheduledAppointments[0].participants.length;
         //console.log(numberOfParticipants);
 
-        wrapper.vm.addParticipantToAScheduleAppointment("Pablo", "69501045", "PART-004", "ANG-0001");
+        wrapper.vm.addParticipantToAScheduleAppointment("Pablo", "69501045", "PART-004", "Dentist");
         assert.equal(numberOfParticipants + 1, expectedLength);
     });
     it.only("Should Delete participant from an appointment, just delete", () => {
@@ -151,22 +133,46 @@ describe("Participants.vue", () => {
             stubs: ['VTextField']
 
         });
-        const expectedLength = 0;
+        const expectedLength = 1;
         const numberOfParticipants = wrapper.vm.$store.state.scheduledAppointments[0].participants.length;
         // console.log(numberOfParticipants);
-        wrapper.vm.deleteParticipantToAScheduleAppointment("ANG-0001", "PART-002");
-        wrapper.vm.deleteParticipantToAScheduleAppointment("ANG-0001", "PART-004");
+        wrapper.vm.deleteParticipantToAScheduleAppointment("Dentist", "PART-002");
 
-        assert.equal(numberOfParticipants - 2, expectedLength);
+        assert.equal(numberOfParticipants - 1, expectedLength);
+    });
+    it.only("Should not be able to add a participant that is already in the appointment", () => {
+        const wrapper = mount(Participants, {
+            store,
+            vuetify,
+            localVue,
+            stubs: ['VTextField', 'VSnackbar']
+
+        });
+        const expectedLength = 2;
+        const number = wrapper.vm.$store.state.scheduledAppointments[0].participants.length;
+        console.log(number);
+        wrapper.vm.addParticipantToAScheduleAppointment("Pablo", "69501045", "PART-004", "Dentist");
+        wrapper.vm.addParticipantToAScheduleAppointment("Pablo Marmol", "69501045", "PART-005", "Dentist");
+        const numberOfParticipants = wrapper.vm.$store.state.scheduledAppointments[0].participants.length;
+        console.log(numberOfParticipants);
+        assert.equal(numberOfParticipants, expectedLength);
     });
     it("Don't update any participant if name is not filled", () => {
 
     });
-    it("Should not be able to add a participant that is already in the appointment", () => {
-    });
-    it("Should be able to remove a participant from an appointment", () => {
-    });
-    it("Don´t add participants that are already in the appointment", () => {
+    it("Delete participants work right", () => {
+        global.alert = () => { };
+        global.confirm = () => true;
+        const wrapper = mount(Participants, {
+            store,
+            vuetify,
+            localVue,
+            stubs: ['VTextField', 'VSnackbar']
+
+        });
+        const initiallength = wrapper.vm.$store.state.participants;
+        wrapper.vm.deleteItem("PART-001");
+        assert.equal(initiallength.length - 1, 1);
     });
 
 });
