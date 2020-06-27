@@ -34,7 +34,6 @@
                     offset-y
                     min-width="290px"
                   >
-                  
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         v-model="scheduledAppointment.date"
@@ -47,7 +46,7 @@
                     <v-date-picker
                       v-model="scheduledAppointment.date"
                       @input="menu_date = false"
-                      color="green lighten-1"
+                      color="grey darken-1"
                       :landscape="$vuetify.breakpoint.smAndUp"
                       class="mt-4"
                     ></v-date-picker>
@@ -78,7 +77,8 @@
                       @input="menu_start_hour = false"
                       class="mt-4"
                       format="24hr"
-                      color="green lighten-1"
+                      :max="scheduledAppointment.endHour"
+                      color="grey darken-1"
                       :landscape="$vuetify.breakpoint.mdAndUp"
                     ></v-time-picker>
                   </v-menu>
@@ -108,10 +108,21 @@
                       @input="menu_end_hour = false"
                       class="mt-4"
                       format="24hr"
-                      color="green lighten-1"
+                      :min="scheduledAppointment.startHour"
+                      color="grey darken-1"
                       :landscape="$vuetify.breakpoint.mdAndUp"
                     ></v-time-picker>
                   </v-menu>
+                </v-col>
+                <v-col cols="12">
+                  <v-select
+                    v-model="scheduledAppointment.participants"
+                    :items="getParticipantsList()"
+                    attach
+                    chips
+                    label="Add Participants"
+                    multiple
+                  ></v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -125,10 +136,19 @@
               class="ma-2"
               outlined
               color="indigo"
-              :disabled="!valid"
               text
-              @click="emitData()"
-              >{{ newMovement ? "SAVE" : "UPDATE" }}</v-btn
+              v-if="newMovement"
+              @click="addAppointment()"
+              >{{ "SAVE" }}</v-btn
+            >
+            <v-btn
+              class="ma-2"
+              outlined
+              color="indigo"
+              text
+              v-if="!newMovement"
+              @click="updateAppointment()"
+              >{{ "UPDATE" }}</v-btn
             >
           </v-card-actions>
         </v-form>
@@ -138,25 +158,16 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
-  name: "scheduledAppointments",
+  name: "Scheduling",
   data: () => ({
     valid: true,
     menu_date: false,
     showCurrent: true,
     menu_end_hour: false,
-    menu_start_hour: false,
-    scheduledAppointment: {
-      name: "",
-      description: "",
-      date: new Date().toISOString().substr(0, 10),
-      startHour: "",
-      endHour: "",
-      agendaId: "",
-      participants: []
-    }
+    menu_start_hour: false
   }),
   props: {
     newMovement: {
@@ -166,42 +177,68 @@ export default {
     dialog: {
       type: Boolean,
       default: false
+    },
+    scheduledAppointment: {
+      type: Object,
+      default: function() {
+        return {
+          id: "",
+          name: "",
+          description: "",
+          date: new Date().toISOString().substr(0, 10),
+          startHour: "",
+          endHour: "",
+          agendaId: "",
+          participants: []
+        };
+      }
     }
   },
   computed: {
     ...mapGetters(["getScheduledAppointments"]),
+    ...mapGetters(["getParticipants"]),
+
     scheduledAppointments() {
       return this.getScheduledAppointments;
+    },
+    participants() {
+      return this.getParticipants;
     }
   },
   methods: {
-    ...mapActions(["updateScheduledAppointment"]),
-
-    emitData: function() {
+    addAppointment: function() {
       if (this._validateData()) {
-        if (this.newMovement) {
-          this.$emit("addAppointment", {
-            name: this.scheduledAppointment.name,
-            description: this.scheduledAppointment.description,
-            date: this.scheduledAppointment.date,
-            startHour: this.scheduledAppointment.startHour,
-            endHour: this.scheduledAppointment.endHour
-          });
-        } else {
-          this.$emit("updateAppointment", {
-            name: this.scheduledAppointment.name,
-            description: this.scheduledAppointment.description,
-            date: this.scheduledAppointment.date,
-            startHour: this.scheduledAppointment.startHour,
-            endHour: this.scheduledAppointment.endHour
-          });
-        }
+        this.$emit("addAppointment", {
+          id: this.getAppointmentId(),
+          name: this.scheduledAppointment.name,
+          description: this.scheduledAppointment.description,
+          date: this.scheduledAppointment.date,
+          startHour: this.scheduledAppointment.startHour,
+          endHour: this.scheduledAppointment.endHour,
+          participants: this.scheduledAppointment.participants
+        });
+      } else {
+        alert("You must complete all fields");
+      }
+      this.cancel();
+    },
+    updateAppointment: function() {
+      if (this._validateData()) {
+        this.$emit("updateAppointment", {
+          id: this.scheduledAppointment.id,
+          name: this.scheduledAppointment.name,
+          description: this.scheduledAppointment.description,
+          date: this.scheduledAppointment.date,
+          startHour: this.scheduledAppointment.startHour,
+          endHour: this.scheduledAppointment.endHour
+        });
       } else {
         alert("You must complete all fields");
       }
 
       this.cancel();
     },
+
     cancel() {
       this.$emit("close");
       this.scheduledAppointment.name = "";
@@ -210,6 +247,25 @@ export default {
       this.scheduledAppointment.startHour = "";
       this.scheduledAppointment.endHour = "";
     },
+
+    getAppointmentId: function() {
+      let newId = 1;
+      let numberOfAppointments = this.scheduledAppointments.length;
+      if (numberOfAppointments > 0) {
+        let lastId = this.scheduledAppointments[numberOfAppointments - 1].id;
+        newId = parseInt(lastId.split("-")[1]) + 1;
+      }
+      return "APP-" + newId;
+    },
+
+    getParticipantsList: function() {
+      let list = [];
+      this.participants.forEach(element => {
+        list.push(element.name);
+      });
+      return list;
+    },
+
     _validateData() {
       return (
         this.scheduledAppointment.name !== "" &&

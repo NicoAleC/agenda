@@ -61,7 +61,7 @@ describe(" Scheduled Appointments CRUD", () => {
     const isValid = wrapper.vm._validateData();
     assert.isTrue(isValid);
   });*/
-  it.only(" Validate add schedule appointment ", () => {
+  it.only(" Validate add schedule appointment. ", () => {
     const wrapper = shallowMount(Appointments, {
       store,
       vuetify,
@@ -70,6 +70,7 @@ describe(" Scheduled Appointments CRUD", () => {
     });
 
     const appointmentToAdd = {
+      id: "APP-2",
       name: " Test ",
       description: " Unit Test ",
       date: "2020-06-26",
@@ -84,20 +85,9 @@ describe(" Scheduled Appointments CRUD", () => {
     );
     //console.log("AddList:" +  JSON.stringify(wrapper.vm.scheduledAppointments));
   });
-  //it.only(" Update appointment ", () => {
-  /*global.alert = message => {
-    console.log(message);
-  };
 
-    const wrapper = shallowMount(Appointments, {
-      store,
-      vuetify,
-      localVue,
-      stubs: ["VTextField"]
-    });*/
-  //});
-  it.only(" Validate delete schedule appointment ", () => {
-    global.alert = () => { };
+  it.only(" Validate Update Schedule appointment. ", () => {
+    global.alert = () => {};
     global.confirm = () => true;
 
     const wrapper = shallowMount(Appointments, {
@@ -107,8 +97,36 @@ describe(" Scheduled Appointments CRUD", () => {
       stubs: ["VTextField"]
     });
 
-    const appointmentToDelete = " Test ";
-    
+    const appointmentToUpdate = {
+      id: "APP-2",
+      name: " Appointment to Update ",
+      description: " Update Unit Test ",
+      date: "2020-06-26",
+      startHour: "11:00",
+      endHour: "12:00"
+    };
+    wrapper.vm.updateAppointment(appointmentToUpdate);
+    //console.log("UpdateList:" + JSON.stringify(wrapper.vm.scheduledAppointments));
+
+    assert.include(
+      JSON.stringify(wrapper.vm.scheduledAppointments),
+      appointmentToUpdate.name
+    );
+  });
+
+  it.only(" Validate delete schedule appointment. ", () => {
+    global.alert = () => {};
+    global.confirm = () => true;
+
+    const wrapper = shallowMount(Appointments, {
+      store,
+      vuetify,
+      localVue,
+      stubs: ["VTextField"]
+    });
+
+    const appointmentToDelete = "APP-2";
+
     wrapper.vm.deleteAppointment(appointmentToDelete);
     //console.log("DeleteList:" +  JSON.stringify(wrapper.vm.scheduledAppointments));
 
@@ -116,6 +134,5 @@ describe(" Scheduled Appointments CRUD", () => {
       JSON.stringify(wrapper.vm.scheduledAppointments),
       appointmentToDelete
     );
-
   });
 });

@@ -20,6 +20,7 @@ const state = {
   ],
   scheduledAppointments: [
     {
+      id: "APP-1",
       name: "Dentist",
       description: "I need to go to dentist",
       date: "2020-06-18",

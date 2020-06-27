@@ -14,14 +14,6 @@
             >
           </v-col>
         </v-layout>
-        <v-expansion-panels popout>
-          <v-expansion-panel
-            v-for="(appointment, index) in scheduledAppointments"
-            :key="index"
-            hide-actions
-          >
-          </v-expansion-panel>
-        </v-expansion-panels>
       </v-row>
       <v-sheet tile height="64" class="d-flex">
         <v-btn icon class="ma-5" @click="$refs.calendar.prev()">
@@ -93,7 +85,7 @@
                 class="grey--text text-truncate hidden-sm-and-down"
                 align="center"
               >
-                <v-icon size="35" @click="deleteAppointment(appointmentE.name)"
+                <v-icon size="35" @click="deleteAppointment(appointmentE.id)"
                   >mdi-delete</v-icon
                 >
               </v-col>
@@ -152,6 +144,7 @@ export default {
       "updateScheduledAppointment",
       "deleteScheduledAppointment"
     ]),
+
     sendData(scheduledAppointment, newMovement) {
       this.scheduledAppointment = {
         ...scheduledAppointment
@@ -159,26 +152,19 @@ export default {
       this.dialog = true;
       this.newMovement = newMovement;
     },
-    addAppointment: function(appointmentToAdd) {
-      this.addScheduledAppointment({
-        name: appointmentToAdd.name,
-        description: appointmentToAdd.description,
-        date: appointmentToAdd.date,
-        startHour: appointmentToAdd.startHour,
-        endHour: appointmentToAdd.endHour
-      });
 
-      this.events.push({
-        name: appointmentToAdd.name,
-        start: `${appointmentToAdd.date} ${appointmentToAdd.startHour}`,
-        end: `${appointmentToAdd.date} ${appointmentToAdd.endHour}`,
-        color: this.colors[this.rnd(0, this.colors.length - 1)]
-      });
+    addAppointment: function(appointmentToAdd) {
+      this.addScheduledAppointment(appointmentToAdd);
+      this.setEvents(appointmentToAdd);
     },
 
     updateAppointment: function(appointmentToUpdate) {
-      //  this.scheduledAppointment = appointmentToUpdate;
       this.updateScheduledAppointment(appointmentToUpdate);
+
+      this.events = this.events.filter(
+        event => event.id !== appointmentToUpdate.id
+      );
+      this.setEvents(appointmentToUpdate);
     },
 
     deleteAppointment: function(deleteScheduledAppointment) {
@@ -186,12 +172,10 @@ export default {
       if (confirmation) {
         this.deleteScheduledAppointment(deleteScheduledAppointment);
         this.events = this.events.filter(
-          event => event.name !== deleteScheduledAppointment
+          event => event.id !== deleteScheduledAppointment
         );
         this.selectedOpen = false;
         return true;
-      } else {
-        return false;
       }
     },
 
@@ -199,12 +183,18 @@ export default {
       return event.color;
     },
 
-    getEventName(event) {
-      return event.name;
-    },
-
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
+    },
+
+    setEvents(app) {
+      this.events.push({
+        id: app.id,
+        name: app.name,
+        start: `${app.date} ${app.startHour}`,
+        end: `${app.date} ${app.endHour}`,
+        color: this.colors[this.rnd(0, this.colors.length - 1)]
+      });
     },
 
     showAppointment: function({ nativeEvent, event }) {
@@ -222,21 +212,17 @@ export default {
       }
 
       nativeEvent.stopPropagation();
-      this.getScheduledAppointments.forEach(element => {
-        if (element.name === this.selectedAppointment.name) {
+
+      this.scheduledAppointments.forEach(element => {
+        if (element.id === this.selectedAppointment.id) {
           this.appointmentE = element;
         }
       });
     },
     drawAppointments: function() {
       this.events = [];
-      this.getScheduledAppointments.forEach(element => {
-        this.events.push({
-          name: element.name,
-          start: `${element.date} ${element.startHour}`,
-          end: `${element.date} ${element.endHour}`,
-          color: this.colors[this.rnd(0, this.colors.length - 1)]
-        });
+      this.scheduledAppointments.forEach(element => {
+        this.setEvents(element);
       });
     }
   },
