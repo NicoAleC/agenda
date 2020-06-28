@@ -1,5 +1,42 @@
 <template>
   <div>
+    <v-layout>
+      <v-flex>
+        <v-card>
+          <v-toolbar color="#89c1a1">
+            <v-toolbar-title>Postponed Appointments</v-toolbar-title>
+          </v-toolbar>
+          
+          <v-container grid-list-lg>
+              <v-spacer></v-spacer>
+            <v-layout row>
+              <v-flex v-for="(post,index) in postponedAppointments" :key="index">
+                <v-card min-width="300" color="#cee5ce" elevation="4">
+                  <v-card-text>
+                    <p class="display-1 text--primary">{{post.name}}</p>
+                    <div>{{post.description}}</div>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn icon color="#304050">
+                      <v-icon>mdi-calendar-today</v-icon>
+                    </v-btn>
+
+                    <v-btn icon color="#304050">
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+
+                    <v-btn icon color="#304050">
+                      <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
@@ -100,6 +137,11 @@ export default {
         list.push(element.name);
       });
       return list;
+    },
+    getColor() {
+      var color = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+      console.log(color);
+      return color;
     }
   },
   computed: {
