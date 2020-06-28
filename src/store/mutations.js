@@ -15,19 +15,23 @@ export default {
             participantId.contactNumber;
     },
     mutateParticipantDelete(state, code) {
-        /* let foudAccountIndex = 0;
-         while (foudAccountIndex == 0) {
-             if (state.scheduledAppointments[foudAccountIndex].participants.length === 0) {
-                 console.log(state.scheduledAppointments[foudAccountIndex].participants.length);
-                
-             } else {
-                 foudAccountIndex++;
-             }
-         }*/
-
-        state.participants = state.participants.filter(
-            account => account.participantId !== code.participantId
-        );
+        let appointments = state.scheduledAppointments;
+        let participantFound;
+        appointments.forEach(appoint => {
+            appoint.participants.forEach(
+                myParticipants => {
+                    if (code.participantId == myParticipants.participantId) {
+                        participantFound = myParticipants.participantId;
+                    }
+                })
+        });
+        if (participantFound == undefined) {
+            state.participants = state.participants.filter(
+                account => account.participantId !== code.participantId
+            );
+        } else {
+            alert("The participant is on an appointment therefore cannot be removed");
+        }
 
     },
     mutateParticipantAddAppointment(state, addAppoint) {

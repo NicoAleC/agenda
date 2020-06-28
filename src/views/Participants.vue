@@ -61,11 +61,11 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </v-row>
-      <v-snackbar v-model="alert" color="orange" top right :timeout="timeout">
-        <strong>{{changeName ? "Successfully created participant" : "The Participant is already in the appointment"}}</strong>
+      <v-snackbar v-model="alert" color="success" top right :timeout="timeout">
+        <strong>{{changeName ? "Successfully created participant" : "¡Participant successfully added to the appointment!"}}</strong>
       </v-snackbar>
-      <v-snackbar v-model="alert2" color="orange" top right :timeout="timeout">
-        <strong>{{changeNameTwo ? "¡Participant successfully added to the appointment!" : "Participant edited correctly"}}</strong>
+      <v-snackbar v-model="alert2" color="warning" top right :timeout="timeout">
+        <strong>{{changeNameTwo ? "The Participant is already in the appointment" : "Participant edited correctly"}}</strong>
       </v-snackbar>
       <ParticipantsDialog
         :selectedParticipant="selectedParticipant"
@@ -119,11 +119,11 @@ export default {
           participantId: id,
           appointmentName: appointmen
         });
+        this.alert1 = true;
+        this.changeName = false;
+      } else {
         this.alert2 = true;
         this.changeNameTwo = true;
-      } else {
-        this.alert = true;
-        this.changeName = false;
       }
     },
     _findParticipant(appo, members) {
@@ -176,7 +176,12 @@ export default {
     capitalizeAvatar: function(value) {
       if (!value) return "";
       value = value.toString();
-      return value.charAt(0).toUpperCase();
+      let name = value.split(" ")[0];
+      let lastName = value.substring(name.length).trim();
+
+      let fullName =
+        value.charAt(0).toUpperCase() + lastName.charAt(0).toUpperCase();
+      return fullName;
     }
   },
   computed: {
@@ -189,7 +194,7 @@ export default {
     },
     searching: function() {
       if (this.search !== "") {
-        const searchs = this.search.toLowerCase();
+        const searchs = this.search.replace().toLowerCase();
         return this.participants.filter(part => {
           return (
             part.name.toLowerCase().indexOf(searchs) >= 0 ||
