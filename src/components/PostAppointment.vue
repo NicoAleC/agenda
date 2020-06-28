@@ -1,55 +1,99 @@
 <template>
   <div>
-    <v-layout>
-      <v-flex>
-        <v-card>
-          <v-toolbar color="#89c1a1">
-            <v-toolbar-title>Postponed Appointments</v-toolbar-title>
-          </v-toolbar>
+    <div class="postList">
+      <v-layout>
+        <v-flex>
+          <v-card>
+            <v-toolbar color="#89c1a1">
+              <v-toolbar-title>Postponed Appointments</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn icon color="#304050">
+                <v-icon>mdi-home</v-icon>
+              </v-btn>
+              <v-btn icon color="#304050">
+                <v-icon>mdi-face</v-icon>
+              </v-btn>
+              <v-btn icon color="#304050">
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </v-toolbar>
 
-          <v-container grid-list-lg>
-            <v-spacer></v-spacer>
-            <v-layout row>
-              <v-flex
-                v-for="(post, index) in postponedAppointments"
-                :key="index"
-              >
-                <v-card min-width="300" color="#cee5ce" elevation="4">
-                  <v-card-text>
-                    <p class="display-1 text--primary">{{ post.name }}</p>
-                    <div>{{ post.description }}</div>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      icon
-                      color="#304050"
-                      v-on:click="schedulePostponedApp(post)"
-                    >
-                      <v-icon>mdi-calendar-today</v-icon>
-                    </v-btn>
-                    <v-btn
-                      icon
-                      color="#304050"
-                      v-on:click="updatePostponedApp(post)"
-                    >
-                      <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                    <v-btn
-                      icon
-                      color="#304050"
-                      v-on:click="deletePostponedApp(post)"
-                    >
-                      <v-icon>mdi-delete</v-icon>
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-flex>
-            </v-layout>
-          </v-container>
+            <v-container grid-list-lg>
+              <v-spacer></v-spacer>
+              <v-layout row>
+                <v-flex v-for="(post,index) in postponedAppointments" :key="index">
+                  <v-card min-width="300" color="#cee5ce" elevation="4">
+                    <v-card-text>
+                      <p class="display-1 text--primary">{{post.name}}</p>
+                      <div>{{post.description}}</div>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn icon color="#304050" v-on:click="function(){name = post.name; description=post.description; dialogRes = true}">
+                        <v-icon>mdi-calendar-today</v-icon>
+                      </v-btn>
+                      <v-btn
+                        v-on:click="function(){name = post.name; description=post.description; dialogEdit = true}"
+                        icon
+                        color="#304050"
+                      >
+                        <v-icon>mdi-pencil</v-icon>
+                      </v-btn>
+                      <v-btn icon color="#304050" v-on:click="deletePostponedApp(post)">
+                        <v-icon>mdi-delete</v-icon>
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </div>
+    <div class=dialogEdit>
+      <v-dialog max-width="600px" v-model="dialogEdit">
+        <v-card>
+          <v-card-title>
+            <h4>Edit Postponed Appointment</h4>
+          </v-card-title>
+          <v-spacer></v-spacer>
+          <v-card-text>
+            <v-form>
+              <p>Name:</p>
+              <h1 class="display-1 text--primary">{{name}}</h1>
+              <v-textarea label="Description" v-model="description"></v-textarea>
+              <v-btn
+                class="success mx-0 mt-3"
+                @click="function(){dialogEdit=false; updatePostponedApp({name: name, description: description})}"
+              >Save</v-btn>
+            </v-form>
+          </v-card-text>
         </v-card>
-      </v-flex>
-    </v-layout>
+      </v-dialog>
+    </div>
+     <div class=dialogReschedule>
+      <v-dialog max-width="600px" v-model="dialogRes">
+        <v-card>
+          <v-card-title>
+            <h4>Reschedule Postponed Appointment</h4>
+          </v-card-title>
+          <v-spacer></v-spacer>
+          <v-card-text>
+            <v-form>
+              <p>Name:</p>
+              <h1 >{{name}}</h1>
+              <p>Description:</p>
+              <h1>{{description}}</h1>
+              <v-btn
+                class="success mx-0 mt-3"
+                @click="function(){dialogRes=false}"
+              >Reschedule</v-btn>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </div>
   </div>
 </template>
 
@@ -61,37 +105,9 @@ export default {
     return {
       name: "",
       description: "",
-      valid: true,
-      menu_date: false,
-      showCurrent: true,
-      menu_end_hour: false,
-      menu_start_hour: false
+      dialogEdit: false,
+      dialogRes: false
     };
-  },
-  props: {
-    newMovement: {
-      type: Boolean,
-      default: false
-    },
-    dialog: {
-      type: Boolean,
-      default: false
-    },
-    scheduledAppointment: {
-      type: Object,
-      default: function() {
-        return {
-          id: "",
-          name: "",
-          description: "",
-          date: new Date().toISOString().substr(0, 10),
-          startHour: "",
-          endHour: "",
-          agendaId: "",
-          participants: []
-        };
-      }
-    }
   },
   methods: {
     ...mapActions([
