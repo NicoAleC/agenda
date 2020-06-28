@@ -46,40 +46,37 @@ const state = {
     {
       name: "Amazon",
       description: "Must pickup Amazon items"
-    },{
-      name: "Dentist",
+    },
+    {
+      name: "Dentist 1",
       description: "I need to go to dentist"
     },
     {
-      name: "Amazon",
+      name: "Amazon 1",
       description: "Must pickup Amazon items"
-    },{
-      name: "Dentist",
+    },
+    {
+      name: "Dentist 2",
       description: "I need to go to dentist"
     },
     {
-      name: "Amazon",
+      name: "Amazon 2",
       description: "Must pickup Amazon items"
-    },{
-      name: "Dentist",
+    },
+    {
+      name: "Dentist 3",
       description: "I need to go to dentist"
     },
     {
-      name: "Amazon",
+      name: "Amazon 3",
       description: "Must pickup Amazon items"
-    },{
-      name: "Dentist",
+    },
+    {
+      name: "Dentist 4",
       description: "I need to go to dentist"
     },
     {
-      name: "Amazon",
-      description: "Must pickup Amazon items"
-    },{
-      name: "Dentist",
-      description: "I need to go to dentist"
-    },
-    {
-      name: "Amazon",
+      name: "Amazon 4",
       description: "Must pickup Amazon items"
     }
   ]

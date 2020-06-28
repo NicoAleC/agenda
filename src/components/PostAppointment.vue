@@ -6,28 +6,41 @@
           <v-toolbar color="#89c1a1">
             <v-toolbar-title>Postponed Appointments</v-toolbar-title>
           </v-toolbar>
-          
+
           <v-container grid-list-lg>
-              <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
             <v-layout row>
-              <v-flex v-for="(post,index) in postponedAppointments" :key="index">
+              <v-flex
+                v-for="(post, index) in postponedAppointments"
+                :key="index"
+              >
                 <v-card min-width="300" color="#cee5ce" elevation="4">
                   <v-card-text>
-                    <p class="display-1 text--primary">{{post.name}}</p>
-                    <div>{{post.description}}</div>
+                    <p class="display-1 text--primary">{{ post.name }}</p>
+                    <div>{{ post.description }}</div>
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn icon color="#304050">
+                    <v-btn
+                      icon
+                      color="#304050"
+                      v-on:click="schedulePostponedApp(post)"
+                    >
                       <v-icon>mdi-calendar-today</v-icon>
                     </v-btn>
-
-                    <v-btn icon color="#304050">
-                      <v-icon>mdi-delete</v-icon>
-                    </v-btn>
-
-                    <v-btn icon color="#304050">
+                    <v-btn
+                      icon
+                      color="#304050"
+                      v-on:click="updatePostponedApp(post)"
+                    >
                       <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                    <v-btn
+                      icon
+                      color="#304050"
+                      v-on:click="deletePostponedApp(post)"
+                    >
+                      <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -87,61 +100,31 @@ export default {
       "deletePostponed",
       "addScheduledAppointment"
     ]),
-    addPostponedApp() {
-      this.addPostponed({
-        name: this.name,
-        description: this.description
-      });
-      this.name = "";
-      this.description = "";
+    addPostponedApp(postApp) {
+      this.addPostponed(postApp);
     },
-    updatePostponedApp() {
-      this.updatePostponed({
-        name: this.name,
-        description: this.description
-      });
-
-      this.name = "";
-      this.description = "";
+    updatePostponedApp(postApp) {
+      this.updatePostponed(postApp);
     },
-    deletePostponedApp() {
-      this.deletePostponed({
-        name: this.name,
-        description: this.description
-      });
-
-      this.name = "";
-      this.description = "";
+    deletePostponedApp(postApp) {
+      this.deletePostponed(postApp);
     },
-    schedulePostponed(scheduleData) {
-      this.deletePostponed({
-        name: this.name,
-        description: this.description
-      });
-
+    schedulePostponed(postApp) {
+      this.deletePostponed(postApp);
+      var scheduleData = {
+        id: "APP-2",
+        date: "2020-06-26",
+        startHour: "11:00",
+        endHour: "12:00"
+      };
       this.addScheduledAppointment({
         id: scheduleData.id,
-        name: this.name,
-        description: this.description,
+        name: postApp.name,
+        description: postApp.description,
         date: scheduleData.date,
         startHour: scheduleData.startHour,
         endHour: scheduleData.endHour
       });
-
-      this.name = "";
-      this.description = "";
-    },
-    getParticipantsList: function() {
-      let list = [];
-      this.participants.forEach(element => {
-        list.push(element.name);
-      });
-      return list;
-    },
-    getColor() {
-      var color = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
-      console.log(color);
-      return color;
     }
   },
   computed: {
