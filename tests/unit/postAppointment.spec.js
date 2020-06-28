@@ -49,7 +49,6 @@ describe("Postponed Appointments", () => {
     );
     assert.equal(updatedPostponed.name, foundPost.name);
     assert.equal(updatedPostponed.description, foundPost.description);
-  
   });
   it.only("Delete a postponed appointment", () => {
     const wrapper = mount(PostAppointment, { store, localVue, vuetify });
@@ -60,6 +59,28 @@ describe("Postponed Appointments", () => {
     assert.equal(
       expectedLenght,
       wrapper.vm.$store.state.postponedAppointments.length
+    );
+  });
+  it.only("Scheduling a postponed appointment should appear on the Appointments list and leave the postponed list", () => {
+    const wrapper = mount(PostAppointment, { store, localVue, vuetify });
+    wrapper.setData({ name: "Future Appointment", description: "Fuuuuture" });
+    wrapper.vm.addPostponedApp();
+    let currentLengthP = wrapper.vm.$store.state.postponedAppointments.length;
+    let currentLengthA = wrapper.vm.$store.state.scheduledAppointments.length;
+    const appointmentRenewed = {
+      id: "APP-2",
+      date: "2020-06-26",
+      startHour: "11:00",
+      endHour: "12:00"
+    };
+    wrapper.vm.schedulePostponed(appointmentRenewed);
+    assert.equal(
+      currentLengthP,
+      wrapper.vm.$store.state.postponedAppointments.length
+    );
+    assert.equal(
+      currentLengthA,
+      wrapper.vm.$store.state.scheduledAppointments.length
     );
   });
 });

@@ -36,10 +36,28 @@ export default {
     mutateUpdatePostponed(state, updatedPost) {
         const toUpdate = state.postponedAppointments.findIndex(post => post.name === updatedPost.name);
         if (toUpdate >= 0) {
-            state.postponedAppointments.splice(toUpdate,1,updatedPost);
+            state.postponedAppointments.splice(toUpdate, 1, updatedPost);
         }
     },
     mutateDeletePostponed(state, deletePost) {
         state.postponedAppointments = state.postponedAppointments.filter(post => post.name !== deletePost.name);
+    },
+    mutateScheduledAppointmentList(state, appointmentToAdd) {
+        state.scheduledAppointments.push(appointmentToAdd);
+    },
+    mutateUpdateAppointment(state, appointmentToUpdate) {
+        const index = state.scheduledAppointments.findIndex(
+            appointment => appointment.id === appointmentToUpdate.id
+        );
+        if (index > -1) {
+            //state.scheduledAppointments[index] = appointmentToUpdate;
+            state.scheduledAppointments[index].name = appointmentToUpdate.name;
+            state.scheduledAppointments[index].description = appointmentToUpdate.description;
+        }
+    },
+    mutateDeleteAppointment(state, deleteScheduledAppointment) {
+        state.scheduledAppointments = state.scheduledAppointments.filter(
+            appointment => appointment.id !== deleteScheduledAppointment
+        );
     }
 };

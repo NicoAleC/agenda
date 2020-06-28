@@ -22,5 +22,14 @@ export default {
     },
     deletePostponed({ commit }, delPostponed) {
         commit("mutateDeletePostponed", delPostponed);
+    },
+    addScheduledAppointment({ commit }, appointmentToAdd) {
+        commit("mutateScheduledAppointmentList", appointmentToAdd);
+    },
+    updateScheduledAppointment({ commit }, appointmentToUpdate) {
+        commit("mutateUpdateAppointment", appointmentToUpdate);
+    },
+    deleteScheduledAppointment({ commit }, appointmentToDelete) {
+        commit("mutateDeleteAppointment", appointmentToDelete);
     }
 };

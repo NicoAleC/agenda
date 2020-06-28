@@ -6,5 +6,8 @@ export default {
   },
   getPostponed(state) {
     return state.postponedAppointments;
+  },
+  getScheduledAppointments(state) {
+    return state.scheduledAppointments;
   }
 };
