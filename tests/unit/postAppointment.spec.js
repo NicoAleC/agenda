@@ -65,8 +65,10 @@ describe("Postponed Appointments", () => {
     const wrapper = mount(PostAppointment, { store, localVue, vuetify });
     wrapper.setData({ name: "Future Appointment", description: "Fuuuuture" });
     wrapper.vm.addPostponedApp();
-    let currentLengthP = wrapper.vm.$store.state.postponedAppointments.length-1;
-    let currentLengthA = wrapper.vm.$store.state.scheduledAppointments.length+1;
+    let currentLengthP =
+      wrapper.vm.$store.state.postponedAppointments.length - 1;
+    let currentLengthA =
+      wrapper.vm.$store.state.scheduledAppointments.length + 1;
     const appointmentRenewed = {
       id: "APP-2",
       date: "2020-06-26",
