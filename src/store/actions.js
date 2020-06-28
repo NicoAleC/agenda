@@ -13,5 +13,9 @@ export default {
     },
     addParticipantToAnAppointment({ commit }, addAppointment) {
         commit("mutateParticipantAddAppointment", addAppointment);
-    }
+    },
+    deleteParticipantFromAnAppointment({ commit }, addAppointment) {
+        commit("mutateParticipantDeleteAppointment", addAppointment);
+    },
+
 };

@@ -18,10 +18,10 @@
 
           <v-col class="text-right">
             <v-btn
-              color="primary"
+              color="black"
               dark
               x-large
-              class="ma-2"
+              outlined
               @click="sendData(selectedParticipant,true)"
             >New Participant</v-btn>
           </v-col>
@@ -44,7 +44,11 @@
                   <strong v-html="participant.contactNumber"></strong>
                 </v-col>
                 <v-col class="grey--text text-truncate hidden-sm-and-down">
-                  <v-icon size="35" class="mr-2" @click="sendData(participant,false)">mdi-plus</v-icon>
+                  <v-icon
+                    size="35"
+                    class="mr-2"
+                    @click="addParticipantToAScheduleAppointment(participant.name, participant.contactNumber, participant.participantId,name )"
+                  >mdi-plus</v-icon>
                 </v-col>
                 <v-col class="grey--text text-truncate hidden-sm-and-down">
                   <v-icon size="35" class="mr-2" @click="sendData(participant,false)">mdi-pencil</v-icon>
@@ -57,14 +61,12 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </v-row>
-      <v-snackbar
-        v-model="alert"
-        type="success"
-        color="primary"
-        top
-        right
-        :timeout="timeout"
-      >Participante creado correctamente</v-snackbar>
+      <v-snackbar v-model="alert" color="orange" top right :timeout="timeout">
+        <strong>{{changeName ? "Successfully created participant" : "The Participant is already in the appointment"}}</strong>
+      </v-snackbar>
+      <v-snackbar v-model="alert2" color="orange" top right :timeout="timeout">
+        <strong>{{changeNameTwo ? "¡Participant successfully added to the appointment!" : "Participant edited correctly"}}</strong>
+      </v-snackbar>
       <ParticipantsDialog
         :selectedParticipant="selectedParticipant"
         :newMovement="newMovement"
@@ -91,16 +93,48 @@ export default {
   data: () => ({
     selectedParticipant: {},
     search: "",
-    idparticipant: "",
     newMovement: false,
     dialog: false,
-    participantindex: null,
     alert: false,
-    timeout: 3000
+    alert2: false,
+
+    timeout: 3000,
+    changeName: null,
+    changeNameTwo: null,
+    name: "Dentist"
   }),
   methods: {
-    ...mapActions(["addParticipant", "updateParticipant", "deleteParticipant"]),
+    ...mapActions([
+      "addParticipant",
+      "updateParticipant",
+      "deleteParticipant",
+      "addParticipantToAnAppointment"
+    ]),
 
+    addParticipantToAScheduleAppointment(name, contact, id, appointmen) {
+      if (this._findParticipant(appointmen, id) == -1) {
+        this.addParticipantToAnAppointment({
+          name: name,
+          contactNumber: contact,
+          participantId: id,
+          appointmentName: appointmen
+        });
+        this.alert2 = true;
+        this.changeNameTwo = true;
+      } else {
+        this.alert = true;
+        this.changeName = false;
+      }
+    },
+    _findParticipant(appo, members) {
+      const found = this.appointments.findIndex(
+        appoint => appoint.name == appo
+      );
+      const appointmentFound = this.appointments[found].participants.findIndex(
+        participants => participants.participantId == members
+      );
+      return appointmentFound;
+    },
     deleteItem(idparticipant) {
       let confirmation = confirm("Are you sure you want to delete?");
       if (confirmation) {
@@ -112,17 +146,6 @@ export default {
         return false;
       }
     },
-    findIndex(code) {
-      const identification = this.participants.findIndex(
-        part => part.participantId === code
-      );
-      console.log(identification);
-      return identification;
-    },
-    firstElement(name) {
-      let first = name.charAt(0);
-      return first;
-    },
     sendData(selectedParticipant, newMovement) {
       this.selectedParticipant = {
         ...selectedParticipant
@@ -130,16 +153,14 @@ export default {
       this.dialog = true;
       this.newMovement = newMovement;
     },
-    enableDeleteAndUpdate() {},
     addNewParticipant(newOne) {
       this.addParticipant({
         name: newOne.name,
         contactNumber: newOne.contactNumber,
-        participantId: newOne.participantId,
-        index: this.findIndex(newOne.participantId)
+        participantId: newOne.participantId
       });
       this.alert = true;
-      console.log(this.findIndex(newOne.participantId));
+      this.changeName = true;
     },
     updateNewParticipant(newOne) {
       this.updateParticipant({
@@ -147,6 +168,8 @@ export default {
         contactNumber: newOne.contactNumber,
         participantId: newOne.participantId
       });
+      this.alert2 = true;
+      this.changeNameTwo = false;
     }
   },
   filters: {
@@ -157,9 +180,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["getParticipants"]),
+    ...mapGetters(["getParticipants", "getScheduled"]),
     participants() {
       return this.getParticipants;
+    },
+    appointments() {
+      return this.getScheduled;
     },
     searching: function() {
       if (this.search !== "") {

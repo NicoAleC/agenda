@@ -16,8 +16,7 @@ const state = {
       participantId: "PART-002",
       name: "Pablo Rivas",
       contactNumber: "69501045"
-    }
-  ],
+    }],
   scheduledAppointments: [
     {
       name: "Dentist",
@@ -26,7 +25,28 @@ const state = {
       startHour: "10:00",
       endHour: "11:00",
       agendaId: "ANG-0001",
-      participants: []
+      participants: [
+        {
+          participantId: "PART-002",
+          name: "Pablo Rivas",
+          contactNumber: "69501045"
+        }
+      ]
+    },
+    {
+      name: "Dentist",
+      description: "I need to go to dentist",
+      date: "06/18/2020",
+      startHour: "10:00",
+      endHour: "11:00",
+      agendaId: "ANG-0002",
+      participants: [
+        {
+          participantId: "PART-002",
+          name: "Pablo Rivas",
+          contactNumber: "69501045"
+        }
+      ]
     }
   ]
 };
