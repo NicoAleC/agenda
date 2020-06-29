@@ -112,7 +112,12 @@ export default {
     capitalizeAvatar: function(value) {
       if (!value) return "";
       value = value.toString();
-      return value.charAt(0).toUpperCase();
+      let name = value.split(" ")[0];
+      let lastName = value.substring(name.length).trim();
+
+      let fullName =
+        value.charAt(0).toUpperCase() + lastName.charAt(0).toUpperCase();
+      return fullName;
     }
   },
   methods: {

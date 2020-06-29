@@ -11,13 +11,10 @@
             dark
             x-large
             class="ma-2"
-            @click="$router.push('participants')"
-            >Añadir Participantes</v-btn
-          >
+            v-on:click="$router.push('participants')"
+          >Añadir Participantes</v-btn>
 
-          <v-btn color="primary" dark x-large class="ma-2" @click="sendData()"
-            >Mis Participantes</v-btn
-          >
+          <v-btn color="primary" dark x-large class="ma-2" v-on:click="sendData()">Mis Participantes</v-btn>
         </v-col>
       </v-layout>
 

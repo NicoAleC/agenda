@@ -36,7 +36,7 @@
                       <v-col class="grey--text text-truncate hidden-sm-and-down">
                         <v-icon
                           size="35"
-                          @click="deleteParticipantToAScheduleAppointment(name,participant.participantId)"
+                          v-on:click="deleteParticipantToAScheduleAppointment(name,participant.participantId)"
                         >mdi-delete</v-icon>
                       </v-col>
                     </v-row>
@@ -108,7 +108,12 @@ export default {
     capitalizeAvatar: function(value) {
       if (!value) return "";
       value = value.toString();
-      return value.charAt(0).toUpperCase();
+      let name = value.split(" ")[0];
+      let lastName = value.substring(name.length).trim();
+
+      let fullName =
+        value.charAt(0).toUpperCase() + lastName.charAt(0).toUpperCase();
+      return fullName;
     }
   }
 };
