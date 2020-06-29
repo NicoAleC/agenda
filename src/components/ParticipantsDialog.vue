@@ -132,7 +132,6 @@ export default {
           participantId: id
         });
       }
-
       this.reset();
     },
 

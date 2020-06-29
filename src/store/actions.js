@@ -23,5 +23,10 @@ export default {
     },
     deleteScheduledAppointment({ commit }, appointmentToDelete) {
         commit("mutateDeleteAppointment", appointmentToDelete);
-    }
+    },
+
+    deleteParticipantFromAnAppointment({ commit }, addAppointment) {
+        commit("mutateParticipantDeleteAppointment", addAppointment);
+    },
+
 };
