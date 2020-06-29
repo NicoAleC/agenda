@@ -2,20 +2,22 @@
 // https://nightwatchjs.org/guide
 
 module.exports = {
-  "default e2e tests": browser => {
+  "Agendas e2e Test": browser => {
     browser
       .init()
-      .waitForElementVisible("#app")
-      .assert.elementPresent(".hello")
-      .assert.containsText("h1", "Welcome to Your Vue.js App")
-      .assert.elementCount("img", 1)
-      .end();
-  },
-
-  "example e2e test using a custom command": browser => {
-    browser
-      .openHomepage()
-      .assert.elementPresent(".hello")
+      .waitForElementVisible("#home")
+      .click("#home-btn-addAgenda")
+      .pause(3000)
+      //.assert.elementPresent("#CTA-Name")
+      .setValue("input[id=CTA-Name]", "Agenda-Prueba")
+      .pause(3000)
+      .setValue("input[id=CTA-BeginH]", "10:10:00")
+      .pause(3000)
+      .setValue("input[id=CTA-EndH]", "11:00:00")
+      .pause(3000)
+      .setValue("input[id=CTA-Desc]", "Esto es una prueba")
+      .click("#CTA-btn-Create")
+      .pause(3000)
       .end();
   }
 };
