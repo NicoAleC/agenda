@@ -20,7 +20,8 @@ const state = {
       description: "My Agenda to manage Hobbies",
       startHour: "9:00",
       endHour: "10:00"
-    }],
+    }
+  ],
   participants: [
     {
       participantId: "PART-001",

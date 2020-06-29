@@ -10,7 +10,7 @@ export default {
   getScheduledAppointments(state) {
     return state.scheduledAppointments;
   },
-  getAgendas(state){
+  getAgendas(state) {
     return state.agendas;
   }
 };

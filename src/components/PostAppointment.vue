@@ -53,7 +53,11 @@
                       >
                         <v-icon>mdi-pencil</v-icon>
                       </v-btn>
-                      <v-btn icon color="#304050" v-on:click="deletePostponedApp(post)">
+                      <v-btn
+                        icon
+                        color="#304050"
+                        v-on:click="deletePostponedApp(post)"
+                      >
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
                     </v-card-actions>
@@ -74,8 +78,16 @@
           <v-spacer></v-spacer>
           <v-card-text>
             <v-form>
-              <v-text-field label="Name" v-model="name" :rules="rules.nameRule"></v-text-field>
-              <v-textarea label="Description" v-model="description" :rules="rules.lengthRule"></v-textarea>
+              <v-text-field
+                label="Name"
+                v-model="name"
+                :rules="rules.nameRule"
+              ></v-text-field>
+              <v-textarea
+                label="Description"
+                v-model="description"
+                :rules="rules.lengthRule"
+              ></v-textarea>
               <v-btn
                 class="success mx-0 mt-3"
                 @click="
@@ -86,14 +98,15 @@
                     description: description
                   });
                 "
-              >Save</v-btn>
+                >Save</v-btn
+              >
             </v-form>
           </v-card-text>
         </v-card>
       </v-dialog>
     </div>
     <div class="dialogReschedule">
-      <v-dialog max-width="600px" v-model="dialogRes">
+      <v-dialog max-width="800px" v-model="dialogRes">
         <v-card>
           <v-card-title>
             <h4>Reschedule Postponed Appointment</h4>
@@ -101,15 +114,78 @@
           <v-spacer></v-spacer>
           <v-card-text>
             <v-form>
-              <v-text-field readonly auto-grow label="Name" v-model="name"></v-text-field>
-              <v-textarea readonly auto-grow label="Description" v-model="description"></v-textarea>
-              <v-select v-model="idAgenda" :items="getAgendasList" :rules="rules.agenda" label= "Agenda" item-text="name" item-value="agendaId" :hint="idAgenda.agendaId" return-object></v-select>
-
-              <v-text-field readonly auto-grow label="Date" v-model="date"></v-text-field>
-              <v-text-field readonly auto-grow label="Start Hour" v-model="startHour"></v-text-field>
-              <v-text-field readonly auto-grow label="End Hour" v-model="endHour"></v-text-field>
-
-              <v-btn class="success mx-0 mt-3" @click="dialogRes = false">Reschedule</v-btn>
+              <v-text-field
+                readonly
+                auto-grow
+                label="Name"
+                v-model="name"
+              ></v-text-field>
+              <v-textarea
+                readonly
+                auto-grow
+                label="Description"
+                v-model="description"
+              ></v-textarea>
+              <v-select
+                v-model="idAgenda"
+                :items="getAgendasList"
+                :rules="rules.agenda"
+                label="Agenda"
+                item-text="name"
+                item-value="agendaId"
+                :hint="idAgenda"
+                persistent-hint
+                return-value
+              ></v-select>
+              <v-text-field
+                readonly
+                label="Date"
+                v-model="date"
+                v-on:click="datePopup = true"
+              ></v-text-field>
+              <v-menu
+                v-model="datePopup"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                offset-y
+                min-width="250px"
+              >
+                <v-date-picker
+                  v-model="date"
+                  @input="datePopup = false"
+                ></v-date-picker>
+              </v-menu>
+              <div class="TimePickers">
+                <v-row justify="space-around" align="center">
+                  <v-col style="width: 290px; flex: 0 1 auto">
+                    <h2>Start Hour</h2>
+                    <v-time-picker
+                      v-model="startHour"
+                      :max="endHour"
+                    ></v-time-picker>
+                  </v-col>
+                  <v-col style="width: 290px; flex: 0 1 auto">
+                    <h2>End Hour</h2>
+                    <v-time-picker
+                      v-model="endHour"
+                      :min="startHour"
+                    ></v-time-picker>
+                  </v-col>
+                </v-row>
+              </div>
+              <v-select
+                v-model="participantsList"
+                :items="participants"
+                :rules="rules.agenda"
+                label="Participants"
+                multiple
+                item-text="name"
+                item-value="participantId"
+                return-value
+              ></v-select>
+              <v-btn class="success mx-0 mt-3" @click="packReschedule()"
+                >Reschedule</v-btn
+              >
             </v-form>
           </v-card-text>
         </v-card>
@@ -128,11 +204,13 @@ export default {
       name: "",
       description: "",
       idAgenda: "",
-      date: "",
+      date: new Date().toISOString().substr(0, 10),
       startHour: "",
       endHour: "",
+      participantsList: [],
       dialogEdit: false,
       dialogRes: false,
+      datePopup: false,
       rules: {
         lengthRule: [
           v => v.length <= 256 || "Field must be less than 256 characters"
@@ -141,9 +219,7 @@ export default {
           v => !!v || "Name is required",
           v => v.length <= 32 || "Name must be less than 32 characters"
         ],
-        agendaRule:[
-          v=>!!v || "Item is required"
-          ]
+        agendaRule: [v => !!v || "Item is required"]
       }
     };
   },
@@ -177,7 +253,8 @@ export default {
         description: postApp.description,
         date: postApp.date,
         startHour: postApp.startHour,
-        endHour: postApp.endHour
+        endHour: postApp.endHour,
+        participants: postApp.participants
       });
     },
     lastId() {
@@ -185,13 +262,39 @@ export default {
         Math,
         this.postponedAppointments.map(post => post.id)
       );
+    },
+    checkEmptyFields() {
+      return (
+        this.id === "" ||
+        this.name === "" ||
+        this.description === "" ||
+        this.idAgenda === "" ||
+        this.startHour === "" ||
+        this.endHour === ""
+      );
+    },
+    packReschedule() {
+      if (!this.checkEmptyFields()) {
+        this.dialogRes = false;
+        this.schedulePostponed({
+          id: this.id,
+          idAgenda: this.idAgenda,
+          name: this.name,
+          description: this.description,
+          date: this.date,
+          startHour: this.startHour,
+          endHour: this.endHour,
+          participants: this.participantsList
+        });
+      }
     }
   },
   computed: {
     ...mapGetters([
       "getPostponed",
       "getScheduledAppointments",
-      "getParticipants", "getAgendas"
+      "getParticipants",
+      "getAgendas"
     ]),
     postponedAppointments() {
       return this.getPostponed;
@@ -202,7 +305,7 @@ export default {
     participants() {
       return this.getParticipants;
     },
-    getAgendasList(){
+    getAgendasList() {
       return this.getAgendas;
     }
   }

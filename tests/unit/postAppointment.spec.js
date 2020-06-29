@@ -32,6 +32,12 @@ describe("Postponed Appointments", () => {
     wrapper.vm.addPostponedApp(newPostponed);
     assert.equal(expectedLenght, wrapper.vm.postponedAppointments.length);
   });
+
+  it.only("Last id should be 1", () => {
+    const wrapper = shallowMount(PostAppointment, { store, localVue, vuetify });
+    const lastIdPost = wrapper.vm.lastId();
+    assert.equal(lastIdPost, 1);
+  });
   it.only("Edit a postponed appointment", () => {
     const wrapper = shallowMount(PostAppointment, { store, localVue, vuetify });
     let updatedPostponed = {
@@ -86,7 +92,8 @@ describe("Postponed Appointments", () => {
       description: toBeAppointed.description,
       date: "2020-06-26",
       startHour: "11:00",
-      endHour: "12:00"
+      endHour: "12:00",
+      participants: ["PART-001"]
     };
     wrapper.vm.schedulePostponed(appointmentRenewed);
     assert.equal(
@@ -97,5 +104,41 @@ describe("Postponed Appointments", () => {
       currentLengthA,
       wrapper.vm.$store.state.scheduledAppointments.length
     );
+  });
+
+  it.only("Scheduling a postponed appointment shouldnt modify anything if fields startHour,endHour,categoryId ... are empty", () => {
+    const wrapper = shallowMount(PostAppointment, { store, localVue, vuetify });
+    wrapper.setData({
+      id: "",
+      name: "",
+      description: "",
+      idAgenda: "",
+      date: new Date().toISOString().substr(0, 10),
+      startHour: "",
+      endHour: "",
+      participantsList: [],
+      dialogEdit: false,
+      dialogRes: false,
+      datePopup: false
+    });
+
+    let currentLengthP = wrapper.vm.$store.state.postponedAppointments.length;
+    let currentLengthA = wrapper.vm.$store.state.scheduledAppointments.length;
+
+    wrapper.vm.packReschedule();
+    assert.equal(
+      currentLengthP,
+      wrapper.vm.$store.state.postponedAppointments.length
+    );
+    assert.equal(
+      currentLengthA,
+      wrapper.vm.$store.state.scheduledAppointments.length
+    );
+  });
+
+  it.only("Data should start clean", () => {
+    const wrapper = shallowMount(PostAppointment, { store, localVue, vuetify });
+    const itsEmpty = wrapper.vm.checkEmptyFields();
+    assert.isTrue(itsEmpty);
   });
 });
