@@ -1,7 +1,6 @@
 "use strict";
 
 export default {
-
   getParticipants(state) {
     return state.participants;
   },
@@ -10,9 +9,7 @@ export default {
     return state.scheduledAppointments;
   },
 
-    getScheduled(state) {
-        return state.scheduledAppointments;
-    }
-};
-    
+  getScheduled(state) {
+    return state.scheduledAppointments;
+  }
 };

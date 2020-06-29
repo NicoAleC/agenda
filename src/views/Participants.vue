@@ -21,16 +21,10 @@
               color="black"
               dark
               x-large
-
-              class="ma-2"
+              outlined
               @click="sendData(selectedParticipant, true)"
               >New Participant</v-btn
             >
-
-              outlined
-              @click="sendData(selectedParticipant,true)"
-            >New Participant</v-btn>
-
           </v-col>
         </v-layout>
         <v-expansion-panels popout>
@@ -62,14 +56,16 @@
                   <v-icon
                     size="35"
                     class="mr-2"
-
-                    @click="sendData(participant, false)"
+                    @click="
+                      addParticipantToAScheduleAppointment(
+                        participant.name,
+                        participant.contactNumber,
+                        participant.participantId,
+                        name
+                      )
+                    "
                     >mdi-plus</v-icon
                   >
-
-                    @click="addParticipantToAScheduleAppointment(participant.name, participant.contactNumber, participant.participantId,name )"
-                  >mdi-plus</v-icon>
-
                 </v-col>
                 <v-col class="grey--text text-truncate hidden-sm-and-down">
                   <v-icon
@@ -103,10 +99,18 @@
       >
 
       <v-snackbar v-model="alert" color="orange" top right :timeout="timeout">
-        <strong>{{changeName ? "Successfully created participant" : "The Participant is already in the appointment"}}</strong>
+        <strong>{{
+          changeName
+            ? "Successfully created participant"
+            : "The Participant is already in the appointment"
+        }}</strong>
       </v-snackbar>
       <v-snackbar v-model="alert2" color="orange" top right :timeout="timeout">
-        <strong>{{changeNameTwo ? "¡Participant successfully added to the appointment!" : "Participant edited correctly"}}</strong>
+        <strong>{{
+          changeNameTwo
+            ? "¡Participant successfully added to the appointment!"
+            : "Participant edited correctly"
+        }}</strong>
       </v-snackbar>
 
       <ParticipantsDialog
