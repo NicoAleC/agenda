@@ -61,7 +61,7 @@ describe(" Scheduled Appointments CRUD", () => {
       id: "APP-2",
       name: " Test ",
       description: " Unit Test ",
-      date: "2020-06-26",
+      date: "2020-08-24",
       startHour: "11:00",
       endHour: "12:00"
     };
@@ -89,7 +89,7 @@ describe(" Scheduled Appointments CRUD", () => {
       id: "APP-2",
       name: " Appointment to Update ",
       description: " Update Unit Test ",
-      date: "2020-06-26",
+      date: "2020-08-24",
       startHour: "11:00",
       endHour: "12:00"
     };
@@ -123,12 +123,12 @@ describe(" Scheduled Appointments CRUD", () => {
       appointmentToDelete
     );
   });
-  it.only(" Validate that the start and end hours are correct", () => {
+  it.only(" Validate the start and end times of the appointment. ", () => {
     global.alert = () => {};
 
     const wrapper = shallowMount(Scheduling, {
       store,
-      vuetify: { iconfont: "md" },
+      vuetify,
       localVue,
       stubs: ["VTextField"]
     });
@@ -153,5 +153,23 @@ describe(" Scheduled Appointments CRUD", () => {
       end
     );
     assert.isFalse(isValidAgendaHours);
+  });
+
+  it.only(" Validate the date of the appointment. ", () => {
+    global.alert = () => {};
+
+    const wrapper = shallowMount(Scheduling, {
+      store,
+      vuetify,
+      localVue,
+      stubs: ["VTextField"]
+    });
+
+    let date = "2020-06-01";
+
+    //console.log(wrapper.vm._validateDateFormat(date));
+
+    const isValid = wrapper.vm._validateDateFormat(date);
+    assert.isFalse(isValid);
   });
 });

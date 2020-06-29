@@ -49,6 +49,7 @@
                       color="grey darken-1"
                       :landscape="true"
                       class="mt-4"
+                      min="2020-06-10"
                     ></v-date-picker>
                   </v-menu>
                 </v-col>
@@ -118,6 +119,13 @@
                 </v-col>
                 <v-col cols="12">
                   <v-select
+                    v-model="scheduledAppointment.agendaId"
+                    label="Agenda"
+                  >
+                  </v-select>
+                </v-col>
+                <v-col cols="12">
+                  <v-select
                     multiple
                     :items="selectOptions"
                     v-model="scheduledAppointment.participants"
@@ -146,7 +154,7 @@
               outlined
               color="indigo"
               text
-              v-if="newMovement"
+              v-if="_validateData() && newMovement"
               @click="addAppointment()"
               >{{ "SAVE" }}</v-btn
             >
@@ -173,6 +181,7 @@ export default {
   name: "Scheduling",
   data: () => ({
     valid: true,
+    now: new Date().toISOString().substr(0, 10),
     menu_date: false,
     showCurrent: true,
     menu_end_hour: false,
@@ -244,15 +253,19 @@ export default {
             this.scheduledAppointment.endHour
           )
         ) {
-          this.$emit("addAppointment", {
-            id: this.getAppointmentId(),
-            name: this.scheduledAppointment.name,
-            description: this.scheduledAppointment.description,
-            date: this.scheduledAppointment.date,
-            startHour: this.scheduledAppointment.startHour,
-            endHour: this.scheduledAppointment.endHour,
-            participants: this.scheduledAppointment.participants
-          });
+          if (this._validateDateFormat(this.scheduledAppointment.date)) {
+            this.$emit("addAppointment", {
+              id: this.getAppointmentId(),
+              name: this.scheduledAppointment.name,
+              description: this.scheduledAppointment.description,
+              date: this.scheduledAppointment.date,
+              startHour: this.scheduledAppointment.startHour,
+              endHour: this.scheduledAppointment.endHour,
+              participants: this.scheduledAppointment.participants
+            });
+          } else {
+            alert("You cannot enter an appointments on a past date");
+          }
         } else {
           alert(
             "The time format inserted for the start and end of the appointment is incorrect."
@@ -265,15 +278,37 @@ export default {
     },
 
     updateAppointment: function() {
+      this._validateDateFormat();
       if (this._validateData()) {
-        this.$emit("updateAppointment", {
-          id: this.scheduledAppointment.id,
-          name: this.scheduledAppointment.name,
-          description: this.scheduledAppointment.description,
-          date: this.scheduledAppointment.date,
-          startHour: this.scheduledAppointment.startHour,
-          endHour: this.scheduledAppointment.endHour
-        });
+        if (
+          this._validateStartAndEndHour(
+            this.scheduledAppointment.startHour,
+            this.scheduledAppointment.endHour
+          ) &&
+          this._validateAgendaHours(
+            this.agenda_start_hour,
+            this.agenda_end_hour,
+            this.scheduledAppointment.startHour,
+            this.scheduledAppointment.endHour
+          )
+        ) {
+          if (this._validateDateFormat(this.scheduledAppointment.date)) {
+            this.$emit("updateAppointment", {
+              id: this.scheduledAppointment.id,
+              name: this.scheduledAppointment.name,
+              description: this.scheduledAppointment.description,
+              date: this.scheduledAppointment.date,
+              startHour: this.scheduledAppointment.startHour,
+              endHour: this.scheduledAppointment.endHour
+            });
+          } else {
+            alert("You cannot enter an appointments on a past date");
+          }
+        } else {
+          alert(
+            "The time format inserted for the start and end of the appointment is incorrect."
+          );
+        }
       } else {
         alert("You must complete all fields");
       }
@@ -314,7 +349,11 @@ export default {
       let start = startHour.split(":");
       let end = endHour.split(":");
       //hour[0], minutes[1] -> 24h format
-      return (start[0] === end[0] && start[1] < end[1]) || start[0] < end[0];
+      return (
+        (parseInt(start[0]) === parseInt(end[0]) &&
+          parseInt(start[1]) < parseInt(end[1])) ||
+        parseInt(start[0]) < parseInt(end[0])
+      );
     },
 
     _validateAgendaHours(agenda_start, agenda_end, app_start, app_end) {
@@ -323,11 +362,28 @@ export default {
       let start = app_start.split(":");
       let end = app_end.split(":");
       return (
-        ((parseInt(ag_start[0]) === start[0] &&
-          start[1] >= parseInt(ag_start[1])) ||
-          parseInt(ag_start[0]) < start[0]) &&
-        ((parseInt(ag_end[0]) === end[0] && end[1] <= parseInt(ag_end[1])) ||
-          parseInt(ag_end[0]) > end[0])
+        ((parseInt(ag_start[0]) === parseInt(start[0]) &&
+          parseInt(start[1]) >= parseInt(ag_start[1])) ||
+          parseInt(ag_start[0]) < parseInt(start[0])) &&
+        ((parseInt(ag_end[0]) === parseInt(end[0]) &&
+          parseInt(end[1]) <= parseInt(ag_end[1])) ||
+          parseInt(ag_end[0]) > parseInt(end[0]))
+      );
+    },
+
+    _validateDateFormat(appointmentDate) {
+      //let now = new Date().toISOString().substr(0, 10);
+      let now = new Date();
+      let year = parseInt(now.getFullYear());
+      let day = parseInt(now.getDate());
+      let month = parseInt(now.getMonth() + 1);
+      //let hour = parseInt(now.getHours());
+      let app_date = appointmentDate.split("-");
+      //let app_hour = startHour.split(":");
+      return (
+        parseInt(app_date[0]) >= year &&
+        parseInt(app_date[1]) >= month &&
+        parseInt(app_date[2]) >= day
       );
     }
   }

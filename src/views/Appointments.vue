@@ -145,7 +145,7 @@ export default {
       "deleteScheduledAppointment"
     ]),
 
-    sendData(scheduledAppointment, newMovement) {
+    sendData: function(scheduledAppointment, newMovement) {
       this.scheduledAppointment = {
         ...scheduledAppointment
       };
@@ -168,15 +168,48 @@ export default {
     },
 
     deleteAppointment: function(deleteScheduledAppointment) {
-      let confirmation = confirm("Are you sure you want to delete?");
-      if (confirmation) {
-        this.deleteScheduledAppointment(deleteScheduledAppointment);
-        this.events = this.events.filter(
-          event => event.id !== deleteScheduledAppointment
-        );
-        this.selectedOpen = false;
-        return true;
+      if (this._validateDeleteAppointment(deleteScheduledAppointment)) {
+        if (
+          confirm(
+            "This appointment cannot be deleted, do you want to postpone it??"
+          )
+        ) {
+          //Postponing
+
+          return true;
+        }
+      } else {
+        if (confirm("Are you sure you want to delete?")) {
+          this.deleteScheduledAppointment(deleteScheduledAppointment);
+          this.events = this.events.filter(
+            event => event.id !== deleteScheduledAppointment
+          );
+          this.selectedOpen = false;
+          return true;
+        }
       }
+    },
+
+    _validateDeleteAppointment(appointmentId) {
+      let now = new Date();
+      let year = parseInt(now.getFullYear());
+      let month = parseInt(now.getMonth() + 1);
+      let day = parseInt(now.getDate());
+
+      let date_appointment = "";
+      this.scheduledAppointments.forEach(element => {
+        if (element.id === appointmentId) {
+          date_appointment = element.date;
+        }
+      });
+
+      let app = date_appointment.split("-");
+
+      return (
+        parseInt(app[0]) === year &&
+        parseInt(app[1]) === month &&
+        parseInt(app[2]) === day
+      );
     },
 
     getEventColor(event) {
@@ -187,7 +220,7 @@ export default {
       return Math.floor((b - a + 1) * Math.random()) + a;
     },
 
-    setEvents(app) {
+    setEvents: function(app) {
       this.events.push({
         id: app.id,
         name: app.name,
