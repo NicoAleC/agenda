@@ -50,9 +50,9 @@ export default {
 
     mutateParticipantAddAppointment(state, addAppoint) {
         const foundAccountIndex = state.scheduledAppointments.findIndex(
-            part => part.name === addAppoint.appointmentName
+            part => part.id === addAppoint.appointmentName
         );
-        // console.log("Index" + foundAccountIndex);
+        console.log("Index" + foundAccountIndex);
         state.scheduledAppointments[foundAccountIndex].participants.push({
             participantId: addAppoint.participantId,
             name: addAppoint.name,

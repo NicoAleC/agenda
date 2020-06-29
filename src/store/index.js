@@ -82,7 +82,11 @@ const state = {
       startHour: "10:00",
       endHour: "11:00",
       agendaId: "ANG-0001",
-      participants: []
+      participants: [{
+        participantId: "PART-003",
+        name: "Andy Villarroel",
+        contactNumber: "77905861"
+      }]
     }]
 };
 export default new Vuex.Store({

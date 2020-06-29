@@ -74,7 +74,7 @@
                 <router-link
                   :to="{
                 name: 'Participants',
-                params: { id: appointmentE.name }
+                params: { id: appointmentE.id }
               }"
                 >
                   <v-icon size="35" @click="sendDialog()">mdi-account</v-icon>

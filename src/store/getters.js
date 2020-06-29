@@ -20,9 +20,5 @@ export default {
 
   getScheduledAppointments(state) {
     return state.scheduledAppointments;
-  },
-
-  getScheduled(state) {
-    return state.scheduledAppointments;
   }
 };

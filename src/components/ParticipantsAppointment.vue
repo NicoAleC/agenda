@@ -78,8 +78,7 @@ export default {
           date: new Date().toISOString().substr(0, 10),
           startHour: "",
           endHour: "",
-          agendaId: "",
-          participants: []
+          agendaId: ""
         };
       }
     }
@@ -105,14 +104,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["getScheduled"]),
+    ...mapGetters(["getScheduledAppointments"]),
     scheduled() {
-      return this.getScheduled;
+      return this.getScheduledAppointments;
     },
     participantList: function() {
-      const id = this.scheduled.findIndex(
-        appointment => appointment.name === this.scheduledAppointment.name
+      let id = this.scheduled.findIndex(
+        appointment => appointment.id === this.scheduledAppointment.id
       );
+      console.log(id);
 
       if (id !== -1) {
         return this.scheduled[id].participants;

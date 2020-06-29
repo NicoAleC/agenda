@@ -145,10 +145,8 @@ export default {
       }
     },
     _findParticipant(appo, members) {
-      const found = this.appointments.findIndex(
-        appoint => appoint.name == appo
-      );
-      const appointmentFound = this.appointments[found].participants.findIndex(
+      let found = this.appointments.findIndex(appoint => appoint.id == appo);
+      let appointmentFound = this.appointments[found].participants.findIndex(
         participants => participants.participantId == members
       );
       return appointmentFound;
@@ -203,12 +201,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["getParticipants", "getScheduled"]),
+    ...mapGetters(["getParticipants", "getScheduledAppointments"]),
     participants() {
       return this.getParticipants;
     },
     appointments() {
-      return this.getScheduled;
+      return this.getScheduledAppointments;
     },
     searching: function() {
       if (this.search !== "") {

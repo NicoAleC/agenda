@@ -236,7 +236,7 @@ export default {
               date: this.scheduledAppointment.date,
               startHour: this.scheduledAppointment.startHour,
               endHour: this.scheduledAppointment.endHour,
-              participants: this.scheduledAppointment.participants
+              participants: []
             });
           } else {
             alert("You cannot enter an appointments on a past date");
@@ -274,7 +274,8 @@ export default {
               description: this.scheduledAppointment.description,
               date: this.scheduledAppointment.date,
               startHour: this.scheduledAppointment.startHour,
-              endHour: this.scheduledAppointment.endHour
+              endHour: this.scheduledAppointment.endHour,
+              participants: []
             });
           } else {
             alert("You cannot enter an appointments on a past date");
