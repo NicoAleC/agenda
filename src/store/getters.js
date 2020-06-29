@@ -9,8 +9,20 @@ const getIdAgendas = state => {
 const getIdLooked = state => {
   return state.idToPass;
 };
+
 export default {
   getAgendas,
   getIdAgendas,
-  getIdLooked
+  getIdLooked,
+  getParticipants(state) {
+    return state.participants;
+  },
+
+  getScheduledAppointments(state) {
+    return state.scheduledAppointments;
+  },
+
+  getScheduled(state) {
+    return state.scheduledAppointments;
+  }
 };
