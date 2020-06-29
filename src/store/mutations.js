@@ -41,6 +41,26 @@ export default {
             contactNumber: addAppoint.contactNumber
         });
     },
+
+    mutateScheduledAppointmentList(state, appointmentToAdd) {
+        state.scheduledAppointments.push(appointmentToAdd);
+      },
+      
+
+      mutateUpdateAppointment(state, appointmentToUpdate) {
+        const index = state.scheduledAppointments.findIndex(
+          appointment => appointment.id === appointmentToUpdate.id
+        );
+        if (index > -1 ){
+            state.scheduledAppointments[index] = appointmentToUpdate;
+        }
+    },
+      mutateDeleteAppointment(state, deleteScheduledAppointment) {
+        state.scheduledAppointments = state.scheduledAppointments.filter(
+          appointment => appointment.id !== deleteScheduledAppointment
+        );
+      },
+
     mutateParticipantDeleteAppointment(state, deleteAppoint) {
         const foundAccountIndex = state.scheduledAppointments.findIndex(
             part => part.name === deleteAppoint.appointmentName
@@ -49,4 +69,5 @@ export default {
             foundAccountIndex
         ].participants.filter(appoint => appoint.participantId !== deleteAppoint.participantId);
     }
+
 };

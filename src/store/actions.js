@@ -14,6 +14,17 @@ export default {
     addParticipantToAnAppointment({ commit }, addAppointment) {
         commit("mutateParticipantAddAppointment", addAppointment);
     },
+
+    addScheduledAppointment({ commit }, appointmentToAdd) {
+        commit("mutateScheduledAppointmentList", appointmentToAdd);
+    },
+    updateScheduledAppointment({ commit }, appointmentToUpdate) {
+        commit("mutateUpdateAppointment", appointmentToUpdate);
+    },
+    deleteScheduledAppointment({ commit }, appointmentToDelete) {
+        commit("mutateDeleteAppointment", appointmentToDelete);
+    },
+
     deleteParticipantFromAnAppointment({ commit }, addAppointment) {
         commit("mutateParticipantDeleteAppointment", addAppointment);
     },

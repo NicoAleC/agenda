@@ -4,18 +4,16 @@
       <v-card>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-card-title>
-            {{
-            newMovement ? "New Participant" : " Update a Participant"
-            }}
+            {{ newMovement ? "New Participant" : " Update a Participant" }}
           </v-card-title>
           <v-card-text>
             <v-container>
               <v-row>
                 <v-col class="text-center">
                   <v-avatar color="red" size="100">
-                    <span
-                      class="white--text headline"
-                    >{{ selectedParticipant.name | capitalizeAvatar }}</span>
+                    <span class="white--text headline">{{
+                      selectedParticipant.name | capitalizeAvatar
+                    }}</span>
                   </v-avatar>
                 </v-col>
                 <v-col cols="12">
@@ -52,8 +50,11 @@
                 emitUpdateAndAdd(
                   selectedParticipant.name,
                   selectedParticipant.contactNumber,
-                  selectedParticipant.participantId)"
-            >{{ newMovement ? "SAVE" : "UPDATE" }}</v-btn>
+                  selectedParticipant.participantId
+                )
+              "
+              >{{ newMovement ? "SAVE" : "UPDATE" }}</v-btn
+            >
           </v-card-actions>
         </v-form>
       </v-card>
