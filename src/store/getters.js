@@ -9,5 +9,8 @@ export default {
   },
   getScheduledAppointments(state) {
     return state.scheduledAppointments;
+  },
+  getAgendas(state){
+    return state.agendas;
   }
 };

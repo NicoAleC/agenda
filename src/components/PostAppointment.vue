@@ -53,11 +53,7 @@
                       >
                         <v-icon>mdi-pencil</v-icon>
                       </v-btn>
-                      <v-btn
-                        icon
-                        color="#304050"
-                        v-on:click="deletePostponedApp(post)"
-                      >
+                      <v-btn icon color="#304050" v-on:click="deletePostponedApp(post)">
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
                     </v-card-actions>
@@ -78,11 +74,8 @@
           <v-spacer></v-spacer>
           <v-card-text>
             <v-form>
-              <v-text-field label="Name" v-model="name"></v-text-field>
-              <v-textarea
-                label="Description"
-                v-model="description"
-              ></v-textarea>
+              <v-text-field label="Name" v-model="name" :rules="rules.nameRule"></v-text-field>
+              <v-textarea label="Description" v-model="description" :rules="rules.lengthRule"></v-textarea>
               <v-btn
                 class="success mx-0 mt-3"
                 @click="
@@ -93,8 +86,7 @@
                     description: description
                   });
                 "
-                >Save</v-btn
-              >
+              >Save</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
@@ -109,13 +101,15 @@
           <v-spacer></v-spacer>
           <v-card-text>
             <v-form>
-              <p>Name:</p>
-              <h1>{{ name }}</h1>
-              <p>Description:</p>
-              <h1>{{ description }}</h1>
-              <v-btn class="success mx-0 mt-3" @click="dialogRes = false"
-                >Reschedule</v-btn
-              >
+              <v-text-field readonly auto-grow label="Name" v-model="name"></v-text-field>
+              <v-textarea readonly auto-grow label="Description" v-model="description"></v-textarea>
+              <v-select v-model="idAgenda" :items="getAgendasList" :rules="rules.agenda" label= "Agenda" item-text="name" item-value="agendaId" :hint="idAgenda.agendaId" return-object></v-select>
+
+              <v-text-field readonly auto-grow label="Date" v-model="date"></v-text-field>
+              <v-text-field readonly auto-grow label="Start Hour" v-model="startHour"></v-text-field>
+              <v-text-field readonly auto-grow label="End Hour" v-model="endHour"></v-text-field>
+
+              <v-btn class="success mx-0 mt-3" @click="dialogRes = false">Reschedule</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
@@ -138,9 +132,22 @@ export default {
       startHour: "",
       endHour: "",
       dialogEdit: false,
-      dialogRes: false
+      dialogRes: false,
+      rules: {
+        lengthRule: [
+          v => v.length <= 256 || "Field must be less than 256 characters"
+        ],
+        nameRule: [
+          v => !!v || "Name is required",
+          v => v.length <= 32 || "Name must be less than 32 characters"
+        ],
+        agendaRule:[
+          v=>!!v || "Item is required"
+          ]
+      }
     };
   },
+
   methods: {
     ...mapActions([
       "addPostponed",
@@ -184,7 +191,7 @@ export default {
     ...mapGetters([
       "getPostponed",
       "getScheduledAppointments",
-      "getParticipants"
+      "getParticipants", "getAgendas"
     ]),
     postponedAppointments() {
       return this.getPostponed;
@@ -194,6 +201,9 @@ export default {
     },
     participants() {
       return this.getParticipants;
+    },
+    getAgendasList(){
+      return this.getAgendas;
     }
   }
 };
