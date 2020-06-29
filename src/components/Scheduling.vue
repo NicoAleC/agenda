@@ -3,9 +3,9 @@
     <v-dialog v-model="dialog" persistent max-width="605px">
       <v-card class="spacing-playground pa-5" fluid>
         <v-form ref="form" v-model="valid" lazy-validation>
-          <v-card-title class="text-center">
-            {{ newMovement ? "New Appointment" : " Update Appointment " }}
-          </v-card-title>
+          <v-card-title
+            class="text-center"
+          >{{ newMovement ? "New Appointment" : " Update Appointment " }}</v-card-title>
           <v-card-text>
             <v-container>
               <v-row>
@@ -118,37 +118,14 @@
                   </v-menu>
                 </v-col>
                 <v-col cols="12">
-                  <v-select
-                    v-model="scheduledAppointment.agendaId"
-                    label="Agenda"
-                  >
-                  </v-select>
-                </v-col>
-                <v-col cols="12">
-                  <v-select
-                    multiple
-                    :items="selectOptions"
-                    v-model="scheduledAppointment.participants"
-                    attach
-                    chips
-                    label="Add Participants"
-                  >
-                    <!-- <option -->
-                    <!-- v-for="(participant, index) in participant_list" -->
-                    <!-- :key="index" -->
-                    <!-- > -->
-                    <!-- {{ participant.name }} -->
-                    <!-- </option> -->
-                  </v-select>
+                  <v-select v-model="scheduledAppointment.agendaId" label="Agenda"></v-select>
                 </v-col>
               </v-row>
             </v-container>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="ma-2" outlined color="indigo" text @click="cancel"
-              >Cancel</v-btn
-            >
+            <v-btn class="ma-2" outlined color="indigo" text @click="cancel">Cancel</v-btn>
             <v-btn
               class="ma-2"
               outlined
@@ -156,8 +133,7 @@
               text
               v-if="_validateData() && newMovement"
               @click="addAppointment()"
-              >{{ "SAVE" }}</v-btn
-            >
+            >{{ "SAVE" }}</v-btn>
             <v-btn
               class="ma-2"
               outlined
@@ -165,8 +141,7 @@
               text
               v-if="!newMovement"
               @click="updateAppointment()"
-              >{{ "UPDATE" }}</v-btn
-            >
+            >{{ "UPDATE" }}</v-btn>
           </v-card-actions>
         </v-form>
       </v-card>

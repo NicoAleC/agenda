@@ -10,8 +10,7 @@
               x-large
               class="mb-2"
               @click="sendData(scheduledAppointment, true)"
-              >New Appointment</v-btn
-            >
+            >New Appointment</v-btn>
           </v-col>
         </v-layout>
       </v-row>
@@ -19,9 +18,7 @@
         <v-btn icon class="ma-5" @click="$refs.calendar.prev()">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-        <v-toolbar-title v-if="$refs.calendar" class="ma-5">
-          {{ $refs.calendar.title }}
-        </v-toolbar-title>
+        <v-toolbar-title v-if="$refs.calendar" class="ma-5">{{ $refs.calendar.title }}</v-toolbar-title>
         <v-btn icon class="ma-5" @click="$refs.calendar.next()">
           <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
@@ -58,36 +55,36 @@
           <v-card min-width="500px" flat>
             <v-toolbar :color="selectedAppointment.color" dark>
               <v-row justify="center">
-                <v-toolbar-title
-                  v-html="selectedAppointment.name"
-                ></v-toolbar-title>
+                <v-toolbar-title v-html="selectedAppointment.name"></v-toolbar-title>
               </v-row>
             </v-toolbar>
             <v-card-text>
-              <div class="mt-8 text-center">
-                Description: {{ appointmentE.description }}
-              </div>
+              <div class="mt-8 text-center">Description: {{ appointmentE.description }}</div>
               <div class="mt-8 text-center">
                 Duration: {{ appointmentE.startHour }} -
                 {{ appointmentE.endHour }}
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-col
-                class="grey--text text-truncate hidden-sm-and-down"
-                align="center"
-              >
-                <v-icon size="35" @click="sendData(appointmentE, false)"
-                  >mdi-pencil</v-icon
-                >
+              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
+                <v-icon size="35" @click="sendData(appointmentE, false)">mdi-pencil</v-icon>
               </v-col>
-              <v-col
-                class="grey--text text-truncate hidden-sm-and-down"
-                align="center"
-              >
-                <v-icon size="35" @click="deleteAppointment(appointmentE.id)"
-                  >mdi-delete</v-icon
+
+              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
+                <router-link
+                  :to="{
+                name: 'Participants',
+                params: { id: appointmentE.name }
+              }"
                 >
+                  <v-icon size="35" @click="sendDialog()">mdi-account</v-icon>
+                </router-link>
+              </v-col>
+              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
+                <v-icon size="35" @click="sendDialog(appointmentE)">mdi-account-check</v-icon>
+              </v-col>
+              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
+                <v-icon size="35" @click="deleteAppointment(appointmentE.id)">mdi-delete</v-icon>
               </v-col>
             </v-card-actions>
           </v-card>
@@ -101,6 +98,11 @@
         @addAppointment="addAppointment"
         @updateAppointment="updateAppointment"
       />
+      <ParticipantsAppointment
+        :scheduledAppointment="scheduledAppointment"
+        :dialog2="dialog2"
+        @close="dialog2 = false"
+      />
     </v-container>
   </div>
 </template>
@@ -108,12 +110,14 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Scheduling from "@/components/Scheduling.vue";
+import ParticipantsAppointment from "@/components/ParticipantsAppointment.vue";
 
 export default {
   name: "Appointments",
 
   components: {
-    Scheduling
+    Scheduling,
+    ParticipantsAppointment
   },
 
   data: () => ({
@@ -121,6 +125,7 @@ export default {
     appointmentE: {},
     newMovement: false,
     dialog: false,
+    dialog2: false,
     type: "month",
     types: ["month", "week", "day"],
     value: "",
@@ -151,6 +156,12 @@ export default {
       };
       this.dialog = true;
       this.newMovement = newMovement;
+    },
+    sendDialog: function(scheduledAppointment) {
+      this.scheduledAppointment = {
+        ...scheduledAppointment
+      };
+      this.dialog2 = true;
     },
 
     addAppointment: function(appointmentToAdd) {

@@ -66,6 +66,11 @@ const state = {
       participantId: "PART-002",
       name: "Pablo Rivas",
       contactNumber: "69501045"
+    },
+    {
+      participantId: "PART-003",
+      name: "Andy Villarroel",
+      contactNumber: "77905861"
     }
   ],
   scheduledAppointments: [

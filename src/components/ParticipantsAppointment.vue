@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" persistent max-width="600px">
+    <v-dialog v-model="dialog2" persistent max-width="600px">
       <v-card>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-card-title>My Participants</v-card-title>
@@ -63,9 +63,25 @@ export default {
   components: {},
   data: () => ({ valid: true, name: "Dentist" }),
   props: {
-    dialog: {
+    dialog2: {
       type: Boolean,
       default: false
+    },
+
+    scheduledAppointment: {
+      type: Object,
+      default: function() {
+        return {
+          id: "",
+          name: "",
+          description: "",
+          date: new Date().toISOString().substr(0, 10),
+          startHour: "",
+          endHour: "",
+          agendaId: "",
+          participants: []
+        };
+      }
     }
   },
   methods: {
@@ -95,8 +111,9 @@ export default {
     },
     participantList: function() {
       const id = this.scheduled.findIndex(
-        appointment => appointment.name === "Dentist"
+        appointment => appointment.name === this.scheduledAppointment.name
       );
+
       if (id !== -1) {
         return this.scheduled[id].participants;
       } else {
