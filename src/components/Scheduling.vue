@@ -47,7 +47,7 @@
                       v-model="scheduledAppointment.date"
                       @input="menu_date = false"
                       color="grey darken-1"
-                      :landscape="$vuetify.breakpoint.smAndUp"
+                      :landscape="true"
                       class="mt-4"
                     ></v-date-picker>
                   </v-menu>
@@ -78,8 +78,9 @@
                       class="mt-4"
                       format="24hr"
                       :max="scheduledAppointment.endHour"
+                      :min="agenda_start_hour"
                       color="grey darken-1"
-                      :landscape="$vuetify.breakpoint.mdAndUp"
+                      :landscape="true"
                     ></v-time-picker>
                   </v-menu>
                 </v-col>
@@ -109,20 +110,28 @@
                       class="mt-4"
                       format="24hr"
                       :min="scheduledAppointment.startHour"
+                      :max="agenda_end_hour"
                       color="grey darken-1"
-                      :landscape="$vuetify.breakpoint.mdAndUp"
+                      :landscape="true"
                     ></v-time-picker>
                   </v-menu>
                 </v-col>
                 <v-col cols="12">
                   <v-select
+                    multiple
+                    :items="selectOptions"
                     v-model="scheduledAppointment.participants"
-                    :items="getParticipantsList()"
                     attach
                     chips
                     label="Add Participants"
-                    multiple
-                  ></v-select>
+                  >
+                    <!-- <option -->
+                    <!-- v-for="(participant, index) in participant_list" -->
+                    <!-- :key="index" -->
+                    <!-- > -->
+                    <!-- {{ participant.name }} -->
+                    <!-- </option> -->
+                  </v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -167,7 +176,9 @@ export default {
     menu_date: false,
     showCurrent: true,
     menu_end_hour: false,
-    menu_start_hour: false
+    menu_start_hour: false,
+    agenda_start_hour: "5:00",
+    agenda_end_hour: "23:30"
   }),
   props: {
     newMovement: {
@@ -201,27 +212,58 @@ export default {
     scheduledAppointments() {
       return this.getScheduledAppointments;
     },
-    participants() {
+
+    participant_list() {
       return this.getParticipants;
+    },
+
+    selectOptions() {
+      return this.getParticipants.map(participant => participant.name);
+    },
+
+    getParticipantsList: function() {
+      let list = [];
+      this.participants.forEach(element => {
+        list.push(element.name);
+      });
+      return list;
     }
   },
   methods: {
     addAppointment: function() {
       if (this._validateData()) {
-        this.$emit("addAppointment", {
-          id: this.getAppointmentId(),
-          name: this.scheduledAppointment.name,
-          description: this.scheduledAppointment.description,
-          date: this.scheduledAppointment.date,
-          startHour: this.scheduledAppointment.startHour,
-          endHour: this.scheduledAppointment.endHour,
-          participants: this.scheduledAppointment.participants
-        });
+        if (
+          this._validateStartAndEndHour(
+            this.scheduledAppointment.startHour,
+            this.scheduledAppointment.endHour
+          ) &&
+          this._validateAgendaHours(
+            this.agenda_start_hour,
+            this.agenda_end_hour,
+            this.scheduledAppointment.startHour,
+            this.scheduledAppointment.endHour
+          )
+        ) {
+          this.$emit("addAppointment", {
+            id: this.getAppointmentId(),
+            name: this.scheduledAppointment.name,
+            description: this.scheduledAppointment.description,
+            date: this.scheduledAppointment.date,
+            startHour: this.scheduledAppointment.startHour,
+            endHour: this.scheduledAppointment.endHour,
+            participants: this.scheduledAppointment.participants
+          });
+        } else {
+          alert(
+            "The time format inserted for the start and end of the appointment is incorrect."
+          );
+        }
       } else {
-        alert("You must complete all fields");
+        alert("You must complete all fields.");
       }
       this.cancel();
     },
+
     updateAppointment: function() {
       if (this._validateData()) {
         this.$emit("updateAppointment", {
@@ -258,14 +300,6 @@ export default {
       return "APP-" + newId;
     },
 
-    getParticipantsList: function() {
-      let list = [];
-      this.participants.forEach(element => {
-        list.push(element.name);
-      });
-      return list;
-    },
-
     _validateData() {
       return (
         this.scheduledAppointment.name !== "" &&
@@ -274,8 +308,28 @@ export default {
         this.scheduledAppointment.startHour !== "" &&
         this.scheduledAppointment.endHour !== ""
       );
+    },
+
+    _validateStartAndEndHour(startHour, endHour) {
+      let start = startHour.split(":");
+      let end = endHour.split(":");
+      //hour[0], minutes[1] -> 24h format
+      return (start[0] === end[0] && start[1] < end[1]) || start[0] < end[0];
+    },
+
+    _validateAgendaHours(agenda_start, agenda_end, app_start, app_end) {
+      let ag_start = agenda_start.split(":");
+      let ag_end = agenda_end.split(":");
+      let start = app_start.split(":");
+      let end = app_end.split(":");
+      return (
+        ((parseInt(ag_start[0]) === start[0] &&
+          start[1] >= parseInt(ag_start[1])) ||
+          parseInt(ag_start[0]) < start[0]) &&
+        ((parseInt(ag_end[0]) === end[0] && end[1] <= parseInt(ag_end[1])) ||
+          parseInt(ag_end[0]) > end[0])
+      );
     }
   }
 };
 </script>
-<style></style>

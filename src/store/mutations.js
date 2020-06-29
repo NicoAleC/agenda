@@ -41,9 +41,7 @@ export default {
           appointment => appointment.id === appointmentToUpdate.id
         );
         if (index > -1 ){
-            //state.scheduledAppointments[index] = appointmentToUpdate;
-            state.scheduledAppointments[index].name = appointmentToUpdate.name;
-            state.scheduledAppointments[index].description = appointmentToUpdate.description;
+            state.scheduledAppointments[index] = appointmentToUpdate;
         }
     },
       mutateDeleteAppointment(state, deleteScheduledAppointment) {

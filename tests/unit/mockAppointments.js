@@ -1,4 +1,16 @@
 export default {
+  participants: [
+    {
+      participantId: "PART-001",
+      name: "Mariana",
+      contactNumber: "4356795"
+    },
+    {
+      participantId: "PART-002",
+      name: "Pablo Rivas",
+      contactNumber: "69501045"
+    }
+  ],
   scheduledAppointments: [
     {
       id: "APP-1",

@@ -2,7 +2,7 @@ import Appointments from "@/views/Appointments.vue";
 import Scheduling from "@/components/Scheduling.vue";
 
 import { assert } from "chai";
-import { createLocalVue, shallowMount } from "@vue/test-utils";
+import { createLocalVue, shallowMount, mount } from "@vue/test-utils";
 
 import Vuex from "vuex";
 import Vuetify from "vuetify";
@@ -38,7 +38,7 @@ describe(" Scheduled Appointments CRUD", () => {
       console.log(message);
     };
 
-    const wrapper = shallowMount(Scheduling, {
+    const wrapper = mount(Scheduling, {
       store,
       vuetify,
       localVue,
@@ -48,19 +48,7 @@ describe(" Scheduled Appointments CRUD", () => {
     const isValid = wrapper.vm._validateData();
     assert.isFalse(isValid);
   });
-  /*it("Validate data shoudl pass if data enter", async () => {
-    const wrapper = mount(Scheduling);
 
-    wrapper.vm.$data.name = "test";
-    wrapper.vm.$data.description = "Unit test";
-    wrapper.vm.$data.date = "06/25/2020";
-    wrapper.vm.$data.startHour = "10:00";
-    wrapper.vm.$data.endHour = "14:30";
-    wrapper.vm.$data.agendID = "AGN-0002";
-
-    const isValid = wrapper.vm._validateData();
-    assert.isTrue(isValid);
-  });*/
   it.only(" Validate add schedule appointment. ", () => {
     const wrapper = shallowMount(Appointments, {
       store,
@@ -80,10 +68,10 @@ describe(" Scheduled Appointments CRUD", () => {
     wrapper.vm.addAppointment(appointmentToAdd);
 
     assert.include(
-      JSON.stringify(wrapper.vm.scheduledAppointments),
+      JSON.stringify(wrapper.vm.$store.state.scheduledAppointments),
       appointmentToAdd.name
     );
-    //console.log("AddList:" +  JSON.stringify(wrapper.vm.scheduledAppointments));
+    //console.log("AddList:" +  JSON.stringify(wrapper.vm.$store.state.scheduledAppointments));
   });
 
   it.only(" Validate Update Schedule appointment. ", () => {
@@ -106,10 +94,10 @@ describe(" Scheduled Appointments CRUD", () => {
       endHour: "12:00"
     };
     wrapper.vm.updateAppointment(appointmentToUpdate);
-    //console.log("UpdateList:" + JSON.stringify(wrapper.vm.scheduledAppointments));
+    //console.log("UpdateList:" + JSON.stringify(wrapper.vm.$store.state.scheduledAppointments));
 
     assert.include(
-      JSON.stringify(wrapper.vm.scheduledAppointments),
+      JSON.stringify(wrapper.vm.$store.state.scheduledAppointments),
       appointmentToUpdate.name
     );
   });
@@ -128,11 +116,42 @@ describe(" Scheduled Appointments CRUD", () => {
     const appointmentToDelete = "APP-2";
 
     wrapper.vm.deleteAppointment(appointmentToDelete);
-    //console.log("DeleteList:" +  JSON.stringify(wrapper.vm.scheduledAppointments));
+    //console.log("DeleteList:" +  JSON.stringify(wrapper.vm.$store.state.scheduledAppointments));
 
     assert.notInclude(
-      JSON.stringify(wrapper.vm.scheduledAppointments),
+      JSON.stringify(wrapper.vm.$store.state.scheduledAppointments),
       appointmentToDelete
     );
+  });
+  it.only(" Validate that the start and end hours are correct", () => {
+    global.alert = () => {};
+
+    const wrapper = shallowMount(Scheduling, {
+      store,
+      vuetify: { iconfont: "md" },
+      localVue,
+      stubs: ["VTextField"]
+    });
+
+    let start = "15:08";
+    let end = "12:00";
+
+    //console.log(wrapper.vm._validateStartAndEndHour(start, end));
+
+    const isValid = wrapper.vm._validateStartAndEndHour(start, end);
+    assert.isFalse(isValid);
+
+    let agendaStart = "6:00";
+    let agendaEnd = "23:50";
+    start = "5:00";
+    end = "23:00";
+
+    const isValidAgendaHours = wrapper.vm._validateAgendaHours(
+      agendaStart,
+      agendaEnd,
+      start,
+      end
+    );
+    assert.isFalse(isValidAgendaHours);
   });
 });
