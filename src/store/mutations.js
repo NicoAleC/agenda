@@ -34,13 +34,13 @@ export default {
         state.postponedAppointments.push(addPost);
     },
     mutateUpdatePostponed(state, updatedPost) {
-        const toUpdate = state.postponedAppointments.findIndex(post => post.name === updatedPost.name);
+        const toUpdate = state.postponedAppointments.findIndex(post => post.id === updatedPost.id);
         if (toUpdate >= 0) {
             state.postponedAppointments.splice(toUpdate, 1, updatedPost);
         }
     },
     mutateDeletePostponed(state, deletePost) {
-        state.postponedAppointments = state.postponedAppointments.filter(post => post.name !== deletePost.name);
+        state.postponedAppointments = state.postponedAppointments.filter(post => post.id !== deletePost.id);
     },
     mutateScheduledAppointmentList(state, appointmentToAdd) {
         state.scheduledAppointments.push(appointmentToAdd);

@@ -21,7 +21,8 @@ export default {
   ],
   postponedAppointments: [
     {
-      name: "Dentist",
+      id: 0,
+      name: "Dentista",
       description: "I need to go to dentist"
     }
   ]

@@ -28,51 +28,60 @@ describe("Postponed Appointments", () => {
   it.only("Add a postponed appointment", () => {
     const wrapper = shallowMount(PostAppointment, { store, localVue, vuetify });
     const newPostponed = { name: "Test", description: "default description" };
-    let expectedLenght =
-      wrapper.vm.$store.state.postponedAppointments.length + 1;
+    let expectedLenght = wrapper.vm.postponedAppointments.length + 1;
     wrapper.vm.addPostponedApp(newPostponed);
-    assert.equal(
-      expectedLenght,
-      wrapper.vm.$store.state.postponedAppointments.length
-    );
+    assert.equal(expectedLenght, wrapper.vm.postponedAppointments.length);
   });
   it.only("Edit a postponed appointment", () => {
     const wrapper = shallowMount(PostAppointment, { store, localVue, vuetify });
-    const updatedPostponed = {
+    let updatedPostponed = {
       name: "Test",
-      description: "updated description"
+      description: "old description"
     };
+    wrapper.vm.addPostponedApp(updatedPostponed);
+    updatedPostponed =
+      wrapper.vm.postponedAppointments[
+        wrapper.vm.postponedAppointments.length - 1
+      ];
+    updatedPostponed.name = "updatedName";
+    updatedPostponed.description = "updatedDescription";
     wrapper.vm.updatePostponedApp(updatedPostponed);
-    const foundPost = wrapper.vm.$store.state.postponedAppointments.find(
-      appoint => appoint.name === updatedPostponed.name
+    const foundPost = wrapper.vm.postponedAppointments.find(
+      appoint => appoint.id === updatedPostponed.id
     );
     assert.equal(updatedPostponed.name, foundPost.name);
     assert.equal(updatedPostponed.description, foundPost.description);
   });
   it.only("Delete a postponed appointment", () => {
     const wrapper = shallowMount(PostAppointment, { store, localVue, vuetify });
-    const toDeletePostponed = {
-      name: "Test",
-      description: "updated description"
+    let toDeletePostponed = {
+      name: "Delete Test",
+      description: "deleted description"
     };
-    let expectedLenght =
-      wrapper.vm.$store.state.postponedAppointments.length - 1;
+    wrapper.vm.addPostponedApp(toDeletePostponed);
+    toDeletePostponed =
+      wrapper.vm.postponedAppointments[
+        wrapper.vm.postponedAppointments.length - 1
+      ];
+    let expectedLenght = wrapper.vm.postponedAppointments.length - 1;
     wrapper.vm.deletePostponedApp(toDeletePostponed);
-    assert.equal(
-      expectedLenght,
-      wrapper.vm.$store.state.postponedAppointments.length
-    );
+    assert.equal(expectedLenght, wrapper.vm.postponedAppointments.length);
   });
   it.only("Scheduling a postponed appointment should appear on the Appointments list and leave the postponed list", () => {
     const wrapper = shallowMount(PostAppointment, { store, localVue, vuetify });
-    const toBeAppointed = { name: "Tobe", description: "description" };
+    let toBeAppointed = { name: "Tobe", description: "description" };
     wrapper.vm.addPostponedApp(toBeAppointed);
+    toBeAppointed =
+      wrapper.vm.postponedAppointments[
+        wrapper.vm.postponedAppointments.length - 1
+      ];
     let currentLengthP =
       wrapper.vm.$store.state.postponedAppointments.length - 1;
     let currentLengthA =
       wrapper.vm.$store.state.scheduledAppointments.length + 1;
     const appointmentRenewed = {
-      id: "APP-2",
+      id: toBeAppointed.id,
+      idAgenda: "APP-2",
       name: toBeAppointed.name,
       description: toBeAppointed.description,
       date: "2020-06-26",
