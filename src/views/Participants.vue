@@ -23,30 +23,21 @@
               x-large
               outlined
               @click="sendData(selectedParticipant, true)"
-              >New Participant</v-btn
-            >
+            >New Participant</v-btn>
           </v-col>
         </v-layout>
         <v-expansion-panels popout>
-          <v-expansion-panel
-            v-for="(participant, i) in searching"
-            :key="i"
-            hide-actions
-          >
+          <v-expansion-panel v-for="(participant, i) in searching" :key="i" hide-actions>
             <v-expansion-panel-header>
               <v-row align="center" class="spacer" no-gutters>
                 <v-col cols="5" sm="3" md="2">
                   <v-avatar color="orange">
-                    <span class="white--text headline">
-                      {{ participant.name | capitalizeAvatar }}
-                    </span>
+                    <span class="white--text headline">{{ participant.name | capitalizeAvatar }}</span>
                   </v-avatar>
                 </v-col>
 
                 <v-col class="hidden-xs-only" sm="5" md="3">
-                  <strong v-html="participant.name" class="list-participant">
-                    {{ participant.name }}
-                  </strong>
+                  <strong v-html="participant.name" class="list-participant">{{ participant.name }}</strong>
                 </v-col>
 
                 <v-col class="text-no-wrap" cols="5" sm="3">
@@ -63,23 +54,13 @@
                         participant.participantId
                       )
                     "
-                    >mdi-plus</v-icon
-                  >
+                  >mdi-plus</v-icon>
                 </v-col>
                 <v-col class="grey--text text-truncate hidden-sm-and-down">
-                  <v-icon
-                    size="35"
-                    class="mr-2"
-                    @click="sendData(participant, false)"
-                    >mdi-pencil</v-icon
-                  >
+                  <v-icon size="35" class="mr-2" @click="sendData(participant, false)">mdi-pencil</v-icon>
                 </v-col>
                 <v-col class="grey--text text-truncate hidden-sm-and-down">
-                  <v-icon
-                    size="35"
-                    @click="deleteItem(participant.participantId)"
-                    >mdi-delete</v-icon
-                  >
+                  <v-icon size="35" @click="deleteItem(participant.participantId)">mdi-delete</v-icon>
                 </v-col>
               </v-row>
             </v-expansion-panel-header>
@@ -87,18 +68,22 @@
         </v-expansion-panels>
       </v-row>
       <v-snackbar v-model="alert" color="success" top right :timeout="timeout">
-        <strong>{{
+        <strong>
+          {{
           changeName
-            ? "Successfully created participant"
-            : "¡Participant successfully added to the appointment!"
-        }}</strong>
+          ? "Successfully created participant"
+          : "¡Participant successfully added to the appointment!"
+          }}
+        </strong>
       </v-snackbar>
       <v-snackbar v-model="alert2" color="warning" top right :timeout="timeout">
-        <strong>{{
+        <strong>
+          {{
           changeNameTwo
-            ? "The Participant is already in the appointment"
-            : "Participant edited correctly"
-        }}</strong>
+          ? "The Participant is already in the appointment"
+          : "Participant edited correctly"
+          }}
+        </strong>
       </v-snackbar>
 
       <ParticipantsDialog
@@ -148,18 +133,23 @@ export default {
 
     addParticipantToAScheduleAppointment(name, contact, id) {
       let route = this.$route.params.id;
-      if (this._findParticipant(route, id) == -1) {
-        this.addParticipantToAnAppointment({
-          name: name,
-          contactNumber: contact,
-          participantId: id,
-          appointmentName: route
-        });
-        this.alert1 = true;
-        this.changeName = false;
+      let routeCapital = route.toString().charAt(0);
+      if (routeCapital == "A") {
+        if (this._findParticipant(route, id) == -1) {
+          this.addParticipantToAnAppointment({
+            name: name,
+            contactNumber: contact,
+            participantId: id,
+            appointmentName: route
+          });
+          this.alert = true;
+          this.changeName = false;
+        } else {
+          this.alert2 = true;
+          this.changeNameTwo = true;
+        }
       } else {
-        this.alert2 = true;
-        this.changeNameTwo = true;
+        console.log(routeCapital);
       }
     },
     _findParticipant(appo, members) {
