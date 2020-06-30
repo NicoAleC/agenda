@@ -14,7 +14,7 @@ import mutations from "@/store/mutations.js";
 import getters from "@/store/getters.js";
 let store;
 
-describe("Participants.vue", () => {
+describe("Participants CRUD", () => {
   let localVue;
   let vuetify;
 
@@ -135,12 +135,11 @@ describe("Participants.vue", () => {
       store,
       vuetify,
       localVue,
-      stubs: ["VTextField"]
+      stubs: ["VTextField", "Snackbar"]
     });
     const expectedLength = 1;
     const numberOfParticipants =
       wrapper.vm.$store.state.scheduledAppointments[0].participants.length;
-    // console.log(numberOfParticipants);
     wrapper.vm.deleteParticipantToAScheduleAppointment("APP-1", "PART-004");
 
     assert.equal(numberOfParticipants - 1, expectedLength);
@@ -156,24 +155,22 @@ describe("Participants.vue", () => {
     const number =
       wrapper.vm.$store.state.scheduledAppointments[0].participants.length;
     console.log(number);
-    wrapper.vm.addParticipantToAScheduleAppointment(
-      "Pablo",
-      "69501045",
-      "PART-004",
-      ""
-    );
+    wrapper.vm.$router.push({
+      name: "Participants",
+      params: { id: "Dentist" }
+    });
+
     wrapper.vm.addParticipantToAScheduleAppointment(
       "Pablo Marmol",
       "69501045",
-      "PART-005",
-      "Dentist"
+      "PART-005"
     );
     const numberOfParticipants =
       wrapper.vm.$store.state.scheduledAppointments[0].participants.length;
     console.log(numberOfParticipants);
     assert.equal(numberOfParticipants, expectedLength);
   });
-  it("Delete participants work right", () => {
+  it.only("Delete participants work right", () => {
     global.alert = () => { };
     global.confirm = () => true;
     const wrapper = mount(Participants, {
@@ -184,6 +181,6 @@ describe("Participants.vue", () => {
     });
     const initiallength = wrapper.vm.$store.state.participants;
     wrapper.vm.deleteItem("PART-001");
-    assert.equal(initiallength.length - 1, 1);
+    assert.equal(initiallength.length - 1, 3);
   });
 });

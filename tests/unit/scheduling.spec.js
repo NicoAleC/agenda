@@ -1,5 +1,6 @@
 import Appointments from "@/views/Appointments.vue";
 import Scheduling from "@/components/Scheduling.vue";
+import VueRouter from "vue-router";
 
 import { assert } from "chai";
 import { createLocalVue, shallowMount, mount } from "@vue/test-utils";
@@ -17,13 +18,25 @@ let store;
 describe(" Scheduled Appointments CRUD", () => {
   let localVue;
   let vuetify;
+  let router;
+
 
   beforeEach(() => {
     localVue = createLocalVue();
     localVue.use(Vuex);
     localVue.use(Vuetify);
+    localVue.use(VueRouter);
 
     vuetify = new Vuetify();
+    router = new VueRouter({
+      routes: [
+        {
+          path: "/appointment",
+          name: "Appointment",
+          component: Appointments
+        }
+      ]
+    });
     store = new Vuex.Store({
       state: mockAppointments,
       actions,
@@ -42,6 +55,8 @@ describe(" Scheduled Appointments CRUD", () => {
       store,
       vuetify,
       localVue,
+      router,
+
       stubs: ["VTextField"]
     });
 
@@ -54,6 +69,8 @@ describe(" Scheduled Appointments CRUD", () => {
       store,
       vuetify,
       localVue,
+      router,
+
       stubs: ["VTextField"]
     });
 
@@ -75,13 +92,15 @@ describe(" Scheduled Appointments CRUD", () => {
   });
 
   it.only(" Validate Update Schedule appointment. ", () => {
-    global.alert = () => {};
+    global.alert = () => { };
     global.confirm = () => true;
 
     const wrapper = shallowMount(Appointments, {
       store,
       vuetify,
       localVue,
+      router,
+
       stubs: ["VTextField"]
     });
 
@@ -103,13 +122,15 @@ describe(" Scheduled Appointments CRUD", () => {
   });
 
   it.only(" Validate delete schedule appointment. ", () => {
-    global.alert = () => {};
+    global.alert = () => { };
     global.confirm = () => true;
 
     const wrapper = shallowMount(Appointments, {
       store,
       vuetify,
       localVue,
+      router,
+
       stubs: ["VTextField"]
     });
 
@@ -124,12 +145,14 @@ describe(" Scheduled Appointments CRUD", () => {
     );
   });
   it.only(" Validate the start and end times of the appointment. ", () => {
-    global.alert = () => {};
+    global.alert = () => { };
 
     const wrapper = shallowMount(Scheduling, {
       store,
       vuetify,
       localVue,
+      router,
+
       stubs: ["VTextField"]
     });
 
@@ -156,12 +179,14 @@ describe(" Scheduled Appointments CRUD", () => {
   });
 
   it.only(" Validate the date of the appointment. ", () => {
-    global.alert = () => {};
+    global.alert = () => { };
 
     const wrapper = shallowMount(Scheduling, {
       store,
       vuetify,
       localVue,
+      router,
+
       stubs: ["VTextField"]
     });
 
