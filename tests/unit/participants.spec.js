@@ -126,11 +126,11 @@ describe("Participants.vue", () => {
       "Pablo",
       "69501045",
       "PART-004",
-      "Dentist"
+      "APP-1"
     );
     assert.equal(numberOfParticipants + 1, expectedLength);
   });
-  it.only("Should Delete participant from an appointment, just delete", () => {
+  it("Should Delete participant from an appointment, just delete", () => {
     const wrapper = mount(Test, {
       store,
       vuetify,
@@ -141,11 +141,11 @@ describe("Participants.vue", () => {
     const numberOfParticipants =
       wrapper.vm.$store.state.scheduledAppointments[0].participants.length;
     // console.log(numberOfParticipants);
-    wrapper.vm.deleteParticipantToAScheduleAppointment("Dentist", "PART-002");
+    wrapper.vm.deleteParticipantToAScheduleAppointment("APP-1", "PART-004");
 
     assert.equal(numberOfParticipants - 1, expectedLength);
   });
-  it.only("Should not be able to add a participant that is already in the appointment", () => {
+  it("Should not be able to add a participant that is already in the appointment", () => {
     const wrapper = mount(Participants, {
       store,
       vuetify,
@@ -160,7 +160,7 @@ describe("Participants.vue", () => {
       "Pablo",
       "69501045",
       "PART-004",
-      "Dentist"
+      ""
     );
     wrapper.vm.addParticipantToAScheduleAppointment(
       "Pablo Marmol",
@@ -173,9 +173,8 @@ describe("Participants.vue", () => {
     console.log(numberOfParticipants);
     assert.equal(numberOfParticipants, expectedLength);
   });
-  it("Don't update any participant if name is not filled", () => {});
   it("Delete participants work right", () => {
-    global.alert = () => {};
+    global.alert = () => { };
     global.confirm = () => true;
     const wrapper = mount(Participants, {
       store,
