@@ -4,7 +4,6 @@
       <v-layout>
         <v-flex>
           <v-card>
-
             <v-container grid-list-lg>
               <v-spacer></v-spacer>
               <v-layout row>

@@ -1,22 +1,7 @@
 <template>
   <div>
     <v-container class="my-10" grid-list-md>
-      <v-toolbar color="#EEB870">
-        <v-toolbar-title id="participants-title">Participants</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon color="#304050" v-on:click="redirectHome()" class="mx-6">
-          Home
-          <v-icon>mdi-home</v-icon>
-        </v-btn>
-        <v-btn icon color="#304050" v-on:click="redirectAppointments()" class="mx-16">
-          Appointments
-          <v-icon>mdi-mailbox</v-icon>
-        </v-btn>
-        <v-btn icon color="#304050" v-on:click="redirectPostponed()" class="mx-10">
-          Postponed
-          <v-icon>mdi-watch</v-icon>
-        </v-btn>
-      </v-toolbar>
+      <h1 id="participants-title">Participants</h1>
 
       <v-row justify="center">
         <v-layout row justify-space-around>
@@ -38,21 +23,30 @@
               x-large
               outlined
               @click="sendData(selectedParticipant, true)"
-            >New Participant</v-btn>
+              >New Participant</v-btn
+            >
           </v-col>
         </v-layout>
         <v-expansion-panels popout>
-          <v-expansion-panel v-for="(participant, i) in searching" :key="i" hide-actions>
+          <v-expansion-panel
+            v-for="(participant, i) in searching"
+            :key="i"
+            hide-actions
+          >
             <v-expansion-panel-header>
               <v-row align="center" class="spacer" no-gutters>
                 <v-col cols="5" sm="3" md="2">
                   <v-avatar color="orange">
-                    <span class="white--text headline">{{ participant.name | capitalizeAvatar }}</span>
+                    <span class="white--text headline">
+                      {{ participant.name | capitalizeAvatar }}
+                    </span>
                   </v-avatar>
                 </v-col>
 
                 <v-col class="hidden-xs-only" sm="5" md="3">
-                  <strong v-html="participant.name" class="list-participant">{{ participant.name }}</strong>
+                  <strong v-html="participant.name" class="list-participant">
+                    {{ participant.name }}
+                  </strong>
                 </v-col>
 
                 <v-col class="text-no-wrap" cols="5" sm="3">
@@ -69,13 +63,23 @@
                         participant.participantId
                       )
                     "
-                  >mdi-plus</v-icon>
+                    >mdi-plus</v-icon
+                  >
                 </v-col>
                 <v-col class="grey--text text-truncate hidden-sm-and-down">
-                  <v-icon size="35" class="mr-2" @click="sendData(participant, false)">mdi-pencil</v-icon>
+                  <v-icon
+                    size="35"
+                    class="mr-2"
+                    @click="sendData(participant, false)"
+                    >mdi-pencil</v-icon
+                  >
                 </v-col>
                 <v-col class="grey--text text-truncate hidden-sm-and-down">
-                  <v-icon size="35" @click="deleteItem(participant.participantId)">mdi-delete</v-icon>
+                  <v-icon
+                    size="35"
+                    @click="deleteItem(participant.participantId)"
+                    >mdi-delete</v-icon
+                  >
                 </v-col>
               </v-row>
             </v-expansion-panel-header>
@@ -83,22 +87,18 @@
         </v-expansion-panels>
       </v-row>
       <v-snackbar v-model="alert" color="success" top right :timeout="timeout">
-        <strong>
-          {{
+        <strong>{{
           changeName
-          ? "Successfully created participant"
-          : "¡Participant successfully added to the appointment!"
-          }}
-        </strong>
+            ? "Successfully created participant"
+            : "¡Participant successfully added to the appointment!"
+        }}</strong>
       </v-snackbar>
       <v-snackbar v-model="alert2" color="warning" top right :timeout="timeout">
-        <strong>
-          {{
+        <strong>{{
           changeNameTwo
-          ? "The Participant is already in the appointment"
-          : "Participant edited correctly"
-          }}
-        </strong>
+            ? "The Participant is already in the appointment"
+            : "Participant edited correctly"
+        }}</strong>
       </v-snackbar>
 
       <ParticipantsDialog
@@ -145,15 +145,6 @@ export default {
       "deleteParticipant",
       "addParticipantToAnAppointment"
     ]),
-    redirectHome() {
-      this.$router.push("/");
-    },
-    redirectPostponed() {
-      this.$router.push("/postponed");
-    },
-    redirectAppointments() {
-      this.$router.push("/appointments");
-    },
 
     addParticipantToAScheduleAppointment(name, contact, id) {
       let route = this.$route.params.id;
