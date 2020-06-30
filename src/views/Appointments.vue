@@ -4,7 +4,7 @@
       <v-toolbar-title>Appointments</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon color="#304050" v-on:click="sendData(scheduledAppointment, true)" class="mx-5">
-       Add
+        Add
         <v-icon>mdi-plus</v-icon>
       </v-btn>
       <v-btn icon color="#304050" v-on:click="redirectHome()" class="mx-6">
@@ -17,15 +17,15 @@
       </v-btn>
     </v-toolbar>
     <v-container class="my-10" grid-list-md>
-    
-
       <v-sheet tile height="64" class="d-flex">
         <v-btn icon class="ma-5" @click="$refs.calendar.prev()">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-        <v-toolbar-title v-if="$refs.calendar" class="ma-5">{{
+        <v-toolbar-title v-if="$refs.calendar" class="ma-5">
+          {{
           $refs.calendar.title
-        }}</v-toolbar-title>
+          }}
+        </v-toolbar-title>
         <v-btn icon class="ma-5" @click="$refs.calendar.next()">
           <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
@@ -62,34 +62,22 @@
           <v-card min-width="500px" flat>
             <v-toolbar :color="selectedAppointment.color" dark>
               <v-row justify="center">
-                <v-toolbar-title
-                  v-html="selectedAppointment.name"
-                ></v-toolbar-title>
+                <v-toolbar-title v-html="selectedAppointment.name"></v-toolbar-title>
               </v-row>
             </v-toolbar>
             <v-card-text>
-              <div class="mt-8 text-center">
-                Description: {{ appointmentE.description }}
-              </div>
+              <div class="mt-8 text-center">Description: {{ appointmentE.description }}</div>
               <div class="mt-8 text-center">
                 Duration: {{ appointmentE.startHour }} -
                 {{ appointmentE.endHour }}
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-col
-                class="grey--text text-truncate hidden-sm-and-down"
-                align="center"
-              >
-                <v-icon size="35" @click="sendData(appointmentE, false)"
-                  >mdi-pencil</v-icon
-                >
+              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
+                <v-icon size="35" @click="sendData(appointmentE, false)">mdi-pencil</v-icon>
               </v-col>
 
-              <v-col
-                class="grey--text text-truncate hidden-sm-and-down"
-                align="center"
-              >
+              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
                 <router-link
                   :to="{
                     name: 'Participants',
@@ -99,21 +87,11 @@
                   <v-icon size="35" @click="sendDialog()">mdi-account</v-icon>
                 </router-link>
               </v-col>
-              <v-col
-                class="grey--text text-truncate hidden-sm-and-down"
-                align="center"
-              >
-                <v-icon size="35" @click="sendDialog(appointmentE)"
-                  >mdi-account-check</v-icon
-                >
+              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
+                <v-icon size="35" @click="sendDialog(appointmentE)">mdi-account-check</v-icon>
               </v-col>
-              <v-col
-                class="grey--text text-truncate hidden-sm-and-down"
-                align="center"
-              >
-                <v-icon size="35" @click="deleteAppointment(appointmentE.id)"
-                  >mdi-delete</v-icon
-                >
+              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
+                <v-icon size="35" @click="deleteAppointment(appointmentE.id)">mdi-delete</v-icon>
               </v-col>
             </v-card-actions>
           </v-card>
@@ -176,12 +154,13 @@ export default {
     ...mapActions([
       "addScheduledAppointment",
       "updateScheduledAppointment",
-      "deleteScheduledAppointment"
+      "deleteScheduledAppointment",
+      "addPostponed"
     ]),
-   redirectHome(){
+    redirectHome() {
       this.$router.push("/");
     },
-    redirectPostponed(){
+    redirectPostponed() {
       this.$router.push("postponed");
     },
     sendData: function(scheduledAppointment, newMovement) {
@@ -302,16 +281,33 @@ export default {
       this.scheduledAppointments.forEach(element => {
         this.setEvents(element);
       });
+    },
+    addPostponed(postApp) {
+      const newPost = {
+        id: this.lastIdPostponed() + 1,
+        name: postApp.name,
+        description: postApp.description
+      };
+      this.addPostponed(newPost);
+    },
+    lastIdPostponed() {
+      return Math.max.apply(
+        Math,
+        this.postponedAppointments.map(post => post.id)
+      );
     }
   },
 
   computed: {
-    ...mapGetters(["getScheduledAppointments"]),
+    ...mapGetters(["getScheduledAppointments", "getPostponed"]),
     scheduledAppointments() {
       return this.getScheduledAppointments;
     },
     draw() {
       return this.events;
+    },
+    postponedAppointments() {
+      return this.getPostponed;
     }
   }
 };
