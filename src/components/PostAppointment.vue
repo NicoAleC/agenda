@@ -4,19 +4,6 @@
       <v-layout>
         <v-flex>
           <v-card>
-            <v-toolbar color="#89c1a1">
-              <v-toolbar-title>Postponed Appointments</v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-btn icon color="#304050">
-                <v-icon>mdi-home</v-icon>
-              </v-btn>
-              <v-btn icon color="#304050">
-                <v-icon>mdi-face</v-icon>
-              </v-btn>
-              <v-btn icon color="#304050">
-                <v-icon>mdi-plus</v-icon>
-              </v-btn>
-            </v-toolbar>
 
             <v-container grid-list-lg>
               <v-spacer></v-spacer>

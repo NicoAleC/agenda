@@ -1,20 +1,24 @@
 <template>
   <div>
+    <v-toolbar color="#68DAD5">
+      <v-toolbar-title>Appointments</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon color="#304050" v-on:click="sendData(scheduledAppointment, true)" class="mx-5">
+       Add
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+      <v-btn icon color="#304050" v-on:click="redirectHome()" class="mx-6">
+        Home
+        <v-icon>mdi-home</v-icon>
+      </v-btn>
+      <v-btn icon color="#304050" v-on:click="redirectPostponed()" class="mx-10">
+        Postponed
+        <v-icon>mdi-watch</v-icon>
+      </v-btn>
+    </v-toolbar>
     <v-container class="my-10" grid-list-md>
-      <h1 class="text-center">Appointments</h1>
+    
 
-      <v-row justify="center">
-        <v-layout row justify-space-around>
-          <v-col class="text-right">
-            <v-btn
-              x-large
-              class="mb-2"
-              @click="sendData(scheduledAppointment, true)"
-              >New Appointment</v-btn
-            >
-          </v-col>
-        </v-layout>
-      </v-row>
       <v-sheet tile height="64" class="d-flex">
         <v-btn icon class="ma-5" @click="$refs.calendar.prev()">
           <v-icon>mdi-chevron-left</v-icon>
@@ -174,7 +178,12 @@ export default {
       "updateScheduledAppointment",
       "deleteScheduledAppointment"
     ]),
-
+   redirectHome(){
+      this.$router.push("/");
+    },
+    redirectPostponed(){
+      this.$router.push("postponed");
+    },
     sendData: function(scheduledAppointment, newMovement) {
       this.scheduledAppointment = {
         ...scheduledAppointment

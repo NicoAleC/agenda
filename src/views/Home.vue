@@ -3,6 +3,8 @@
     <v-row id="Home-first-table" class="fill-height">
       <v-col>
         <v-toolbar dark color="#5E35B1">
+           <v-toolbar-title text-color="#FFFFFF" class="white--text">Agendas</v-toolbar-title>
+         <v-spacer></v-spacer>
           <v-select
             v-model="choosedAgenda"
             :hint="`${choosedAgenda.agendaId}, ${choosedAgenda.description}`"
@@ -13,39 +15,35 @@
             persistent-hint
             return-object
             single-line
-          >
-          </v-select>
+          ></v-select>
           <v-spacer></v-spacer>
-          <v-btn
-            id="home-btn-addAgenda"
-            icon
-            @click.stop="toggleComponentAgendas"
-          >
+          <v-btn id="home-btn-addAgenda" icon @click.stop="toggleComponentAgendas" class="mx-4" > 
+            Add
             <v-icon>mdi-plus</v-icon>
           </v-btn>
-          <v-btn icon @click.stop="toggleComponentDeleteAgendas">
+          <v-btn icon @click.stop="toggleComponentDeleteAgendas" class="mx-4">
+            Del
             <v-icon>mdi-delete</v-icon>
           </v-btn>
-          <v-btn icon>
-            <v-icon @click.stop="toggleComponentUpdateAgendas"
-              >mdi-rename-box</v-icon
-            >
+          <v-btn icon @click.stop="toggleComponentUpdateAgendas" class="mx-4">
+            Edit
+            <v-icon >mdi-rename-box</v-icon>
+          </v-btn>
+          <v-btn icon color="#FFFFFF" v-on:click="redirectAppointments()" class="mx-14">
+            Appointments
+            <v-icon>mdi-mailbox</v-icon>
           </v-btn>
         </v-toolbar>
         <v-sheet height="64">
           <v-toolbar flat color="#81D4FA">
-            <v-btn outlined class="mr-4" color="white--text" @click="setToday">
-              Today
-            </v-btn>
+            <v-btn outlined class="mr-4" color="white--text" @click="setToday">Today</v-btn>
             <v-btn fab text small color="grey darken-2" @click="prev">
               <v-icon small>mdi-chevron-left</v-icon>
             </v-btn>
             <v-btn fab text small color="grey darken-2" @click="next">
               <v-icon small>mdi-chevron-right</v-icon>
             </v-btn>
-            <v-toolbar-title v-if="$refs.calendar">
-              {{ $refs.calendar.title }}
-            </v-toolbar-title>
+            <v-toolbar-title v-if="$refs.calendar">{{ $refs.calendar.title }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-menu bottom right>
               <template v-slot:activator="{ on, attrs }">
@@ -107,9 +105,7 @@
                 <span v-html="selectedEvent.details"></span>
               </v-card-text>
               <v-card-actions>
-                <v-btn text color="secondary" @click="selectedOpen = false">
-                  Cancel
-                </v-btn>
+                <v-btn text color="secondary" @click="selectedOpen = false">Cancel</v-btn>
               </v-card-actions>
             </v-card>
           </v-menu>
@@ -215,6 +211,9 @@ export default {
   },
   methods: {
     ...mapActions(["idlooked"]),
+    redirectAppointments() {
+      this.$router.push("appointments");
+    },
     toggleComponentAgendas() {
       this.dialogAgendas = !this.dialogAgendas;
     },

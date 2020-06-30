@@ -1,7 +1,22 @@
 <template>
   <div>
     <v-container class="my-10" grid-list-md>
-      <h1 id="participants-title">Participants</h1>
+      <v-toolbar color="#EEB870">
+      <v-toolbar-title id="participants-title">Participants</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon color="#304050" v-on:click="redirectHome()" class="mx-6">
+        Home
+        <v-icon>mdi-home</v-icon>
+      </v-btn>
+      <v-btn icon color="#304050" v-on:click="redirectAppointments()"  class="mx-16">
+        Appointments
+        <v-icon>mdi-mailbox</v-icon>
+      </v-btn>
+      <v-btn icon color="#304050" v-on:click="redirectPostponed()" class="mx-10">
+        Postponed
+        <v-icon>mdi-watch</v-icon>
+      </v-btn>
+    </v-toolbar>
 
       <v-row justify="center">
         <v-layout row justify-space-around>
@@ -145,6 +160,14 @@ export default {
       "deleteParticipant",
       "addParticipantToAnAppointment"
     ]),
+    redirectHome(){
+      this.$router.push("/");
+    },
+    redirectPostponed(){
+      this.$router.push("postponed");
+    },redirectAppointment(){
+      this.$router.push("appointment");
+    },
 
     addParticipantToAScheduleAppointment(name, contact, id) {
       let route = this.$route.params.id;
