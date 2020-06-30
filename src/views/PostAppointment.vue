@@ -31,7 +31,7 @@ export default {
       this.$router.push("/");
     },
     redirectAppointments() {
-      this.$router.push("appointments");
+      this.$router.push("appointments/ANG-0");
     }
   }
 };

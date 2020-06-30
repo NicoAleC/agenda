@@ -1,4 +1,4 @@
-"use strict";
+" use strict";
 
 const addAgenda = ({ commit }, newAgenda) => {
   commit("mutateaddAgenda", newAgenda);
@@ -55,5 +55,8 @@ export default {
   },
   deletePostponed({ commit }, delPostponed) {
     commit("mutateDeletePostponed", delPostponed);
+  },
+  addAppointmentsToAgendas({ commit }, appointmentToAdd) {
+    commit("mutateAddAppointmentsToAgendas", appointmentToAdd);
   }
 };

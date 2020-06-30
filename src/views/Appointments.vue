@@ -6,6 +6,7 @@
       <v-btn
         icon
         color="#304050"
+        v-if="route !== 'ANG-0'"
         v-on:click="sendData(scheduledAppointment, true)"
         class="mx-5"
       >
@@ -169,6 +170,7 @@ export default {
     selectedAppointment: {},
     selectedElement: null,
     selectedOpen: false,
+    route: "",
     colors: [
       "blue",
       "indigo",
@@ -185,15 +187,18 @@ export default {
       "addScheduledAppointment",
       "updateScheduledAppointment",
       "deleteScheduledAppointment",
-      "addPostponed"
+      "addPostponed",
+      "addAppointmentsToAgendas"
     ]),
     redirectHome() {
       this.$router.push("/");
     },
     redirectPostponed() {
+      this.$router.push("/appointments");
       this.$router.push("postponed");
     },
     sendData: function(scheduledAppointment, newMovement) {
+      this.scheduledAppointment.agendaId = this.$route.params.agendaId;
       this.scheduledAppointment = {
         ...scheduledAppointment
       };
@@ -210,8 +215,13 @@ export default {
     addAppointment: function(appointmentToAdd) {
       this.addScheduledAppointment(appointmentToAdd);
       this.setEvents(appointmentToAdd);
+      this.scheduledAppointment = appointmentToAdd;
     },
 
+    addAppointmentToAgenda: function(){
+      this.addAppointmentsToAgendas(this.scheduledAppointment);
+    },
+  
     updateAppointment: function(appointmentToUpdate) {
       this.updateScheduledAppointment(appointmentToUpdate);
 
@@ -308,9 +318,16 @@ export default {
     },
     drawAppointments: function() {
       this.events = [];
+      this.route = this.$route.params.agendaId;
+    
       this.scheduledAppointments.forEach(element => {
-        this.setEvents(element);
+        if (this.route === "ANG-0"){
+          this.setEvents(element);
+      }else if (element.agendaId === this.route){
+          this.setEvents(element);
+        }
       });
+
     },
     addPostponed(postApp) {
       const newPost = {
@@ -329,7 +346,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["getScheduledAppointments", "getPostponed"]),
+    ...mapGetters(["getScheduledAppointments", "getPostponed", "getAgendas"]),
     scheduledAppointments() {
       return this.getScheduledAppointments;
     },
@@ -338,6 +355,10 @@ export default {
     },
     postponedAppointments() {
       return this.getPostponed;
+    },
+
+    agendas_list() {
+      return this.getAgendas;
     }
   }
 };

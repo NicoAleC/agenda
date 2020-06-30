@@ -1,4 +1,4 @@
-"use strict";
+" use strict";
 
 const mutateaddAgenda = (state, newAgenda) => {
   state.agendas.push(newAgenda);
@@ -124,5 +124,13 @@ export default {
     state.postponedAppointments = state.postponedAppointments.filter(
       post => post.id !== deletePost.id
     );
-  }
+  },
+  mutateAddAppointmentsToAgendas(state, appointmentToAdd) {
+    const index = state.agendas.findIndex(
+      agenda => agenda.agendaId === appointmentToAdd.agendaId
+    );
+    if (index > -1) {
+      state.agendas[index].appointments.push(appointmentToAdd);
+    }
+  },
 };

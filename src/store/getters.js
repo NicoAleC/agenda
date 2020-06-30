@@ -1,4 +1,4 @@
-"use strict";
+" use strict";
 
 const getAgendas = state => {
   return state.agendas;

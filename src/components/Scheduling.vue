@@ -118,10 +118,6 @@
                   </v-menu>
                 </v-col>
                 <v-col cols="12">
-                  <v-select
-                    v-model="scheduledAppointment.agendaId"
-                    label="Agenda"
-                  ></v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -197,8 +193,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["getScheduledAppointments"]),
-    ...mapGetters(["getParticipants"]),
+    ...mapGetters(["getScheduledAppointments", "getParticipants", "getAgendas"]),
 
     scheduledAppointments() {
       return this.getScheduledAppointments;
@@ -207,7 +202,9 @@ export default {
     participant_list() {
       return this.getParticipants;
     },
-
+    agenda_list() {
+      return this.getAgendas;
+    },
     selectOptions() {
       return this.getParticipants.map(participant => participant.name);
     },
@@ -243,7 +240,8 @@ export default {
               date: this.scheduledAppointment.date,
               startHour: this.scheduledAppointment.startHour,
               endHour: this.scheduledAppointment.endHour,
-              participants: []
+              participants: [],
+              agendaId: this.scheduledAppointment.agendaId
             });
           } else {
             alert("You cannot enter an appointments on a past date");
@@ -282,7 +280,8 @@ export default {
               date: this.scheduledAppointment.date,
               startHour: this.scheduledAppointment.startHour,
               endHour: this.scheduledAppointment.endHour,
-              participants: []
+              participants: [],
+              agendaId: this.scheduledAppointment.agendaId
             });
           } else {
             alert("You cannot enter an appointments on a past date");
