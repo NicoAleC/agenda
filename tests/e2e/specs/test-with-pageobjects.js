@@ -6,7 +6,7 @@
 //   https://nightwatchjs.org/guide/working-with-page-objects/
 ////////////////////////////////////////////////////////////////
 
-module.exports = {
+/*module.exports = {
   beforeEach: browser => browser.init(),
 
   "e2e tests using page objects": browser => {
@@ -31,4 +31,4 @@ module.exports = {
       .element("@cliPluginLinks")
       .text.to.contain("e2e-nightwatch");
   }
-};
+};*/

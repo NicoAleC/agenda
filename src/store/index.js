@@ -3,55 +3,93 @@ import Vuex from "vuex";
 import actions from "./actions";
 import mutations from "./mutations";
 import getters from "./getters";
+
 Vue.use(Vuex);
 
 const state = {
+  idToPass: "",
   agendas: [
     {
-      agendaId: "ANG-0001",
+      agendaId: "ANG-1",
       name: "Work",
       description: "My Agenda to manage my workd",
       startHour: "10:00",
-      endHour: "16:00"
+      endHour: "12:00",
+      appointments: [
+        {
+          name: "PRUEBA",
+          start: `2020-06-19T23:45:00`,
+          end: `2020-06-20T01:45:00`,
+          color: "green",
+          timed: true
+        },
+        {
+          name: "PRUEBA2",
+          start: `2020-06-9T23:45:00`,
+          end: `2020-06-10T01:45:00`,
+          color: "blue",
+          timed: true
+        }
+      ]
     },
     {
-      agendaId: "ANG-0002",
-      name: "Hobby",
-      description: "My Agenda to manage Hobbies",
-      startHour: "9:00",
-      endHour: "10:00"
+      agendaId: "ANG-2",
+      name: "Home",
+      description: "My Agenda to manage home",
+      startHour: "",
+      endHour: "",
+      appointments: [
+        {
+          name: "PRUEBA",
+          start: `2020-06-1T04:45:00`,
+          end: `2020-06-1T10:45:00`,
+          color: "orange",
+          timed: true
+        },
+        {
+          name: "PRUEBA2",
+          start: `2020-06-1T04:45:00`,
+          end: `2020-06-1T10:45:00`,
+          color: "cyan",
+          timed: true
+        }
+      ]
     }
   ],
   participants: [
     {
       participantId: "PART-001",
-      name: "Mariana",
+      name: "Maria  Quiroga",
       contactNumber: "4356795"
     },
     {
       participantId: "PART-002",
       name: "Pablo Rivas",
       contactNumber: "69501045"
+    },
+    {
+      participantId: "PART-003",
+      name: "Andy Villarroel",
+      contactNumber: "77905861"
     }
   ],
   scheduledAppointments: [
     {
+      id: "APP-1",
       name: "Dentist",
       description: "I need to go to dentist",
-      date: "06/18/2020",
+      date: "2020-06-18",
       startHour: "10:00",
       endHour: "11:00",
       agendaId: "ANG-0001",
-      participants: []
-    },
-    {
-      name: "Soccer Practice",
-      description: "I must go to soccer practice",
-      date: "06/19/2020",
-      startHour: "8:00",
-      endHour: "10:00",
-      agendaId: "ANG-0001",
-      participants: []
+
+      participants: [
+        {
+          participantId: "PART-003",
+          name: "Andy Villarroel",
+          contactNumber: "77905861"
+        }
+      ]
     }
   ],
   postponedAppointments: [
@@ -62,18 +100,18 @@ const state = {
     },
     {
       id: 1,
-      name: "Amazon",
+      name: "PickUps",
       description: "Must pickup Amazon items"
     },
     {
       id: 2,
-      name: "Dentist 1",
-      description: "I need to go to dentist"
+      name: "Deposit",
+      description: "I need to deposit cash"
     },
     {
       id: 3,
-      name: "Amazon 1",
-      description: "Must pickup Amazon items"
+      name: "Opening Krusty Krab 2",
+      description: "Attend to the inaguration of KK2"
     }
   ]
 };

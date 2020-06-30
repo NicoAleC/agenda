@@ -18,10 +18,10 @@
 
           <v-col class="text-right">
             <v-btn
-              color="primary"
+              color="black"
               dark
               x-large
-              class="ma-2"
+              outlined
               @click="sendData(selectedParticipant, true)"
               >New Participant</v-btn
             >
@@ -37,16 +37,16 @@
               <v-row align="center" class="spacer" no-gutters>
                 <v-col cols="5" sm="3" md="2">
                   <v-avatar color="orange">
-                    <span class="white--text headline">{{
-                      participant.name | capitalizeAvatar
-                    }}</span>
+                    <span class="white--text headline">
+                      {{ participant.name | capitalizeAvatar }}
+                    </span>
                   </v-avatar>
                 </v-col>
 
                 <v-col class="hidden-xs-only" sm="5" md="3">
-                  <strong v-html="participant.name" class="list-participant">{{
-                    participant.name
-                  }}</strong>
+                  <strong v-html="participant.name" class="list-participant">
+                    {{ participant.name }}
+                  </strong>
                 </v-col>
 
                 <v-col class="text-no-wrap" cols="5" sm="3">
@@ -56,7 +56,13 @@
                   <v-icon
                     size="35"
                     class="mr-2"
-                    @click="sendData(participant, false)"
+                    @click="
+                      addParticipantToAScheduleAppointment(
+                        participant.name,
+                        participant.contactNumber,
+                        participant.participantId
+                      )
+                    "
                     >mdi-plus</v-icon
                   >
                 </v-col>
@@ -80,15 +86,21 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </v-row>
-      <v-snackbar
-        v-model="alert"
-        type="success"
-        color="primary"
-        top
-        right
-        :timeout="timeout"
-        >Participante creado correctamente</v-snackbar
-      >
+      <v-snackbar v-model="alert" color="success" top right :timeout="timeout">
+        <strong>{{
+          changeName
+            ? "Successfully created participant"
+            : "¡Participant successfully added to the appointment!"
+        }}</strong>
+      </v-snackbar>
+      <v-snackbar v-model="alert2" color="warning" top right :timeout="timeout">
+        <strong>{{
+          changeNameTwo
+            ? "The Participant is already in the appointment"
+            : "Participant edited correctly"
+        }}</strong>
+      </v-snackbar>
+
       <ParticipantsDialog
         :selectedParticipant="selectedParticipant"
         :newMovement="newMovement"
@@ -115,16 +127,48 @@ export default {
   data: () => ({
     selectedParticipant: {},
     search: "",
-    idparticipant: "",
     newMovement: false,
     dialog: false,
-    participantindex: null,
     alert: false,
-    timeout: 3000
+    alert2: false,
+
+    timeout: 3000,
+    changeName: null,
+    changeNameTwo: null,
+
+    name: ""
   }),
   methods: {
-    ...mapActions(["addParticipant", "updateParticipant", "deleteParticipant"]),
+    ...mapActions([
+      "addParticipant",
+      "updateParticipant",
+      "deleteParticipant",
+      "addParticipantToAnAppointment"
+    ]),
 
+    addParticipantToAScheduleAppointment(name, contact, id) {
+      let route = this.$route.params.id;
+      if (this._findParticipant(route, id) == -1) {
+        this.addParticipantToAnAppointment({
+          name: name,
+          contactNumber: contact,
+          participantId: id,
+          appointmentName: route
+        });
+        this.alert1 = true;
+        this.changeName = false;
+      } else {
+        this.alert2 = true;
+        this.changeNameTwo = true;
+      }
+    },
+    _findParticipant(appo, members) {
+      let found = this.appointments.findIndex(appoint => appoint.id == appo);
+      let appointmentFound = this.appointments[found].participants.findIndex(
+        participants => participants.participantId == members
+      );
+      return appointmentFound;
+    },
     deleteItem(idparticipant) {
       let confirmation = confirm("Are you sure you want to delete?");
       if (confirmation) {
@@ -136,17 +180,6 @@ export default {
         return false;
       }
     },
-    findIndex(code) {
-      const identification = this.participants.findIndex(
-        part => part.participantId === code
-      );
-      console.log(identification);
-      return identification;
-    },
-    firstElement(name) {
-      let first = name.charAt(0);
-      return first;
-    },
     sendData(selectedParticipant, newMovement) {
       this.selectedParticipant = {
         ...selectedParticipant
@@ -154,16 +187,14 @@ export default {
       this.dialog = true;
       this.newMovement = newMovement;
     },
-    enableDeleteAndUpdate() {},
     addNewParticipant(newOne) {
       this.addParticipant({
         name: newOne.name,
         contactNumber: newOne.contactNumber,
-        participantId: newOne.participantId,
-        index: this.findIndex(newOne.participantId)
+        participantId: newOne.participantId
       });
       this.alert = true;
-      console.log(this.findIndex(newOne.participantId));
+      this.changeName = true;
     },
     updateNewParticipant(newOne) {
       this.updateParticipant({
@@ -171,23 +202,33 @@ export default {
         contactNumber: newOne.contactNumber,
         participantId: newOne.participantId
       });
+      this.alert2 = true;
+      this.changeNameTwo = false;
     }
   },
   filters: {
     capitalizeAvatar: function(value) {
       if (!value) return "";
       value = value.toString();
-      return value.charAt(0).toUpperCase();
+      let name = value.split(" ")[0];
+      let lastName = value.substring(name.length).trim();
+
+      let fullName =
+        value.charAt(0).toUpperCase() + lastName.charAt(0).toUpperCase();
+      return fullName;
     }
   },
   computed: {
-    ...mapGetters(["getParticipants"]),
+    ...mapGetters(["getParticipants", "getScheduledAppointments"]),
     participants() {
       return this.getParticipants;
     },
+    appointments() {
+      return this.getScheduledAppointments;
+    },
     searching: function() {
       if (this.search !== "") {
-        const searchs = this.search.toLowerCase();
+        const searchs = this.search.replace().toLowerCase();
         return this.participants.filter(part => {
           return (
             part.name.toLowerCase().indexOf(searchs) >= 0 ||

@@ -1,4 +1,4 @@
-/*import { assert } from "chai";
+import { assert } from "chai";
 import { mount, createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
@@ -19,4 +19,4 @@ describe("Home.vue", () => {
 
     assert.equal(tittle.text(), id);
   });
-});*/
+});

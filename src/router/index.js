@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Participants from "../views/Participants.vue";
 import Postponed from "../views/PostAppointment.vue";
+import Test from "../views/Test.vue";
 
 Vue.use(VueRouter);
 
@@ -13,7 +14,7 @@ const routes = [
     component: Home
   },
   {
-    path: "/participants",
+    path: "/participants/:id",
     name: "Participants",
     component: Participants
   },
@@ -21,6 +22,16 @@ const routes = [
     path: "/postponed",
     name: "Postponed",
     component: Postponed
+  },
+  {
+    path: "/appointments",
+    name: "Appointments",
+    component: () => import("../views/Appointments.vue")
+  },
+  {
+    path: "/test",
+    name: "Test",
+    component: Test
   }
 ];
 
