@@ -31,6 +31,22 @@ const deleteParticipantFromAnAppointment = ({ commit }, addAppointment) => {
   commit("mutateParticipantDeleteAppointment", addAppointment);
 };
 
+const addScheduledAppointment = ({ commit }, appointmentToAdd) => {
+  commit("mutateScheduledAppointmentList", appointmentToAdd);
+};
+
+const updateScheduledAppointment = ({ commit }, appointmentToUpdate) => {
+  commit("mutateUpdateAppointment", appointmentToUpdate);
+};
+
+const deleteScheduledAppointment = ({ commit }, appointmentToDelete) => {
+  commit("mutateDeleteAppointment", appointmentToDelete);
+};
+
+const addAppointmentsToAgendas = ({ commit }, appointmentToAdd) => {
+  commit("mutateAddAppointmentsToAgendas", appointmentToAdd);
+};
+
 export default {
   addAgenda,
   deleteAgenda,
@@ -41,19 +57,10 @@ export default {
   deleteParticipant,
   addParticipantToAnAppointment,
   deleteParticipantFromAnAppointment,
-
-
-
-  addScheduledAppointment({ commit }, appointmentToAdd) {
-    commit("mutateScheduledAppointmentList", appointmentToAdd);
-  },
-  updateScheduledAppointment({ commit }, appointmentToUpdate) {
-    commit("mutateUpdateAppointment", appointmentToUpdate);
-  },
-  deleteScheduledAppointment({ commit }, appointmentToDelete) {
-    commit("mutateDeleteAppointment", appointmentToDelete);
-  },
-
+  addScheduledAppointment,
+  updateScheduledAppointment,
+  deleteScheduledAppointment,
+  addAppointmentsToAgendas,
 
   addPostponed({ commit }, newPostponed) {
     commit("mutateAddPostponed", newPostponed);
@@ -63,8 +70,5 @@ export default {
   },
   deletePostponed({ commit }, delPostponed) {
     commit("mutateDeletePostponed", delPostponed);
-  },
-  addAppointmentsToAgendas({ commit }, appointmentToAdd) {
-    commit("mutateAddAppointmentsToAgendas", appointmentToAdd);
   }
 };
