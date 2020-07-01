@@ -19,7 +19,6 @@ export default {
   getIdLooked,
   getParticipants,
 
-
   getScheduledAppointments(state) {
     return state.scheduledAppointments;
   },

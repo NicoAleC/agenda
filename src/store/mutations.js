@@ -98,7 +98,6 @@ export default {
   },
 
   mutateParticipantDeleteAppointment(state, deleteAppoint) {
-
     state.scheduledAppointments[
       deleteAppoint.appointmentName
     ].participants = state.scheduledAppointments[
