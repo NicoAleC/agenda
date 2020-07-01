@@ -21,7 +21,7 @@
                     autocomplete="off"
                     v-model="selectedParticipant.name"
                     label="Name"
-                    :counter="25"
+                    :counter="35"
                     :rules="rules.nameRules"
                     required
                   ></v-text-field>
@@ -67,11 +67,12 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "ParticipantsDialog",
   data: () => ({
-    valid: false,
+    valid: true,
     rules: {
       nameRules: [
         v => !!v || "Name is required",
-        v => (v && v.length <= 25) || "Name must be less than 25 characters"
+        v => (v && v.length <= 35) || "Name must be less than 35 characters",
+        v => (v && v.length >= 1) || "Name must have at least 1 characters"
       ],
       phoneRules: [
         v => !!v || "Phone is required",
@@ -123,18 +124,20 @@ export default {
     ...mapActions(["updateParticipant"]),
 
     emitUpdateAndAdd(names, contactNumber, id) {
-      if (this.newMovement) {
-        this.$emit("addNewParticipant", {
-          name: names,
-          contactNumber: contactNumber,
-          participantId: this.generateId()
-        });
-      } else {
-        this.$emit("updateNewParticipant", {
-          name: names,
-          contactNumber: contactNumber,
-          participantId: id
-        });
+      if (this.$refs.form.validate()) {
+        if (this.newMovement) {
+          this.$emit("addNewParticipant", {
+            name: names,
+            contactNumber: contactNumber,
+            participantId: this.generateId()
+          });
+        } else {
+          this.$emit("updateNewParticipant", {
+            name: names,
+            contactNumber: contactNumber,
+            participantId: id
+          });
+        }
       }
       this.reset();
     },
@@ -148,7 +151,6 @@ export default {
         newId = parseInt(lastId.split("-")[1]) + 1;
       }
       const part = "PART - " + newId;
-      console.log(part);
       return part;
     },
     reset() {

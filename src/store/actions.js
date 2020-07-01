@@ -15,24 +15,34 @@ const idlooked = ({ commit }, agendaLookde) => {
 const updateAgenda = ({ commit }, agendaLookde) => {
   commit("mutateupdateAgenda", agendaLookde);
 };
+const addParticipant = ({ commit }, item) => {
+  commit("mutateParticipantList", item);
+};
+const updateParticipant = ({ commit }, item) => {
+  commit("mutateParticipantUpdate", item);
+};
+const deleteParticipant = ({ commit }, deletepart) => {
+  commit("mutateParticipantDelete", deletepart);
+};
+const addParticipantToAnAppointment = ({ commit }, addAppointment) => {
+  commit("mutateParticipantAddAppointment", addAppointment);
+};
+const deleteParticipantFromAnAppointment = ({ commit }, addAppointment) => {
+  commit("mutateParticipantDeleteAppointment", addAppointment);
+};
 
 export default {
   addAgenda,
   deleteAgenda,
   idlooked,
   updateAgenda,
-  addParticipant({ commit }, item) {
-    commit("mutateParticipantList", item);
-  },
-  updateParticipant({ commit }, item) {
-    commit("mutateParticipantUpdate", item);
-  },
-  deleteParticipant({ commit }, deletepart) {
-    commit("mutateParticipantDelete", deletepart);
-  },
-  addParticipantToAnAppointment({ commit }, addAppointment) {
-    commit("mutateParticipantAddAppointment", addAppointment);
-  },
+  addParticipant,
+  updateParticipant,
+  deleteParticipant,
+  addParticipantToAnAppointment,
+  deleteParticipantFromAnAppointment,
+
+
 
   addScheduledAppointment({ commit }, appointmentToAdd) {
     commit("mutateScheduledAppointmentList", appointmentToAdd);
@@ -44,9 +54,7 @@ export default {
     commit("mutateDeleteAppointment", appointmentToDelete);
   },
 
-  deleteParticipantFromAnAppointment({ commit }, addAppointment) {
-    commit("mutateParticipantDeleteAppointment", addAppointment);
-  },
+
   addPostponed({ commit }, newPostponed) {
     commit("mutateAddPostponed", newPostponed);
   },
