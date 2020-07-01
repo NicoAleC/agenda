@@ -32,9 +32,9 @@
         <v-btn icon class="ma-5" @click="$refs.calendar.prev()">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-        <v-toolbar-title v-if="$refs.calendar" class="ma-5">
-          {{ $refs.calendar.title }}
-        </v-toolbar-title>
+        <v-toolbar-title v-if="$refs.calendar" class="ma-5">{{
+          $refs.calendar.title
+        }}</v-toolbar-title>
         <v-btn icon class="ma-5" @click="$refs.calendar.next()">
           <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
@@ -71,9 +71,8 @@
           <v-card min-width="500px" flat>
             <v-toolbar :color="selectedAppointment.color" dark>
               <v-row justify="center">
-                <v-toolbar-title
-                  v-html="selectedAppointment.name"
-                ></v-toolbar-title>
+                <v-toolbar-title v-html="selectedAppointment.name">
+                </v-toolbar-title>
               </v-row>
             </v-toolbar>
             <v-card-text>
@@ -90,11 +89,10 @@
                 class="grey--text text-truncate hidden-sm-and-down"
                 align="center"
               >
-                <v-icon size="35" @click="sendData(appointmentE, false)"
-                  >mdi-pencil</v-icon
-                >
+                <v-icon size="35" @click="sendData(appointmentE, false)">
+                  mdi-pencil
+                </v-icon>
               </v-col>
-
               <v-col
                 class="grey--text text-truncate hidden-sm-and-down"
                 align="center"
@@ -105,16 +103,16 @@
                     params: { id: appointmentE.id }
                   }"
                 >
-                  <v-icon size="35" @click="sendDialog()">mdi-account</v-icon>
+                  <v-icon size="35">mdi-account</v-icon>
                 </router-link>
               </v-col>
               <v-col
                 class="grey--text text-truncate hidden-sm-and-down"
                 align="center"
               >
-                <v-icon size="35" @click="sendDialog(appointmentE)"
-                  >mdi-account-check</v-icon
-                >
+                <v-icon size="35" @click="sendDialog(appointmentE)">
+                  mdi-account-check
+                </v-icon>
               </v-col>
               <v-col
                 class="grey--text text-truncate hidden-sm-and-down"
@@ -191,13 +189,16 @@ export default {
       "addPostponed",
       "addAppointmentsToAgendas"
     ]),
+
     redirectHome() {
       this.$router.push("/");
     },
+
     redirectPostponed() {
       this.$router.push("/appointments");
       this.$router.push("postponed");
     },
+
     sendData: function(scheduledAppointment, newMovement) {
       this.scheduledAppointment.agendaId = this.$route.params.agendaId;
       this.scheduledAppointment = {
@@ -206,6 +207,7 @@ export default {
       this.dialog = true;
       this.newMovement = newMovement;
     },
+
     sendDialog: function(scheduledAppointment) {
       this.scheduledAppointment = {
         ...scheduledAppointment
@@ -222,7 +224,6 @@ export default {
     addAppointmentToAgenda: function() {
       this.addAppointmentsToAgendas(this.appointment);
     },
-
     updateAppointment: function(appointmentToUpdate) {
       this.updateScheduledAppointment(appointmentToUpdate);
 
@@ -325,6 +326,7 @@ export default {
         }
       });
     },
+
     drawAppointments: function() {
       this.events = [];
       this.route = this.$route.params.agendaId;
@@ -346,6 +348,7 @@ export default {
       };
       this.addPostponed(newPost);
     },
+
     lastIdPostponed() {
       return Math.max.apply(
         Math,
@@ -356,9 +359,11 @@ export default {
 
   computed: {
     ...mapGetters(["getScheduledAppointments", "getPostponed", "getAgendas"]),
+
     scheduledAppointments() {
       return this.getScheduledAppointments;
     },
+
     draw() {
       return this.events;
     },
@@ -372,3 +377,4 @@ export default {
   }
 };
 </script>
+
