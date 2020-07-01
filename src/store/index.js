@@ -13,8 +13,8 @@ const state = {
       agendaId: "ANG-1",
       name: "Work",
       description: "My Agenda to manage my workd",
-      startHour: "10:00",
-      endHour: "12:00",
+      startHour: "08:00",
+      endHour: "20:00",
       appointments: [
         {
           id: "APP-1",
@@ -38,8 +38,8 @@ const state = {
       agendaId: "ANG-2",
       name: "Home",
       description: "My Agenda to manage home",
-      startHour: "",
-      endHour: "",
+      startHour: "05:00",
+      endHour: "22:00",
       appointments: [
         {
           id: "APP-2",

@@ -163,8 +163,9 @@ export default {
     showCurrent: true,
     menu_end_hour: false,
     menu_start_hour: false,
-    agenda_start_hour: "5:00",
-    agenda_end_hour: "23:30"
+    agenda_start_hour: "",
+    agenda_end_hour: "",
+    agenda: {}
   }),
   props: {
     newMovement: {
@@ -208,9 +209,6 @@ export default {
     agenda_list() {
       return this.getAgendas;
     },
-    selectOptions() {
-      return this.getParticipants.map(participant => participant.name);
-    },
 
     getParticipantsList: function() {
       let list = [];
@@ -222,6 +220,7 @@ export default {
   },
   methods: {
     addAppointment: function() {
+      this.get_agenda();
       if (this._validateData()) {
         if (
           this._validateStartAndEndHour(
@@ -261,7 +260,7 @@ export default {
     },
 
     updateAppointment: function() {
-      this._validateDateFormat();
+      this.get_agenda();
       if (this._validateData()) {
         if (
           this._validateStartAndEndHour(
@@ -309,7 +308,6 @@ export default {
       this.scheduledAppointment.startHour = "";
       this.scheduledAppointment.endHour = "";
     },
-
     getAppointmentId: function() {
       let newId = 1;
       let numberOfAppointments = this.scheduledAppointments.length;
@@ -318,6 +316,15 @@ export default {
         newId = parseInt(lastId.split("-")[1]) + 1;
       }
       return "APP-" + newId;
+    },
+
+    get_agenda: function () {
+      this.agenda_list.forEach(element => {
+        if (element.agendaId === this.scheduledAppointment.agendaId) {
+          this.agenda_start_hour = element.startHour;
+          this.agenda_end_hour = element.endHour
+        }
+      });
     },
 
     _validateData() {

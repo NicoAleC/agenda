@@ -159,7 +159,7 @@ export default {
   },
 
   data: () => ({
-    appointment:{},
+    appointment: {},
     scheduledAppointment: {},
     appointmentE: {},
     newMovement: false,
@@ -229,8 +229,8 @@ export default {
       this.events = this.events.filter(
         event => event.id !== appointmentToUpdate.id
       );
-       this.setEvents(appointmentToUpdate);
-     },
+      this.setEvents(appointmentToUpdate);
+    },
 
     deleteAppointment: function(deleteScheduledAppointment) {
       let deleteId = deleteScheduledAppointment.id;
@@ -241,12 +241,12 @@ export default {
           )
         ) {
           //Postponing
-            this.deleteEvents(deleteId);
-            this.add_Postponed({
-              name: deleteScheduledAppointment.name,
-              description: deleteScheduledAppointment.description
-            });
-            this.selectedOpen = false;
+          this.deleteEvents(deleteId);
+          this.add_Postponed({
+            name: deleteScheduledAppointment.name,
+            description: deleteScheduledAppointment.description
+          });
+          this.selectedOpen = false;
           return true;
         }
       } else {
@@ -300,9 +300,7 @@ export default {
     },
 
     deleteEvents: function(app_id) {
-      this.events = this.events.filter(
-            event => event.id !== app_id
-      );
+      this.events = this.events.filter(event => event.id !== app_id);
     },
 
     showAppointment: function({ nativeEvent, event }) {
@@ -332,14 +330,14 @@ export default {
       this.route = this.$route.params.agendaId;
 
       this.scheduledAppointments.forEach(element => {
-        if (this.route === "ANG-0"){
+        if (this.route === "ANG-0") {
           this.setEvents(element);
-      } else if (element.agendaId === this.route){
+        } else if (element.agendaId === this.route) {
           this.setEvents(element);
         }
       });
-
     },
+
     add_Postponed(postApp) {
       const newPost = {
         id: this.lastIdPostponed() + 1,
