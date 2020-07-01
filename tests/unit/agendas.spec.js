@@ -50,7 +50,14 @@ describe("Home.vue", () => {
       ) + 1}`;
     assert.equal(wrapper.vm.createAgendaID(), idGenerated);
     const expecteLength = wrapper.vm.$store.state.agendas.length + 1;
-    wrapper.vm.newAgenda();
+    wrapper.vm.addAgenda({
+      agendaId: idGenerated,
+      name: "prueba",
+      description: "prueba",
+      startHour: "prueba",
+      endHour: "prueba",
+      appointments: []
+    });
     assert.equal(wrapper.vm.$store.state.agendas.length, expecteLength);
   });
   it.only("Delte Agenda", () => {
