@@ -17,12 +17,7 @@
         Home
         <v-icon>mdi-home</v-icon>
       </v-btn>
-      <v-btn
-        icon
-        color="#304050"
-        v-on:click="redirectPostponed()"
-        class="mx-10"
-      >
+      <v-btn icon color="#304050" v-on:click="redirectPostponed()" class="mx-10">
         Postponed
         <v-icon>mdi-watch</v-icon>
       </v-btn>
@@ -32,9 +27,7 @@
         <v-btn icon class="ma-5" @click="$refs.calendar.prev()">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-        <v-toolbar-title v-if="$refs.calendar" class="ma-5">
-          {{ $refs.calendar.title }}
-        </v-toolbar-title>
+        <v-toolbar-title v-if="$refs.calendar" class="ma-5">{{ $refs.calendar.title }}</v-toolbar-title>
         <v-btn icon class="ma-5" @click="$refs.calendar.next()">
           <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
@@ -71,58 +64,36 @@
           <v-card min-width="500px" flat>
             <v-toolbar :color="selectedAppointment.color" dark>
               <v-row justify="center">
-                <v-toolbar-title
-                  v-html="selectedAppointment.name"
-                ></v-toolbar-title>
+                <v-toolbar-title v-html="selectedAppointment.name"></v-toolbar-title>
               </v-row>
             </v-toolbar>
             <v-card-text>
-              <div class="mt-8 text-center">
-                Description: {{ appointmentE.description }}
-              </div>
+              <div class="mt-8 text-center">Description: {{ appointmentE.description }}</div>
               <div class="mt-8 text-center">
                 Duration: {{ appointmentE.startHour }} -
                 {{ appointmentE.endHour }}
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-col
-                class="grey--text text-truncate hidden-sm-and-down"
-                align="center"
-              >
-                <v-icon size="35" @click="sendData(appointmentE, false)"
-                  >mdi-pencil</v-icon
-                >
+              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
+                <v-icon size="35" @click="sendData(appointmentE, false)">mdi-pencil</v-icon>
               </v-col>
 
-              <v-col
-                class="grey--text text-truncate hidden-sm-and-down"
-                align="center"
-              >
+              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
                 <router-link
                   :to="{
                     name: 'Participants',
                     params: { id: appointmentE.id }
                   }"
                 >
-                  <v-icon size="35" @click="sendDialog()">mdi-account</v-icon>
+                  <v-icon size="35">mdi-account</v-icon>
                 </router-link>
               </v-col>
-              <v-col
-                class="grey--text text-truncate hidden-sm-and-down"
-                align="center"
-              >
-                <v-icon size="35" @click="sendDialog(appointmentE)"
-                  >mdi-account-check</v-icon
-                >
+              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
+                <v-icon size="35" @click="sendDialog(appointmentE)">mdi-account-check</v-icon>
               </v-col>
-              <v-col
-                class="grey--text text-truncate hidden-sm-and-down"
-                align="center"
-              >
-                <v-icon size="35" @click="deleteAppointment(appointmentE.id)"
-                  >mdi-delete</v-icon
-                >
+              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
+                <v-icon size="35" @click="deleteAppointment(appointmentE.id)">mdi-delete</v-icon>
               </v-col>
             </v-card-actions>
           </v-card>
@@ -218,10 +189,10 @@ export default {
       this.scheduledAppointment = appointmentToAdd;
     },
 
-    addAppointmentToAgenda: function(){
+    addAppointmentToAgenda: function() {
       this.addAppointmentsToAgendas(this.scheduledAppointment);
     },
-  
+
     updateAppointment: function(appointmentToUpdate) {
       this.updateScheduledAppointment(appointmentToUpdate);
 
@@ -319,15 +290,14 @@ export default {
     drawAppointments: function() {
       this.events = [];
       this.route = this.$route.params.agendaId;
-    
+
       this.scheduledAppointments.forEach(element => {
-        if (this.route === "ANG-0"){
+        if (this.route === "ANG-0") {
           this.setEvents(element);
-      }else if (element.agendaId === this.route){
+        } else if (element.agendaId === this.route) {
           this.setEvents(element);
         }
       });
-
     },
     addPostponed(postApp) {
       const newPost = {
