@@ -12,9 +12,17 @@
             x-large
             class="ma-2"
             v-on:click="$router.push('participants')"
-          >Añadir Participantes</v-btn>
+            >Añadir Participantes</v-btn
+          >
 
-          <v-btn color="primary" dark x-large class="ma-2" v-on:click="sendData()">Mis Participantes</v-btn>
+          <v-btn
+            color="primary"
+            dark
+            x-large
+            class="ma-2"
+            v-on:click="sendData()"
+            >Mis Participantes</v-btn
+          >
         </v-col>
       </v-layout>
 
@@ -65,9 +73,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["getScheduled"]),
+    ...mapGetters(["getScheduledAppointments"]),
     scheduled() {
-      return this.getScheduled;
+      return this.getScheduledAppointments;
     }
   }
 };

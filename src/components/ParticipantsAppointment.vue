@@ -16,9 +16,9 @@
                     <v-row align="center" class="spacer" no-gutters>
                       <v-col cols="5" sm="3" md="2">
                         <v-avatar color="orange">
-                          <span
-                            class="white--text headline"
-                          >{{ participant.name | capitalizeAvatar }}</span>
+                          <span class="white--text headline">{{
+                            participant.name | capitalizeAvatar
+                          }}</span>
                         </v-avatar>
                       </v-col>
 
@@ -26,18 +26,27 @@
                         <strong
                           v-html="participant.name"
                           class="list-participant"
-                        >{{ participant.name }}</strong>
+                          >{{ participant.name }}</strong
+                        >
                       </v-col>
 
                       <v-col class="text-no-wrap" cols="5" sm="3">
                         <strong v-html="participant.contactNumber"></strong>
                       </v-col>
 
-                      <v-col class="grey--text text-truncate hidden-sm-and-down">
+                      <v-col
+                        class="grey--text text-truncate hidden-sm-and-down"
+                      >
                         <v-icon
                           size="35"
-                          v-on:click="deleteParticipantToAScheduleAppointment(name,participant.participantId)"
-                        >mdi-delete</v-icon>
+                          v-on:click="
+                            deleteParticipantToAScheduleAppointment(
+                              name,
+                              participant.participantId
+                            )
+                          "
+                          >mdi-delete</v-icon
+                        >
                       </v-col>
                     </v-row>
                   </v-expansion-panel-header>

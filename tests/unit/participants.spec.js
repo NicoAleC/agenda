@@ -170,8 +170,8 @@ describe("Participants CRUD", () => {
     console.log(numberOfParticipants);
     assert.equal(numberOfParticipants, expectedLength);
   });
-  it.only("Delete participants work right", () => {
-    global.alert = () => { };
+  it("Delete participants work right", () => {
+    global.alert = () => {};
     global.confirm = () => true;
     const wrapper = mount(Participants, {
       store,

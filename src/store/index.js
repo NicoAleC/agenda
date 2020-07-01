@@ -17,18 +17,20 @@ const state = {
       endHour: "12:00",
       appointments: [
         {
-          name: "PRUEBA",
-          start: `2020-06-19T23:45:00`,
-          end: `2020-06-20T01:45:00`,
-          color: "green",
-          timed: true
-        },
-        {
-          name: "PRUEBA2",
-          start: `2020-06-9T23:45:00`,
-          end: `2020-06-10T01:45:00`,
-          color: "blue",
-          timed: true
+          id: "APP-1",
+          name: "Dentist",
+          description: "I need to go to dentist",
+          date: "2020-06-18",
+          startHour: "10:00",
+          endHour: "11:00",
+          agendaId: "ANG-1",
+          participants: [
+            {
+              participantId: "PART-003",
+              name: "Andy Villarroel",
+              contactNumber: "77905861"
+            }
+          ]
         }
       ]
     },
@@ -40,18 +42,14 @@ const state = {
       endHour: "",
       appointments: [
         {
-          name: "PRUEBA",
-          start: `2020-06-1T04:45:00`,
-          end: `2020-06-1T10:45:00`,
-          color: "orange",
-          timed: true
-        },
-        {
-          name: "PRUEBA2",
-          start: `2020-06-1T04:45:00`,
-          end: `2020-06-1T10:45:00`,
-          color: "cyan",
-          timed: true
+          id: "APP-2",
+          name: "Doctor",
+          description: "I need to go to the hospital",
+          date: "2020-06-20",
+          startHour: "15:00",
+          endHour: "20:00",
+          agendaId: "ANG-2",
+          participants: []
         }
       ]
     }
@@ -81,13 +79,50 @@ const state = {
       date: "2020-06-18",
       startHour: "10:00",
       endHour: "11:00",
-      agendaId: "ANG-0001",
-      participants: [{
-        participantId: "PART-003",
-        name: "Andy Villarroel",
-        contactNumber: "77905861"
-      }]
-    }]
+      agendaId: "ANG-1",
+
+      participants: [
+        {
+          participantId: "PART-003",
+          name: "Andy Villarroel",
+          contactNumber: "77905861"
+        }
+      ]
+    },
+    {
+      id: "APP-2",
+      name: "Doctor",
+      description: "I need to go to the hospital",
+      date: "2020-06-20",
+      startHour: "15:00",
+      endHour: "20:00",
+      agendaId: "ANG-2",
+
+      participants: []
+    }
+  ],
+  postponedAppointments: [
+    {
+      id: 0,
+      name: "Dentist",
+      description: "I need to go to dentist"
+    },
+    {
+      id: 1,
+      name: "PickUps",
+      description: "Must pickup Amazon items"
+    },
+    {
+      id: 2,
+      name: "Deposit",
+      description: "I need to deposit cash"
+    },
+    {
+      id: 3,
+      name: "Opening Krusty Krab 2",
+      description: "Attend to the inaguration of KK2"
+    }
+  ]
 };
 export default new Vuex.Store({
   state,

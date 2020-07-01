@@ -1,4 +1,4 @@
-"use strict";
+" use strict";
 
 const getAgendas = state => {
   return state.agendas;
@@ -20,5 +20,8 @@ export default {
 
   getScheduledAppointments(state) {
     return state.scheduledAppointments;
+  },
+  getPostponed(state) {
+    return state.postponedAppointments;
   }
 };
