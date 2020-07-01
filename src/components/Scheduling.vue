@@ -131,7 +131,7 @@
               outlined
               color="indigo"
               text
-              v-if="_validateData() && newMovement"
+              v-if="newMovement"
               @click="addAppointment()"
               >{{ "SAVE" }}</v-btn
             >
@@ -157,7 +157,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "Scheduling",
   data: () => ({
-    valid: true,
+    valid: false,
     now: new Date().toISOString().substr(0, 10),
     menu_date: false,
     showCurrent: true,
@@ -318,11 +318,11 @@ export default {
       return "APP-" + newId;
     },
 
-    get_agenda: function () {
+    get_agenda: function() {
       this.agenda_list.forEach(element => {
         if (element.agendaId === this.scheduledAppointment.agendaId) {
           this.agenda_start_hour = element.startHour;
-          this.agenda_end_hour = element.endHour
+          this.agenda_end_hour = element.endHour;
         }
       });
     },
