@@ -134,8 +134,14 @@ describe(" Scheduled Appointments CRUD", () => {
       stubs: ["VTextField"]
     });
 
-    const appointmentToDelete = "APP-2";
-
+    const appointmentToDelete = {
+      id: "APP-2",
+      name: " Appointment to Update ",
+      description: " Update Unit Test ",
+      date: "2020-08-24",
+      startHour: "11:00",
+      endHour: "12:00"
+    };
     wrapper.vm.deleteAppointment(appointmentToDelete);
     //console.log("DeleteList:" +  JSON.stringify(wrapper.vm.$store.state.scheduledAppointments));
 
