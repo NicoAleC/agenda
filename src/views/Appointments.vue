@@ -17,7 +17,12 @@
         Home
         <v-icon>mdi-home</v-icon>
       </v-btn>
-      <v-btn icon color="#304050" v-on:click="redirectPostponed()" class="mx-10">
+      <v-btn
+        icon
+        color="#304050"
+        v-on:click="redirectPostponed()"
+        class="mx-10"
+      >
         Postponed
         <v-icon>mdi-watch</v-icon>
       </v-btn>
@@ -27,7 +32,9 @@
         <v-btn icon class="ma-5" @click="$refs.calendar.prev()">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-        <v-toolbar-title v-if="$refs.calendar" class="ma-5">{{ $refs.calendar.title }}</v-toolbar-title>
+        <v-toolbar-title v-if="$refs.calendar" class="ma-5">{{
+          $refs.calendar.title
+        }}</v-toolbar-title>
         <v-btn icon class="ma-5" @click="$refs.calendar.next()">
           <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
@@ -64,22 +71,32 @@
           <v-card min-width="500px" flat>
             <v-toolbar :color="selectedAppointment.color" dark>
               <v-row justify="center">
-                <v-toolbar-title v-html="selectedAppointment.name"></v-toolbar-title>
+                <v-toolbar-title v-html="selectedAppointment.name">
+                </v-toolbar-title>
               </v-row>
             </v-toolbar>
             <v-card-text>
-              <div class="mt-8 text-center">Description: {{ appointmentE.description }}</div>
+              <div class="mt-8 text-center">
+                Description: {{ appointmentE.description }}
+              </div>
               <div class="mt-8 text-center">
                 Duration: {{ appointmentE.startHour }} -
                 {{ appointmentE.endHour }}
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
-                <v-icon size="35" @click="sendData(appointmentE, false)">mdi-pencil</v-icon>
+              <v-col
+                class="grey--text text-truncate hidden-sm-and-down"
+                align="center"
+              >
+                <v-icon size="35" @click="sendData(appointmentE, false)">
+                  mdi-pencil
+                </v-icon>
               </v-col>
-
-              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
+              <v-col
+                class="grey--text text-truncate hidden-sm-and-down"
+                align="center"
+              >
                 <router-link
                   :to="{
                     name: 'Participants',
@@ -89,11 +106,21 @@
                   <v-icon size="35">mdi-account</v-icon>
                 </router-link>
               </v-col>
-              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
-                <v-icon size="35" @click="sendDialog(appointmentE)">mdi-account-check</v-icon>
+              <v-col
+                class="grey--text text-truncate hidden-sm-and-down"
+                align="center"
+              >
+                <v-icon size="35" @click="sendDialog(appointmentE)">
+                  mdi-account-check
+                </v-icon>
               </v-col>
-              <v-col class="grey--text text-truncate hidden-sm-and-down" align="center">
-                <v-icon size="35" @click="deleteAppointment(appointmentE.id)">mdi-delete</v-icon>
+              <v-col
+                class="grey--text text-truncate hidden-sm-and-down"
+                align="center"
+              >
+                <v-icon size="35" @click="deleteAppointment(appointmentE)"
+                  >mdi-delete</v-icon
+                >
               </v-col>
             </v-card-actions>
           </v-card>
@@ -130,6 +157,7 @@ export default {
   },
 
   data: () => ({
+    appointment: {},
     scheduledAppointment: {},
     appointmentE: {},
     newMovement: false,
@@ -161,13 +189,16 @@ export default {
       "addPostponed",
       "addAppointmentsToAgendas"
     ]),
+
     redirectHome() {
       this.$router.push("/");
     },
+
     redirectPostponed() {
       this.$router.push("/appointments");
       this.$router.push("postponed");
     },
+
     sendData: function(scheduledAppointment, newMovement) {
       this.scheduledAppointment.agendaId = this.$route.params.agendaId;
       this.scheduledAppointment = {
@@ -176,6 +207,7 @@ export default {
       this.dialog = true;
       this.newMovement = newMovement;
     },
+
     sendDialog: function(scheduledAppointment) {
       this.scheduledAppointment = {
         ...scheduledAppointment
@@ -186,13 +218,12 @@ export default {
     addAppointment: function(appointmentToAdd) {
       this.addScheduledAppointment(appointmentToAdd);
       this.setEvents(appointmentToAdd);
-      this.scheduledAppointment = appointmentToAdd;
+      this.appointment = appointmentToAdd;
     },
 
     addAppointmentToAgenda: function() {
-      this.addAppointmentsToAgendas(this.scheduledAppointment);
+      this.addAppointmentsToAgendas(this.appointment);
     },
-
     updateAppointment: function(appointmentToUpdate) {
       this.updateScheduledAppointment(appointmentToUpdate);
 
@@ -203,22 +234,26 @@ export default {
     },
 
     deleteAppointment: function(deleteScheduledAppointment) {
-      if (this._validateDeleteAppointment(deleteScheduledAppointment)) {
+      let deleteId = deleteScheduledAppointment.id;
+      if (this._validateDeleteAppointment(deleteId)) {
         if (
           confirm(
             "This appointment cannot be deleted, do you want to postpone it??"
           )
         ) {
           //Postponing
-
+          this.deleteEvents(deleteId);
+          this.add_Postponed({
+            name: deleteScheduledAppointment.name,
+            description: deleteScheduledAppointment.description
+          });
+          this.selectedOpen = false;
           return true;
         }
       } else {
         if (confirm("Are you sure you want to delete?")) {
-          this.deleteScheduledAppointment(deleteScheduledAppointment);
-          this.events = this.events.filter(
-            event => event.id !== deleteScheduledAppointment
-          );
+          this.deleteScheduledAppointment(deleteId);
+          this.deleteEvents(deleteId);
           this.selectedOpen = false;
           return true;
         }
@@ -265,6 +300,10 @@ export default {
       });
     },
 
+    deleteEvents: function(app_id) {
+      this.events = this.events.filter(event => event.id !== app_id);
+    },
+
     showAppointment: function({ nativeEvent, event }) {
       const open = () => {
         this.selectedAppointment = event;
@@ -287,6 +326,7 @@ export default {
         }
       });
     },
+
     drawAppointments: function() {
       this.events = [];
       this.route = this.$route.params.agendaId;
@@ -299,7 +339,8 @@ export default {
         }
       });
     },
-    addPostponed(postApp) {
+
+    add_Postponed(postApp) {
       const newPost = {
         id: this.lastIdPostponed() + 1,
         name: postApp.name,
@@ -307,6 +348,7 @@ export default {
       };
       this.addPostponed(newPost);
     },
+
     lastIdPostponed() {
       return Math.max.apply(
         Math,
@@ -317,9 +359,11 @@ export default {
 
   computed: {
     ...mapGetters(["getScheduledAppointments", "getPostponed", "getAgendas"]),
+
     scheduledAppointments() {
       return this.getScheduledAppointments;
     },
+
     draw() {
       return this.events;
     },
@@ -333,3 +377,4 @@ export default {
   }
 };
 </script>
+

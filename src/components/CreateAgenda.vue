@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-dialog v-model="show" persistent max-width="300px">
-      <v-card>
+    <v-dialog v-model="show" persistent max-width="500px">
+      <v-card class="spacing-playground pa-5" fluid>
         <v-card-title>
           <span class="headline">Create Agenda</span>
         </v-card-title>
@@ -13,7 +13,6 @@
             required
           ></v-text-field>
         </v-col>
-        <v-spacer></v-spacer>
         <v-col cols="12">
           <v-text-field
             id="CTA-BeginH"
@@ -22,7 +21,6 @@
             required
           ></v-text-field>
         </v-col>
-        <v-spacer></v-spacer>
         <v-col cols="12">
           <v-text-field
             id="CTA-EndH"
@@ -31,7 +29,6 @@
             required
           ></v-text-field>
         </v-col>
-        <v-spacer></v-spacer>
         <v-col cols="12">
           <v-text-field
             id="CTA-Desc"
@@ -40,23 +37,27 @@
             required
           ></v-text-field>
         </v-col>
-        <v-spacer></v-spacer>
-        <v-btn
-          color="blue darken-1"
-          text
-          @click.stop="
-            show = false;
-            name = '';
-          "
-          >Cancel</v-btn
-        >
-        <v-btn
-          id="CTA-btn-Create"
-          color="blue darken-1"
-          text
-          @click.stop="newAgenda"
-          >Create</v-btn
-        >
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue darken-1"
+            class="ma-2"
+            text
+            @click.stop="
+              show = false;
+              name = '';
+            "
+            >Cancel</v-btn
+          >
+          <v-btn
+            id="CTA-btn-Create"
+            color="blue darken-1"
+            class="ma-2"
+            text
+            @click.stop="newAgenda"
+            >Create</v-btn
+          >
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
@@ -107,7 +108,7 @@ export default {
       if (
         this.name === "" &&
         this.description === "" &&
-        this.ending === "" &&
+        this.beginning === "" &&
         this.ending === ""
       ) {
         alert("Fill all the Components");

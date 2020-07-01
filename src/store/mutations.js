@@ -130,5 +130,5 @@ export default {
     if (index > -1) {
       state.agendas[index].appointments.push(appointmentToAdd);
     }
-  },
+  }
 };
