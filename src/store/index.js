@@ -24,7 +24,6 @@ const state = {
           startHour: "10:00",
           endHour: "11:00",
           agendaId: "ANG-1",
-    
           participants: [
             {
               participantId: "PART-003",
@@ -50,7 +49,6 @@ const state = {
           startHour: "15:00",
           endHour: "20:00",
           agendaId: "ANG-2",
-    
           participants: []
         }
       ]

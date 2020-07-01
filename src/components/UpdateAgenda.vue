@@ -12,7 +12,7 @@
         <v-col cols="12">
           <v-text-field
             v-model="startHour"
-            label="Biggining Hour"
+            label="Biggining Hour[00:00]24H"
             required
           ></v-text-field>
         </v-col>
@@ -20,7 +20,7 @@
         <v-col cols="12">
           <v-text-field
             v-model="endingHour"
-            label="Ending Hour"
+            label="Ending Hour[00:00]24H"
             required
           ></v-text-field>
         </v-col>
@@ -90,8 +90,8 @@ export default {
       this.show = false;
       this.name = "";
       this.description = "";
-      this.beginning = "";
-      this.ending = "";
+      this.startHour = "";
+      this.endingHour = "";
     }
   },
   computed: {

@@ -7,17 +7,6 @@
             >Agendas</v-toolbar-title
           >
           <v-spacer></v-spacer>
-          <v-select
-            v-model="choosedAgenda"
-            :hint="`${choosedAgenda.agendaId}, ${choosedAgenda.description}`"
-            :items="idNameGetAgendas"
-            item-text="name"
-            item-value="agendaId"
-            label="ALL"
-            persistent-hint
-            return-object
-            single-line
-          ></v-select>
           <v-spacer></v-spacer>
           <v-btn
             id="home-btn-addAgenda"
@@ -28,23 +17,6 @@
             Add
             <v-icon>mdi-plus</v-icon>
           </v-btn>
-          <v-btn icon @click.stop="toggleComponentDeleteAgendas" class="mx-4">
-            Del
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
-          <v-btn icon @click.stop="toggleComponentUpdateAgendas" class="mx-4">
-            Edit
-            <v-icon>mdi-rename-box</v-icon>
-          </v-btn>
-          <!-- <v-btn -->
-          <!-- icon -->
-          <!-- color="#FFFFFF" -->
-          <!-- v-on:click="redirectAppointments()" -->
-          <!-- class="mx-14" -->
-          <!-- > -->
-          <!-- Appointments -->
-          <!-- <v-icon>mdi-mailbox</v-icon> -->
-          <!-- </v-btn> -->
           <router-link
             :to="{
               name: 'Appointments',
@@ -56,6 +28,49 @@
             <v-icon @click="sendAgenda()">mdi-mailbox</v-icon>
           </router-link>
         </v-toolbar>
+        <br />
+        <v-card
+          class="mx-auto"
+          max-width="344"
+          outlined
+          v-for="agenda in idNameGetAgendas"
+          :key="agenda.agendaId"
+        >
+          <v-list-item three-line>
+            <v-list-item-content>
+              <div class="overline mb-4">{{ agenda.agendaId }}</div>
+              <p class="headline mb-1">{{ agenda.name }}</p>
+              <div>{{ agenda.description }}</div>
+            </v-list-item-content>
+
+            <v-avatar tile size="80" color="blue lighten-5">
+              <v-icon size="50">mdi-calendar-clock</v-icon>
+            </v-avatar>
+          </v-list-item>
+
+          <v-card-actions>
+            <v-btn
+              icon
+              v-on:click="value = agenda.agendaId"
+              @click.stop="toggleComponentDeleteAgendas"
+              class="mx-4"
+            >
+              Del
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+            <v-btn
+              icon
+              v-on:click="value = agenda.agendaId"
+              @click.stop="toggleComponentUpdateAgendas"
+              class="mx-4"
+            >
+              Edit
+              <v-icon>mdi-rename-box</v-icon>
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn v-on:click="value = agenda.agendaId">select</v-btn>
+          </v-card-actions>
+        </v-card>
       </v-col>
       <agendas ref="newAgenda" v-model="dialogAgendas" />
       <updateAgenda ref="updateAgendas" v-model="dialogUpdateAgenda" />
@@ -92,21 +107,17 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
+    value: "",
     choosedAgenda: {
-      agendaId: "ANG-0",
-      description: "All your meetings",
-      name: "all"
+      agendaId: "ANG-0"
     }
   }),
 
   watch: {
-    choosedAgenda: function(newSelectedAgenda) {
-      this.events = [];
-      let agendaFound = this.agendasGet.find(
-        element => element.agendaId === newSelectedAgenda.agendaId
-      );
+    value: function(newSelectedAgenda) {
+      this.choosedAgenda.agendaId = this.value;
       this.setId();
-      console.log(agendaFound);
+      console.log(newSelectedAgenda);
     }
   },
   computed: {

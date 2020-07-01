@@ -117,8 +117,7 @@
                     ></v-time-picker>
                   </v-menu>
                 </v-col>
-                <v-col cols="12">
-                </v-col>
+                <v-col cols="12"> </v-col>
               </v-row>
             </v-container>
           </v-card-text>
@@ -193,7 +192,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["getScheduledAppointments", "getParticipants", "getAgendas"]),
+    ...mapGetters([
+      "getScheduledAppointments",
+      "getParticipants",
+      "getAgendas"
+    ]),
 
     scheduledAppointments() {
       return this.getScheduledAppointments;

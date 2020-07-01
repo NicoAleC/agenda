@@ -18,7 +18,7 @@
           <v-text-field
             id="CTA-BeginH"
             v-model="beginning"
-            label="Biggining Hour[00:00:00]"
+            label="Biggining Hour[00:00]24H"
             required
           ></v-text-field>
         </v-col>
@@ -27,7 +27,7 @@
           <v-text-field
             id="CTA-EndH"
             v-model="ending"
-            label="Ending Hour[00:00:00]"
+            label="Ending Hour[00:00]24H"
             required
           ></v-text-field>
         </v-col>
@@ -104,20 +104,29 @@ export default {
       return idGenerated;
     },
     newAgenda() {
-      const newAgenda = {
-        agendaId: this.createAgendaID(),
-        name: this.name,
-        description: this.description,
-        startHour: this.beginning,
-        endHour: this.ending,
-        appointments: []
-      };
-      this.show = false;
-      this.name = "";
-      this.description = "";
-      this.beginning = "";
-      this.ending = "";
-      this.addAgenda(newAgenda);
+      if (
+        this.name === "" &&
+        this.description === "" &&
+        this.ending === "" &&
+        this.ending === ""
+      ) {
+        alert("Fill all the Components");
+      } else {
+        const newAgenda = {
+          agendaId: this.createAgendaID(),
+          name: this.name,
+          description: this.description,
+          startHour: this.beginning,
+          endHour: this.ending,
+          appointments: []
+        };
+        this.show = false;
+        this.name = "";
+        this.description = "";
+        this.beginning = "";
+        this.ending = "";
+        this.addAgenda(newAgenda);
+      }
     }
   }
 };
