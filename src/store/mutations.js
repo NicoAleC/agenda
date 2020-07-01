@@ -98,13 +98,11 @@ export default {
   },
 
   mutateParticipantDeleteAppointment(state, deleteAppoint) {
-    const foundAccountIndex = state.scheduledAppointments.findIndex(
-      part => part.name === deleteAppoint.appointmentName
-    );
+
     state.scheduledAppointments[
-      foundAccountIndex
+      deleteAppoint.appointmentName
     ].participants = state.scheduledAppointments[
-      foundAccountIndex
+      deleteAppoint.appointmentName
     ].participants.filter(
       appoint => appoint.participantId !== deleteAppoint.participantId
     );

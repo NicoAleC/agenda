@@ -16,9 +16,11 @@
                     <v-row align="center" class="spacer" no-gutters>
                       <v-col cols="5" sm="3" md="2">
                         <v-avatar color="orange">
-                          <span class="white--text headline">{{
+                          <span class="white--text headline">
+                            {{
                             participant.name | capitalizeAvatar
-                          }}</span>
+                            }}
+                          </span>
                         </v-avatar>
                       </v-col>
 
@@ -26,27 +28,22 @@
                         <strong
                           v-html="participant.name"
                           class="list-participant"
-                          >{{ participant.name }}</strong
-                        >
+                        >{{ participant.name }}</strong>
                       </v-col>
 
                       <v-col class="text-no-wrap" cols="5" sm="3">
                         <strong v-html="participant.contactNumber"></strong>
                       </v-col>
 
-                      <v-col
-                        class="grey--text text-truncate hidden-sm-and-down"
-                      >
+                      <v-col class="grey--text text-truncate hidden-sm-and-down">
                         <v-icon
                           size="35"
                           v-on:click="
                             deleteParticipantToAScheduleAppointment(
-                              name,
                               participant.participantId
                             )
                           "
-                          >mdi-delete</v-icon
-                        >
+                        >mdi-delete</v-icon>
                       </v-col>
                     </v-row>
                   </v-expansion-panel-header>
@@ -70,7 +67,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "ParticipantsAppointment",
   components: {},
-  data: () => ({ valid: true, name: "Dentist" }),
+  data: () => ({ valid: true }),
   props: {
     dialog2: {
       type: Boolean,
@@ -94,14 +91,17 @@ export default {
   },
   methods: {
     ...mapActions(["deleteParticipantFromAnAppointment"]),
-    deleteParticipantToAScheduleAppointment(appointment, participantId) {
+    deleteParticipantToAScheduleAppointment(participantId) {
       let confirmation = confirm(
         "Are you sure you want to delete this participant?"
+      );
+      let id = this.scheduled.findIndex(
+        appointment => appointment.id === this.scheduledAppointment.id
       );
       if (confirmation) {
         this.deleteParticipantFromAnAppointment({
           participantId: participantId,
-          appointmentName: appointment
+          appointmentName: id
         });
         return true;
       } else {
@@ -121,7 +121,6 @@ export default {
       let id = this.scheduled.findIndex(
         appointment => appointment.id === this.scheduledAppointment.id
       );
-      console.log(id);
 
       if (id !== -1) {
         return this.scheduled[id].participants;
