@@ -39,11 +39,7 @@
                       >
                         <v-icon>mdi-pencil</v-icon>
                       </v-btn>
-                      <v-btn
-                        icon
-                        color="#304050"
-                        v-on:click="deletePostponedApp(post)"
-                      >
+                      <v-btn icon color="#304050" v-on:click="deletePostponedApp(post)">
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
                     </v-card-actions>
@@ -64,16 +60,8 @@
           <v-spacer></v-spacer>
           <v-card-text>
             <v-form>
-              <v-text-field
-                label="Name"
-                v-model="name"
-                :rules="rules.nameRule"
-              ></v-text-field>
-              <v-textarea
-                label="Description"
-                v-model="description"
-                :rules="rules.lengthRule"
-              ></v-textarea>
+              <v-text-field label="Name" v-model="name" :rules="rules.nameRule"></v-text-field>
+              <v-textarea label="Description" v-model="description" :rules="rules.lengthRule"></v-textarea>
               <v-btn
                 class="success mx-0 mt-3"
                 @click="
@@ -84,8 +72,7 @@
                     description: description
                   });
                 "
-                >Save</v-btn
-              >
+              >Save</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
@@ -100,18 +87,8 @@
           <v-spacer></v-spacer>
           <v-card-text>
             <v-form>
-              <v-text-field
-                readonly
-                auto-grow
-                label="Name"
-                v-model="name"
-              ></v-text-field>
-              <v-textarea
-                readonly
-                auto-grow
-                label="Description"
-                v-model="description"
-              ></v-textarea>
+              <v-text-field readonly auto-grow label="Name" v-model="name"></v-text-field>
+              <v-textarea readonly auto-grow label="Description" v-model="description"></v-textarea>
               <v-select
                 v-model="idAgenda"
                 :items="getAgendasList"
@@ -123,12 +100,7 @@
                 persistent-hint
                 return-value
               ></v-select>
-              <v-text-field
-                readonly
-                label="Date"
-                v-model="date"
-                v-on:click="datePopup = true"
-              ></v-text-field>
+              <v-text-field readonly label="Date" v-model="date" v-on:click="datePopup = true"></v-text-field>
               <v-menu
                 v-model="datePopup"
                 :close-on-content-click="false"
@@ -136,42 +108,22 @@
                 offset-y
                 min-width="250px"
               >
-                <v-date-picker
-                  v-model="date"
-                  @input="datePopup = false"
-                ></v-date-picker>
+                <v-date-picker v-model="date" @input="datePopup = false"></v-date-picker>
               </v-menu>
               <div class="TimePickers">
                 <v-row justify="space-around" align="center">
                   <v-col style="width: 290px; flex: 0 1 auto">
                     <h2>Start Hour</h2>
-                    <v-time-picker
-                      v-model="startHour"
-                      :max="endHour"
-                    ></v-time-picker>
+                    <v-time-picker v-model="startHour" :max="endHour"></v-time-picker>
                   </v-col>
                   <v-col style="width: 290px; flex: 0 1 auto">
                     <h2>End Hour</h2>
-                    <v-time-picker
-                      v-model="endHour"
-                      :min="startHour"
-                    ></v-time-picker>
+                    <v-time-picker v-model="endHour" :min="startHour"></v-time-picker>
                   </v-col>
                 </v-row>
               </div>
-              <v-select
-                v-model="participantsList"
-                :items="participants"
-                :rules="rules.agenda"
-                label="Participants"
-                multiple
-                item-text="name"
-                item-value="participantId"
-                return-value
-              ></v-select>
-              <v-btn class="success mx-0 mt-3" @click="packReschedule()"
-                >Reschedule</v-btn
-              >
+
+              <v-btn class="success mx-0 mt-3" @click="packReschedule()">Reschedule</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
@@ -239,8 +191,7 @@ export default {
         description: postApp.description,
         date: postApp.date,
         startHour: postApp.startHour,
-        endHour: postApp.endHour,
-        participants: postApp.participants
+        endHour: postApp.endHour
       });
     },
     lastId() {
@@ -269,8 +220,7 @@ export default {
           description: this.description,
           date: this.date,
           startHour: this.startHour,
-          endHour: this.endHour,
-          participants: this.participantsList
+          endHour: this.endHour
         });
       }
     }
