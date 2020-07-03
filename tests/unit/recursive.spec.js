@@ -1,10 +1,8 @@
-/* eslint-disable no-unused-vars */
 import Appointments from "@/views/Appointments.vue";
-import Scheduling from "@/components/Scheduling.vue";
 import VueRouter from "vue-router";
 
 import { assert } from "chai";
-import { createLocalVue, shallowMount, mount } from "@vue/test-utils";
+import { createLocalVue, shallowMount } from "@vue/test-utils";
 
 import Vuex from "vuex";
 import Vuetify from "vuetify";
@@ -13,9 +11,8 @@ import mockAppointments from "./mockAppointments";
 import actions from "@/store/actions.js";
 import mutations from "@/store/mutations.js";
 import getters from "@/store/getters.js";
-import { iterator } from 'core-js/fn/symbol';
 
-describe(" Scheduled Appointments CRUD", () => {
+describe("Recursive tests", () => {
   let localVue;
   let vuetify;
   let router;
@@ -48,60 +45,40 @@ describe(" Scheduled Appointments CRUD", () => {
   });
 
   it.only("Doesn't allow a starting date higer than the ending date", () => {
-    wrapper = mount(Scheduling, {
+    wrapper = shallowMount(Appointments, {
       store,
       vuetify,
       localVue,
-      router
+      router,
+      mocks: {
+        $vuetify: { breakpoint: {} }
+      }
     });
-    const appointment1 = {
-      id: "APP-2",
-      name: " Test ",
-      description: " Unit Test ",
-      date: "2020-08-24",
-      startHour: "11:00",
-      endHour: "12:00"
-    };
-    const appointment2 = {
-      id: "APP-2",
-      name: " Test ",
-      description: " Unit Test ",
-      date: "2020-08-23",
-      startHour: "11:00",
-      endHour: "12:00"
-    };
-    const aux1 = wrapper.vm.$store.state.scheduledAppointments;
-    wrapper.vm.createRecursive(appointment1, appointment2);
-    const aux2 = wrapper.vm.$store.state.scheduledAppointments;
+    wrapper.vm.selectedToRepeat = wrapper.vm.scheduledAppointments[0];
+    wrapper.vm.rStartDate = "2020-07-03";
+    wrapper.vm.rEndDate = "2020-07-01";
+    const aux1 = wrapper.vm.$store.state.scheduledAppointments.length;
+    wrapper.vm.addRecursive();
+    const aux2 = wrapper.vm.$store.state.scheduledAppointments.length;
     assert.equal(aux1, aux2);
   });
 
   it.only("Recreates the appointment selected the times it specifies", () => {
-    wrapper = mount(Scheduling, {
+    wrapper = shallowMount(Appointments, {
       store,
       vuetify,
       localVue,
-      router
+      router,
+      mocks: {
+        $vuetify: { breakpoint: {} }
+      }
     });
-    const appointment1 = {
-      id: "APP-2",
-      name: " Test ",
-      description: " Unit Test ",
-      date: "2020-08-24",
-      startHour: "11:00",
-      endHour: "12:00"
-    };
-    const appointment2 = {
-      id: "APP-2",
-      name: " Test ",
-      description: " Unit Test ",
-      date: "2020-08-23",
-      startHour: "11:00",
-      endHour: "12:00"
-    };
-    const aux1 = wrapper.vm.$store.state.scheduledAppointments;
-    wrapper.vm.createRecursive(appointment1, appointment2);
-    const aux2 = wrapper.vm.$store.state.scheduledAppointments;
-    assert.equal(aux1 + 4, aux2);
+    wrapper.vm.selectedToRepeat = wrapper.vm.scheduledAppointments[0];
+    wrapper.vm.rStartDate = "2020-07-03";
+    wrapper.vm.rEndDate = "2020-07-05";
+    const aux1 = wrapper.vm.$store.state.scheduledAppointments.length;
+    wrapper.vm.addRecursive();
+    const aux2 = wrapper.vm.$store.state.scheduledAppointments.length;
+    assert.equal(aux1 + 3, aux2);
   });
 });
