@@ -7,6 +7,17 @@
         icon
         color="#304050"
         v-if="route !== 'ANG-0'"
+        v-on:click="recursive = !recursive"
+        class="mx-5"
+        id="recursiveButton"
+      >
+        Repeat
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        color="#304050"
+        v-if="route !== 'ANG-0'"
         v-on:click="sendData(scheduledAppointment, true)"
         class="mx-5"
       >
@@ -49,6 +60,39 @@
             class="ma-3"
             label="View by"
           ></v-select>
+        </v-col>
+        <v-col sm="2" v-if="recursive">
+          <v-select
+            v-model="selectedToRepeat"
+            :items="
+              scheduledAppointments.filter(
+                item => item.agendaId === $route.params.agendaId
+              )
+            "
+            dense
+            outlined
+            hide-details
+            class="ma-r"
+            label="Select an item"
+          >
+            <template slot="selection" slot-scope="data">
+              {{ data.item.name }}
+            </template>
+            <template slot="item" slot-scope="data">
+              {{ data.item.name }}
+            </template>
+          </v-select>
+        </v-col>
+        <v-col sm="2" v-if="recursive">
+          <label>From: <input v-model="rStartDate" type="date"/></label>
+        </v-col>
+        <v-col sm="2" v-if="recursive">
+          <label>To: <input v-model="rEndDate" type="date"/></label>
+        </v-col>
+        <v-col sm="1" v-if="recursive">
+          <v-btn color="#304050" v-on:click="addRecursive()" class="mx-4">
+            Repeat
+          </v-btn>
         </v-col>
       </v-sheet>
       <v-sheet height="800">
@@ -179,7 +223,11 @@ export default {
       "orange",
       "grey darken-1"
     ],
-    events: []
+    events: [],
+    recursive: false,
+    rStartDate: "",
+    rEndDate: "",
+    selectedToRepeat: {}
   }),
   methods: {
     ...mapActions([
@@ -354,11 +402,36 @@ export default {
         Math,
         this.postponedAppointments.map(post => post.id)
       );
+    },
+
+    addRecursive() {
+      let date = new Date(this.rStartDate);
+      let item;
+      const aux1 = new Date(this.rStartDate);
+      const aux2 = new Date(this.rEndDate);
+      if (aux1 < aux2 && this.selectedToRepeat.id !== undefined) {
+        const aux3 = new Date(this.selectedToRepeat.date);
+        while (date <= aux2) {
+          if (date.getDate() !== aux3.getDate()) {
+            item = { ...this.selectedToRepeat };
+            item.date = date.toISOString().substring(0, 10);
+            item.id =
+              item.id.substring(0, 4) + (this.scheduledAppointments.length + 1);
+            this.addAppointment(item);
+          }
+          date.setDate(date.getDate() + 1);
+        }
+      }
     }
   },
 
   computed: {
-    ...mapGetters(["getScheduledAppointments", "getPostponed", "getAgendas"]),
+    ...mapGetters([
+      "getScheduledAppointments",
+      "getPostponed",
+      "getAgendas",
+      "getIdLooked"
+    ]),
 
     scheduledAppointments() {
       return this.getScheduledAppointments;
